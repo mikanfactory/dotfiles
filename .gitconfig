@@ -1,0 +1,31 @@
+[user]
+  name = mikanfactory
+  email = k952i4j14x17@gmail.com
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+[alias]
+  co = checkout
+  cm = commit
+  st = status --branch
+  branches = branch -a
+  remotes = remote -v
+  b = branch
+  d = diff
+  dc = diff --cached
+  gr = log --oneline --decorate --graph --all
+[filter "lfs"]
+  clean = git-lfs clean %f
+  smudge = git-lfs smudge %f
+  required = true
+[merge]
+	ff = false
+[pull]
+	ff = only
+[github]
+  user = mikanfactory
+[core]
+  excludesfile = ~/dotfiles/.gitignore_global
+[ghq]
+  root = ~/.go/src
