@@ -20,9 +20,9 @@
   smudge = git-lfs smudge %f
   required = true
 [merge]
-	ff = false
+  ff = false
 [pull]
-	ff = only
+  ff = only
 [github]
   user = mikanfactory
 [core]
