@@ -33,7 +33,7 @@ set nrformats=
 
 "ペースト時にインデントを解除する
 imap <C-t> <nop>
-set pastetoggle=,<C-t>
+set pastetoggle=<F2>
 
 " encode を utf-8 にする
 scriptencoding utf-8
@@ -122,8 +122,6 @@ NeoBundle 'Align'
 NeoBundle 'kien/rainbow_parentheses.vim'
 NeoBundle 'Shougo/vimproc', {
       \ 'build': {
-      \ 'windows': 'make -f make_mingw32.mak',
-      \ 'cygwin': 'make -f make_cygwin.mak',
       \ 'mac': 'make -f make_mac.mak',
       \ 'unix': 'make -f make_unix.mak',
       \ }
@@ -139,6 +137,9 @@ NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'}
 NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'fatih/vim-go'
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'pmsorhaindo/syntastic-local-eslint.vim'
+
 
 "-----------------------------------------------------------------------
 call neobundle#end()
@@ -265,6 +266,17 @@ call unite#custom#source(
 
 " カーソル位置の単語をgrep検索
 nnoremap <silent> ,s :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
+
+"---------------------------------------------------------------------
+" syntastic
+"---------------------------------------------------------------------
+let g:syntastic_javascript_checkers=['eslint']
+
+let g:syntastic_enable_signs = 1
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 "---------------------------------------------------------------------
 " vim-exchange
