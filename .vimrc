@@ -173,20 +173,6 @@ let g:unite_source_file_mru_limit = 200
 let g:gitgutter_system_function       = 'vimproc#system'
 let g:gitgutter_system_error_function = 'vimproc#get_last_status'
 let g:gitgutter_shellescape_function  = 'vimproc#shellescape'
-
-function! DispatchUniteFileRecAsyncOrGit()
-  if isdirectory(getcwd()."/.git")
-    Unite file_rec/git
-  else
-    Unite file_rec/async
-  endif
-endfunction
-
-nnoremap <silent> ,b :<C-u>Unite file_mru buffer<CR>
-nnoremap <silent> ,r :<C-u>Unite file_mru buffer<CR>
-nnoremap <silent> ,f :<C-u>call DispatchUniteFileRecAsyncOrGit()<CR>
-nnoremap <silent> ,y :<C-u>Unite history/yank<CR>
-
 let g:unite_source_grep_command = 'ag'
 let g:unite_source_grep_default_opts = '--nocolor --nogroup'
 let g:unite_source_grep_recursive_opt = ''
@@ -203,18 +189,20 @@ call unite#custom#source(
       \ 'ignore_pattern',
       \ s:unite_ignore_file_rec_patterns)
 
+
+function! DispatchUniteFileRecAsyncOrGit()
+  if isdirectory(getcwd()."/.git")
+    Unite file_rec/git
+  else
+    Unite file_rec/async
+  endif
+endfunction
+
+nnoremap <silent> ,b :<C-u>Unite file_mru buffer<CR>
+nnoremap <silent> ,r :<C-u>Unite file_mru buffer<CR>
+nnoremap <silent> ,f :<C-u>call DispatchUniteFileRecAsyncOrGit()<CR>
+nnoremap <silent> ,y :<C-u>Unite history/yank<CR>
 nnoremap <silent> ,s :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
-
-"---------------------------------------------------------------------
-" syntastic
-"---------------------------------------------------------------------
-let g:syntastic_javascript_checkers=['eslint']
-
-let g:syntastic_enable_signs = 1
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
 
 "---------------------------------------------------------------------
 " vim-exchange
@@ -225,6 +213,16 @@ xmap gx <Plug>(Exchange)
 " vim-go
 "---------------------------------------------------------------------
 au FileType go nmap ,gi <Plug>(go-imports)
+
+"---------------------------------------------------------------------
+" neomake
+"---------------------------------------------------------------------
+let g:neomake_javascript_enabled_makers = ['eslint_d']
+augroup neomake_run
+  autocmd! BufWritePost,BufEnter * Neomake
+  autocmd! InsertLeave *.js,*jsx Neomake
+  autocmd! VimLeave *.js,*jsx !eslint_d stop
+augroup END
 
 "-------------------------------------------------------------------
 " memolist-vim
