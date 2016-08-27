@@ -17,7 +17,7 @@ set pastetoggle=<F2>
 scriptencoding utf-8
 set encoding=utf-8
 set lazyredraw
-" set clipboard=unnamed,autoselect
+set clipboard=unnamed,autoselect
 
 inoremap  <C-e> <END>
 inoremap  <C-a> <HOME>
@@ -28,17 +28,6 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 nnoremap <C-h> <C-w>h
-
-inoremap { {}<Left>
-inoremap {<Enter> {}<Left><CR><ESC><S-o>
-inoremap ( ()<ESC>i
-inoremap (<Enter> ()<Left><CR><ESC><S-o>
-inoremap [ []<ESC>i
-inoremap [<Enter> []<Left><CR><ESC><S-o>
-inoremap ' ''<ESC>i
-inoremap '<Enter> ''<Left><CR><ESC><S-o>
-inoremap " ""<ESC>i
-inoremap "<Enter> ""<Left><CR><ESC><S-o>
 
 hi Pmenu ctermbg=255 ctermfg=0 guifg=#000000 guibg=#999999
 hi PmenuSel ctermbg=blue ctermfg=black
@@ -85,7 +74,7 @@ NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'}
 NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'fatih/vim-go'
-NeoBundle 'neomake/neomake'
+NeoBundle 'ternjs/tern_for_vim'
 
 "-----------------------------------------------------------------------
 call neobundle#end()
@@ -108,7 +97,9 @@ endif
 "--------------------------------------------------------------------
 " quickrun.vim
 "--------------------------------------------------------------------
-nnoremap <silent> ,qr :QuickRun -outputter/buffer/split ":botright 8sp" -hook/time/enable 1<CR>
+nnoremap <silent> ,qr :QuickRun -outputter/buffer/split 
+      \ ":botright 8sp" -hook/time/enable 1<CR>
+
 
 "--------------------------------------------------------------------
 " rainbow_parentheses.vim
@@ -213,16 +204,6 @@ xmap gx <Plug>(Exchange)
 " vim-go
 "---------------------------------------------------------------------
 au FileType go nmap ,gi <Plug>(go-imports)
-
-"---------------------------------------------------------------------
-" neomake
-"---------------------------------------------------------------------
-let g:neomake_javascript_enabled_makers = ['eslint_d']
-augroup neomake_run
-  autocmd! BufWritePost,BufEnter * Neomake
-  autocmd! InsertLeave *.js,*jsx Neomake
-  autocmd! VimLeave *.js,*jsx !eslint_d stop
-augroup END
 
 "-------------------------------------------------------------------
 " memolist-vim
