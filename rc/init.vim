@@ -18,8 +18,8 @@ scriptencoding utf-8
 set encoding=utf-8
 set lazyredraw
 
-inoremap  <C-e> <END>
-inoremap  <C-a> <HOME>
+inoremap <C-e> <END>
+inoremap <C-a> <HOME>
 inoremap <silent> <C-b> <Left>
 inoremap <silent> <C-f> <Right>
 inoremap <silent> <C-h> <C-g>u<C-h>
@@ -38,6 +38,7 @@ augroup filetypes
   au BufRead,BufNewFile *.py           setl ft=python
   au BufRead,BufNewFile *.rb           setl ft=ruby
   au BufRead,BufNewFile *.css          setl ft=css
+  au BufRead,BufNewFile *.tpl          setl ft=gohtmltmpl
   au BufRead,BufNewFile *.scss         setl ft=scss
   au BufRead,BufNewFile *.html         setl ft=html
   au BufRead,BufNewFile *.toml         setl ft=toml
@@ -102,6 +103,13 @@ if dein#load_state(s:dein_dir)
   " go
   call dein#add('fatih/vim-go')
 
+  " python
+  call dein#add('zchee/deoplete-jedi')
+  call dein#add('davidhalter/jedi-vim')
+
+  " javascript
+  call dein#add('carlitux/deoplete-ternjs')
+
   " toml
   call dein#add('cespare/vim-toml')
 
@@ -117,11 +125,95 @@ endif
 " End dein Settings.
 "---------------------------------------------------------------------
 
+
+"--------------------------------------------------------------------
+" color scheme
+"--------------------------------------------------------------------
+" lightline
+let g:lightline = { 
+\   'colorscheme': 'wombat'
+\ }
+
+
+"---------------------------------------------------------------------
+" util
+"---------------------------------------------------------------------
+" matchit
+runtime macros/matchit.vim
+
+" quickrun.vim
+nnoremap <silent> ,qr :QuickRun -outputter/buffer/split 
+      \ ":botright 8sp" -hook/time/enable 1<CR>
+
+" vim-exchange
+xmap gx <Plug>(Exchange)
+
+" memolist-vim
+let g:memolist_path = "$HOME/Dropbox/1writer"
+let g:memolist_memo_date = "%Y-%m-%d %H:%M"
+let g:memolist_memo_date = "epoch"
+let g:memolist_memo_date = "%D %T"
+let g:memolist_prompt_tags = 1
+let g:memolist_prompt_categories = 1
+let g:memolist_qfixgrep = 1
+let g:memolist_vimfiler = 1
+let g:memolist_template_dir_path = "$HOME/Dropbox/1writer"
+
+" rainbow_parentheses.vim
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+
+
+"---------------------------------------------------------------------
+" auto complete
 "---------------------------------------------------------------------
 " deoplete
-"---------------------------------------------------------------------
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_delay = 0
+let g:deoplete#auto_complete_start_length = 1
+let g:deoplete#enable_camel_case = 1
+let g:deoplete#file#enable_buffer_path = 1
+let g:deoplete#max_list = 1000
+
+call deoplete#custom#set('_', 'converters',
+      \ ['converter_auto_paren', 'converter_remove_overlap'])
+call deoplete#custom#set('_', 'matchers', ['matcher_fuzzy'])
+
+" profiling
+let g:deoplete#enable_profile = 0
+
+" omnifunc
+let g:deoplete#omni#input_patterns = {}
+
+" ignore_source
+let g:deoplete#ignore_sources = {}
+
+" python
+let g:deoplete#ignore_sources.python =
+      \ ['buffer', 'dictionary', 'tag', 'syntax', 'neosnippet']
+let g:deoplete#sources#jedi#statement_length = 0
+let g:deoplete#sources#jedi#enable_cache = 1
+let g:deoplete#sources#jedi#short_types = 1
+let g:deoplete#sources#jedi#show_docstring = 0
+let g:deoplete#sources#jedi#debug_enabled = 0
+
+" neosnippet
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+xmap <C-k> <Plug>(neosnippet_expand_target)
+imap <expr><Tab> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)"
+      \: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><Tab> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)"
+      \: "\<Tab>"
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+
 
 "---------------------------------------------------------------------
 " unite
@@ -165,19 +257,29 @@ nnoremap <silent> ,f :<C-u>call DispatchUniteFileRecAsyncOrGit()<CR>
 nnoremap <silent> ,y :<C-u>Unite history/yank<CR>
 nnoremap <silent> ,s :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
 
-"--------------------------------------------------------------------
-" lightline
-"---------------------------------------------------------------------
-let g:lightline = { 
-\   'colorscheme': 'wombat'
-\ }
 
 "--------------------------------------------------------------------
-" neomake
+" syntax and language
 "---------------------------------------------------------------------
+" neomake
 let g:neomake_javascript_enabled_makers = ['eslint_d']
 augroup neomake_run
   autocmd! BufWritePost,BufEnter * Neomake
   autocmd! InsertLeave *.js,*jsx Neomake
   autocmd! VimLeave *.js,*jsx !eslint_d stop
 augroup END
+
+" go
+au FileType go nmap ,gi <Plug>(go-imports)
+
+" python
+let g:jedi#auto_initialization = 0
+let g:jedi#use_splits_not_buffers = 'winwidth'
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#documentation_command = "K"
+let g:jedi#force_py_version = 3
+let g:jedi#max_doc_height = 150
+let g:jedi#popup_select_first = 0
+let g:jedi#show_call_signatures = 0
+let g:jedi#smart_auto_mappings = 0
