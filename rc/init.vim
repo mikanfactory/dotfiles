@@ -32,7 +32,19 @@ hi Pmenu ctermbg=255 ctermfg=0 guifg=#000000 guibg=#999999
 hi PmenuSel ctermbg=blue ctermfg=black
 hi PmenuSbar ctermbg=0 ctermfg=9
 hi PmenuSbar ctermbg=255 ctermfg=0 guifg=#000000 guibg=#FFFFFF
-au BufRead,BufNewFile *.tpl setl ft=gohtmltmpl
+
+augroup filetypes
+  au BufRead,BufNewFile *.go           setl ft=go
+  au BufRead,BufNewFile *.py           setl ft=python
+  au BufRead,BufNewFile *.rb           setl ft=ruby
+  au BufRead,BufNewFile *.css          setl ft=css
+  au BufRead,BufNewFile *.scss         setl ft=scss
+  au BufRead,BufNewFile *.html         setl ft=html
+  au BufRead,BufNewFile *.toml         setl ft=toml
+  au BufRead,BufNewFile *.js,*.jsx     setl ft=javascript
+  au BufRead,BufNewFile *.vim,.vimrc   setl ft=vim
+  au BufRead,BufNewFile *.md,.markdown setl ft=markdown
+augroup END
 
 "---------------------------------------------------------------------
 " Start dein Settings.
@@ -50,12 +62,48 @@ endif
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir)
 
-  let g:rc_dir    = expand('~/dotfiles/rc')
-  let s:toml      = g:rc_dir . '/dein.toml'
-  let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+  " dein
+  call dein#add('Shougo/dein.vim')
 
-  call dein#load_toml(s:toml,      {'lazy': 0})
-  call dein#load_toml(s:lazy_toml, {'lazy': 1})
+  " color scheme
+  call dein#add('jpo/vim-railscasts-theme')
+  call dein#add('itchyny/lightline.vim')
+
+  " util
+  call dein#add('Align')
+  call dein#add('grep.vim')
+  call dein#add('tpope/vim-dispatch')
+  call dein#add('tpope/vim-surround')
+  call dein#add('tmhedberg/matchit')
+  call dein#add('Shougo/vimproc.vim')
+  call dein#add('thinca/vim-quickrun')
+  call dein#add('tommcdo/vim-exchange')
+  call dein#add('kana/vim-textobj-user')
+  call dein#add('kana/vim-textobj-entire')
+  call dein#add('glidenote/memolist.vim')
+  call dein#add('kien/rainbow_parentheses.vim')
+  call dein#add('bronson/vim-visual-star-search')
+
+  " auto complete
+  call dein#add('Shougo/deoplete.nvim')
+  call dein#add('Shougo/neosnippet')
+  call dein#add('Shougo/neosnippet-snippets')
+
+  " unite
+  call dein#add('Shougo/vimfiler')
+  call dein#add('Shougo/neomru.vim')
+  call dein#add('Shougo/unite.vim')
+  call dein#add('thinca/vim-unite-history')
+  call dein#add('kmnk/vim-unite-giti')
+
+  " syntax and language
+  call dein#add('neomake/neomake')
+
+  " go
+  call dein#add('fatih/vim-go')
+
+  " toml
+  call dein#add('cespare/vim-toml')
 
   call dein#end()
   call dein#save_state()
@@ -68,3 +116,68 @@ endif
 "---------------------------------------------------------------------
 " End dein Settings.
 "---------------------------------------------------------------------
+
+"---------------------------------------------------------------------
+" deoplete
+"---------------------------------------------------------------------
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+let g:deoplete#enable_at_startup = 1
+
+"---------------------------------------------------------------------
+" unite
+"---------------------------------------------------------------------
+let g:unite_enable_ignore_case = 1
+let g:unite_enable_smart_case = 1
+let g:unite_enable_start_insert=1
+let g:unite_source_history_yank_enable =1
+let g:unite_source_file_mru_limit = 200
+let g:gitgutter_system_function       = 'vimproc#system'
+let g:gitgutter_system_error_function = 'vimproc#get_last_status'
+let g:gitgutter_shellescape_function  = 'vimproc#shellescape'
+let g:unite_source_grep_command = 'ag'
+let g:unite_source_grep_default_opts = '--nocolor --nogroup'
+let g:unite_source_grep_recursive_opt = ''
+let g:unite_source_grep_max_candidates = 200
+let s:unite_ignore_file_rec_patterns=
+      \ ''
+      \ .'vendor/bundle\|.bundle/\|\.sass-cache/\|'
+      \ .'node_modules/\|bower_components/\|'
+      \ .'venv/\|'
+      \ .'\.\(bmp\|gif\|jpe\?g\|png\|webp\|ai\|psd\)\?$'
+
+call unite#custom#source(
+      \ 'file_rec/async,file_rec/git',
+      \ 'ignore_pattern',
+      \ s:unite_ignore_file_rec_patterns)
+
+
+function! DispatchUniteFileRecAsyncOrGit()
+  if isdirectory(getcwd()."/.git")
+    Unite file_rec/git
+  else
+    Unite file_rec/async
+  endif
+endfunction
+
+nnoremap <silent> ,b :<C-u>Unite file_mru buffer<CR>
+nnoremap <silent> ,r :<C-u>Unite file_mru buffer<CR>
+nnoremap <silent> ,f :<C-u>call DispatchUniteFileRecAsyncOrGit()<CR>
+nnoremap <silent> ,y :<C-u>Unite history/yank<CR>
+nnoremap <silent> ,s :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
+
+"--------------------------------------------------------------------
+" lightline
+"---------------------------------------------------------------------
+let g:lightline = { 
+\   'colorscheme': 'wombat'
+\ }
+
+"--------------------------------------------------------------------
+" neomake
+"---------------------------------------------------------------------
+let g:neomake_javascript_enabled_makers = ['eslint_d']
+augroup neomake_run
+  autocmd! BufWritePost,BufEnter * Neomake
+  autocmd! InsertLeave *.js,*jsx Neomake
+  autocmd! VimLeave *.js,*jsx !eslint_d stop
+augroup END
