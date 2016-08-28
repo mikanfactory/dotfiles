@@ -39,6 +39,7 @@ augroup filetypes
   au BufRead,BufNewFile *.rb           setl ft=ruby
   au BufRead,BufNewFile *.css          setl ft=css
   au BufRead,BufNewFile *.tpl          setl ft=gohtmltmpl
+  au BufRead,BufNewFile *.json         setl ft=json
   au BufRead,BufNewFile *.scss         setl ft=scss
   au BufRead,BufNewFile *.html         setl ft=html
   au BufRead,BufNewFile *.toml         setl ft=toml
@@ -47,6 +48,9 @@ augroup filetypes
   au BufRead,BufNewFile *.vim,.vimrc   setl ft=vim
   au BufRead,BufNewFile *.md,.markdown setl ft=markdown
 augroup END
+
+" trim whitespace
+autocmd BufWritePre * :%s/\s\+$//ge
 
 "---------------------------------------------------------------------
 " Start dein Settings.
@@ -131,7 +135,7 @@ endif
 " color scheme
 "--------------------------------------------------------------------
 " lightline
-let g:lightline = { 
+let g:lightline = {
 \   'colorscheme': 'wombat'
 \ }
 
@@ -143,7 +147,7 @@ let g:lightline = {
 runtime macros/matchit.vim
 
 " quickrun.vim
-nnoremap <silent> ,qr :QuickRun -outputter/buffer/split 
+nnoremap <silent> ,qr :QuickRun -outputter/buffer/split
       \ ":botright 8sp" -hook/time/enable 1<CR>
 
 " vim-exchange
