@@ -49,7 +49,7 @@ alias venv=". venv/bin/activate"
 alias vexit="deactivate"
 alias jupyter='docker run -d --name notebook -p 8888:8888 -v "$HOME/code/jupyter:/home/jovyan/work" jupyter/datascience-notebook'
 alias gcd='cd $(ghq root)/$(ghq list | peco)'
-alias vim="nvim"
+alias vi=vim
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
