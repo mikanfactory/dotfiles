@@ -42,6 +42,7 @@ augroup filetypes
   au BufRead,BufNewFile *.scss         setl ft=scss
   au BufRead,BufNewFile *.html         setl ft=html
   au BufRead,BufNewFile *.toml         setl ft=toml
+  au BufRead,BufNewFile .zshrc         setl ft=zsh
   au BufRead,BufNewFile *.js,*.jsx     setl ft=javascript
   au BufRead,BufNewFile *.vim,.vimrc   setl ft=vim
   au BufRead,BufNewFile *.md,.markdown setl ft=markdown
@@ -262,6 +263,7 @@ nnoremap <silent> ,s :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
 " syntax and language
 "---------------------------------------------------------------------
 " neomake
+let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_javascript_enabled_makers = ['eslint_d']
 augroup neomake_run
   autocmd! BufWritePost,BufEnter * Neomake
