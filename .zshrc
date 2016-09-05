@@ -7,11 +7,10 @@ ZSH_THEME="af-magic"
 # plugins
 plugins=(git ruby rails heroku rake-fast brew mysql)
 
-
 # User configuration
 source $ZSH/oh-my-zsh.sh
 
-# fundamental 
+# fundamental
 autoload -U compinit
 compinit
 HISTFILE=~/.zsh_history
@@ -36,7 +35,7 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - zsh)"
 
 # go
-export GOPATH=$HOME/.go
+export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 
 # alias
@@ -49,8 +48,7 @@ alias venv=". venv/bin/activate"
 alias vexit="deactivate"
 alias jupyter='docker run -d --name notebook -p 8888:8888 -v "$HOME/code/jupyter:/home/jovyan/work" jupyter/datascience-notebook'
 alias gcd='cd $(ghq root)/$(ghq list | peco)'
-alias vim=nvim
-alias vi=nvim
+# alias vim=nvim
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -59,7 +57,3 @@ eval "$(pyenv init -)"
 
 export PATH="/usr/local/sbin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages/:$PYTHONPATH"
-
-# numba
-export LLVM_CONFIG="/usr/local/opt/llvm37/bin/llvm-config-3.7"
-

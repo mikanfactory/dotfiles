@@ -34,19 +34,21 @@ hi PmenuSbar ctermbg=0 ctermfg=9
 hi PmenuSbar ctermbg=255 ctermfg=0 guifg=#000000 guibg=#FFFFFF
 
 augroup filetypes
-  au BufRead,BufNewFile *.go           setl ft=go
-  au BufRead,BufNewFile *.py           setl ft=python
-  au BufRead,BufNewFile *.rb           setl ft=ruby
-  au BufRead,BufNewFile *.css          setl ft=css
-  au BufRead,BufNewFile *.tpl          setl ft=gohtmltmpl
-  au BufRead,BufNewFile *.json         setl ft=json
-  au BufRead,BufNewFile *.scss         setl ft=scss
-  au BufRead,BufNewFile *.html         setl ft=html
-  au BufRead,BufNewFile *.toml         setl ft=toml
-  au BufRead,BufNewFile .zshrc         setl ft=zsh
-  au BufRead,BufNewFile *.js,*.jsx     setl ft=javascript
-  au BufRead,BufNewFile *.vim,.vimrc   setl ft=vim
-  au BufRead,BufNewFile *.md,.markdown setl ft=markdown
+  au BufRead,BufNewFile *.go               setl ft=go
+  au BufRead,BufNewFile *.py               setl ft=python
+  au BufRead,BufNewFile *.rb               setl ft=ruby
+  au BufRead,BufNewFile *.js,              setl ft=javascript
+  " au BufRead,BufNewFile *.jsx,             setl ft=javascript.jsx
+  au BufRead,BufNewFile *.css              setl ft=css
+  au BufRead,BufNewFile *.tpl              setl ft=gohtmltmpl
+  au BufRead,BufNewFile *.json             setl ft=json
+  au BufRead,BufNewFile *.scss             setl ft=scss
+  au BufRead,BufNewFile *.html             setl ft=html
+  au BufRead,BufNewFile *.toml             setl ft=toml
+  au BufRead,BufNewFile .zshrc             setl ft=zsh
+  au BufRead,BufNewFile *.vim,.vimrc       setl ft=vim
+  au BufRead,BufNewFile *.md,.markdown     setl ft=markdown
+  au BufRead,BufNewFile makefile,Makefile  setl ft=make noexpandtab
 augroup END
 
 " trim whitespace
@@ -113,7 +115,7 @@ if dein#load_state(s:dein_dir)
   call dein#add('davidhalter/jedi-vim')
 
   " javascript
-  call dein#add('carlitux/deoplete-ternjs')
+  " call dein#add('carlitux/deoplete-ternjs')
 
   " toml
   call dein#add('cespare/vim-toml')
@@ -135,9 +137,7 @@ endif
 " color scheme
 "--------------------------------------------------------------------
 " lightline
-let g:lightline = {
-\   'colorscheme': 'wombat'
-\ }
+let g:lightline = { 'colorscheme': 'wombat' }
 
 
 "---------------------------------------------------------------------
@@ -289,3 +289,4 @@ let g:jedi#max_doc_height = 150
 let g:jedi#popup_select_first = 0
 let g:jedi#show_call_signatures = 0
 let g:jedi#smart_auto_mappings = 0
+
