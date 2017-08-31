@@ -75,6 +75,10 @@ NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'fatih/vim-go'
 NeoBundle 'ternjs/tern_for_vim'
+NeoBundle 'maverickg/stan.vim'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'davidhalter/jedi-vim'
+NeoBundle 'w0rp/ale'
 
 "-----------------------------------------------------------------------
 call neobundle#end()
@@ -199,6 +203,19 @@ nnoremap <silent> ,s :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
 " vim-exchange
 "---------------------------------------------------------------------
 xmap gx <Plug>(Exchange)
+
+"--------------------------------------------------------------------
+" ale
+"---------------------------------------------------------------------
+let g:ale_fixers = {
+\   'python': ['autopep8', 'flake8']
+\}
+
+"--------------------------------------------------------------------
+" jedi
+"---------------------------------------------------------------------
+autocmd FileType python setlocal completeopt-=preview
+let g:jedi#goto_definitions_command = ",g"
 
 "---------------------------------------------------------------------
 " vim-go
