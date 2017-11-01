@@ -5,7 +5,7 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="af-magic"
 
 # plugins
-plugins=(git ruby rails heroku rake-fast brew mysql)
+plugins=(git)
 
 # User configuration
 source $ZSH/oh-my-zsh.sh
@@ -23,6 +23,7 @@ setopt auto_pushd
 setopt correct
 setopt nolistbeep
 setopt list_packed
+disable r
 
 export EDITOR=/usr/local/bin/vim
 export SHELL=/bin/zsh
@@ -44,6 +45,7 @@ alias cd="pushd"
 alias pop="popd"
 alias end="popd"
 alias dirs="dirs -v"
+alias vinit="virtualenv venv && venv"
 alias venv=". venv/bin/activate"
 alias vexit="deactivate"
 alias gcd='cd $(ghq root)/$(ghq list | peco)'
@@ -56,3 +58,9 @@ eval "$(pyenv init -)"
 
 export PATH="/usr/local/sbin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages/:$PYTHONPATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/s-sugai/code/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/s-sugai/code/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/s-sugai/code/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/s-sugai/code/google-cloud-sdk/completion.zsh.inc'; fi
