@@ -158,6 +158,13 @@ if has('conceal')
 endif
 
 "---------------------------------------------------------------------
+" vimfiler
+"---------------------------------------------------------------------
+let g:vimfiler_as_default_explorer=1
+let g:vimfiler_safe_mode_by_default = 0
+nnoremap <silent> ,d :<c-u>VimFilerBufferDir<cr>
+
+"---------------------------------------------------------------------
 " unite
 "---------------------------------------------------------------------
 let g:unite_enable_ignore_case = 1
@@ -177,6 +184,7 @@ let s:unite_ignore_file_rec_patterns=
       \ .'vendor/bundle\|.bundle/\|\.sass-cache/\|'
       \ .'node_modules/\|bower_components/\|'
       \ .'venv/\|'
+      \ .'env/\|'
       \ .'\.\(bmp\|gif\|jpe\?g\|png\|webp\|ai\|psd\)\?$'
 
 call unite#custom#source(
@@ -193,11 +201,12 @@ function! DispatchUniteFileRecAsyncOrGit()
   endif
 endfunction
 
-nnoremap <silent> ,b :<C-u>Unite file_mru buffer<CR>
+nnoremap <silent> ,b :<c-u>Unite file_mru buffer<cr>
 nnoremap <silent> ,r :<C-u>Unite file_mru buffer<CR>
 nnoremap <silent> ,f :<C-u>call DispatchUniteFileRecAsyncOrGit()<CR>
 nnoremap <silent> ,y :<C-u>Unite history/yank<CR>
 nnoremap <silent> ,s :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
+nnoremap <silent> ,c :<C-u>Unite -default-action=lcd directory_mru<CR>
 
 "---------------------------------------------------------------------
 " vim-exchange
