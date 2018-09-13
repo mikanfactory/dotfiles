@@ -18,6 +18,7 @@ scriptencoding utf-8
 set encoding=utf-8
 set lazyredraw
 set clipboard=unnamed,autoselect
+set t_BE=
 
 inoremap  <C-e> <END>
 inoremap  <C-a> <HOME>
@@ -175,8 +176,8 @@ let g:unite_source_file_mru_limit = 200
 let g:gitgutter_system_function       = 'vimproc#system'
 let g:gitgutter_system_error_function = 'vimproc#get_last_status'
 let g:gitgutter_shellescape_function  = 'vimproc#shellescape'
-let g:unite_source_grep_command = 'ag'
-let g:unite_source_grep_default_opts = '--nocolor --nogroup'
+let g:unite_source_grep_command = 'rg'
+let g:unite_source_grep_default_opts = '-n --no-heading --color never'
 let g:unite_source_grep_recursive_opt = ''
 let g:unite_source_grep_max_candidates = 200
 let s:unite_ignore_file_rec_patterns=
@@ -185,13 +186,13 @@ let s:unite_ignore_file_rec_patterns=
       \ .'node_modules/\|bower_components/\|'
       \ .'venv/\|'
       \ .'env/\|'
+      \ .'\.mypy_cache/\|'
       \ .'\.\(bmp\|gif\|jpe\?g\|png\|webp\|ai\|psd\)\?$'
 
 call unite#custom#source(
       \ 'file_rec/async,file_rec/git',
       \ 'ignore_pattern',
       \ s:unite_ignore_file_rec_patterns)
-
 
 function! DispatchUniteFileRecAsyncOrGit()
   if isdirectory(getcwd()."/.git")
@@ -217,7 +218,7 @@ xmap gx <Plug>(Exchange)
 " ale
 "---------------------------------------------------------------------
 let g:ale_fixers = {
-\   'python': ['autopep8', 'flake8']
+\   'python': ['autopep8', 'flake8', 'mypy']
 \}
 
 "--------------------------------------------------------------------
