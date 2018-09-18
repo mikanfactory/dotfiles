@@ -49,6 +49,7 @@ NeoBundle 'grep.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimshell.vim'
 NeoBundle 'jpo/vim-railscasts-theme'
+NeoBundle 'tomasr/molokai'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-textobj-entire'
@@ -79,6 +80,7 @@ NeoBundle 'ternjs/tern_for_vim'
 NeoBundle 'maverickg/stan.vim'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'davidhalter/jedi-vim'
+NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'w0rp/ale'
 
 "-----------------------------------------------------------------------
@@ -310,4 +312,3 @@ endfunction
 function! MyMode()
   return winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
-
