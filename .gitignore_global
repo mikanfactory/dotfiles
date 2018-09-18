@@ -5,3 +5,11 @@ env
 .ipynb_checkpoints/
 .mypy_cache
 .pytest_cache/
+
+# zgok-ms
+parameters.yml
+composer.phar
+goutte.phar
+tools/devstacks/docker-sync.yml
+memcached.so
+php-cs-fixer.phar
