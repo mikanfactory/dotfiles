@@ -27,6 +27,7 @@ disable r
 
 export EDITOR=/usr/local/bin/vim
 export SHELL=/bin/zsh
+export PATH="/usr/local/sbin:$PATH"
 
 # nodebrew
 export PATH=$HOME/.nodebrew/current/bin:$PATH
@@ -38,6 +39,7 @@ eval "$(rbenv init - zsh)"
 # go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
+export PATH="/usr/local/opt/go@1.9/bin:$PATH"
 
 # alias
 alias :q="exit"
@@ -51,16 +53,37 @@ alias vexit="deactivate"
 alias gcd='cd $(ghq root)/$(ghq list | peco)'
 # alias vim=nvim
 
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-export PATH="/usr/local/sbin:$PATH"
-export PYTHONPATH="/usr/local/lib/python2.7/site-packages/:$PYTHONPATH"
-
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/s-sugai/code/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/s-sugai/code/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/s-sugai/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/s-sugai/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/s-sugai/code/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/s-sugai/code/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/s-sugai/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/s-sugai/google-cloud-sdk/completion.zsh.inc'; fi
+
+# peco history
+function peco-history-selection() {
+BUFFER=`\history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+CURSOR=$#BUFFER
+  zle reset-prompt
+}
+zle -N peco-history-selection
+bindkey '^R' peco-history-selection
+
+# peco ssh
+function peco-ssh () {
+  local selected_host=$(awk '
+  tolower($1)=="host" {
+    for (i=2; i<=NF; i++) {
+      if ($i !~ "[*?]") {
+        print $i
+      }
+    }
+  }
+  ' ~/.ssh/config | sort | peco --query "$LBUFFER")
+  if [ -n "$selected_host" ]; then
+    BUFFER="ssh ${selected_host}"
+    zle accept-line
+  fi
+  zle clear-screen
+}
+zle -N peco-ssh
+bindkey '^\' peco-ssh
