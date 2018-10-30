@@ -9,5 +9,3 @@ with a prefix, e.g.::
     00-first.py
     50-middle.py
     99-last.ipy
-
-please put it `~/.ipython/profile_default/startup/`

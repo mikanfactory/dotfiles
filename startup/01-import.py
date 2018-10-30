@@ -9,6 +9,7 @@ from functools import partial
 from statistics import mean, median
 
 import arrow
+import tables
 import numpy as np
 import pandas as pd
 import seaborn as sns
