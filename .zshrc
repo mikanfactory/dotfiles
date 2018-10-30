@@ -33,8 +33,8 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init - zsh)"
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# eval "$(rbenv init - zsh)"
 
 # go
 export GOPATH=$HOME/go
@@ -48,20 +48,20 @@ alias pop="popd"
 alias end="popd"
 alias dirs="dirs -v"
 alias vinit="virtualenv venv && venv"
-alias venv=". venv/bin/activate"
+alias venv=". ./.venv/bin/activate"
 alias vexit="deactivate"
 alias gcd='cd $(ghq root)/$(ghq list | peco)'
 # alias vim=nvim
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/s-sugai/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/s-sugai/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/home/s-sugai/google-cloud-sdk/path.zsh.inc' ]; then source '/home/s-sugai/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/s-sugai/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/s-sugai/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/home/s-sugai/google-cloud-sdk/completion.zsh.inc' ]; then source '/home/s-sugai/google-cloud-sdk/completion.zsh.inc'; fi
 
 # peco history
 function peco-history-selection() {
-BUFFER=`\history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+BUFFER=`\history -n 1 | tac  | awk '!a[$0]++' | peco`
 CURSOR=$#BUFFER
   zle reset-prompt
 }
