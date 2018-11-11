@@ -32,10 +32,6 @@ export PATH="/usr/local/sbin:$PATH"
 # nodebrew
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 
-# rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init - zsh)"
-
 # go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
@@ -53,6 +49,15 @@ alias vexit="deactivate"
 alias gcd='cd $(ghq root)/$(ghq list | peco)'
 # alias vim=nvim
 
+# global alias
+alias -g H='| head'
+alias -g T='| tail'
+alias -g G='| grep'
+alias -g L="| less"
+alias -g P="| peco"
+alias -g J="| jq ."
+
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/s-sugai/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/s-sugai/google-cloud-sdk/path.zsh.inc'; fi
 
@@ -69,7 +74,7 @@ zle -N peco-history-selection
 bindkey '^R' peco-history-selection
 
 # peco ssh
-function peco-ssh () {
+function peco-ssh() {
   local selected_host=$(awk '
   tolower($1)=="host" {
     for (i=2; i<=NF; i++) {
@@ -87,3 +92,12 @@ function peco-ssh () {
 }
 zle -N peco-ssh
 bindkey '^\' peco-ssh
+
+# peco ps
+function peco-ps() {
+  ps auxw P
+  # zle clear-screen
+  zle reset-prompt
+}
+zle -N peco-ps
+bindkey '^}' peco-ps
