@@ -29,6 +29,9 @@ export EDITOR=/usr/local/bin/vim
 export SHELL=/bin/zsh
 export PATH="/usr/local/sbin:$PATH"
 
+# kaggle
+export PATH="/home/shoji/.local/bin:$PATH"
+
 # nodebrew
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 
@@ -64,9 +67,18 @@ if [ -f '/Users/s-sugai/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/s-
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/s-sugai/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/s-sugai/google-cloud-sdk/completion.zsh.inc'; fi
 
+case ${OSTYPE} in
+  darwin*)
+    _tac='tail -r'
+    ;;
+  linux*)
+    _tac='tac'
+    ;;
+esac
+
 # peco history
 function peco-history-selection() {
-BUFFER=`\history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+BUFFER=`\history -n 1 | $_tac | awk '!a[$0]++' | peco`
 CURSOR=$#BUFFER
   zle reset-prompt
 }
