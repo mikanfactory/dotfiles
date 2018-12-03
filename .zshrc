@@ -30,7 +30,7 @@ export SHELL=/bin/zsh
 export PATH="/usr/local/sbin:$PATH"
 
 # kaggle
-export PATH="/home/shoji/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 # nodebrew
 export PATH=$HOME/.nodebrew/current/bin:$PATH
@@ -62,10 +62,10 @@ alias -g J="| jq ."
 
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/s-sugai/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/s-sugai/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then source "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/s-sugai/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/s-sugai/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then source "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
 case ${OSTYPE} in
   darwin*)
