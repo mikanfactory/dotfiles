@@ -9,6 +9,8 @@ install/vim-plugin: simlink
 	vim +":silent call dein#install()" +:q
 	mkdir -p ~/.vim/colors
 	cp ~/.cache/dein/repos/github.com/jpo/vim-railscasts-theme/colors/railscasts.vim ~/.vim/colors/
+	cd ~/.cache/dein/repos/github.com/Shougo/vimproc.vim && make
+	pip3 install --upgrade neovim
 
 .PHONY: link/vimrc
 simlink:

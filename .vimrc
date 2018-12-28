@@ -64,7 +64,17 @@ if dein#load_state(s:dein_dir)
   call dein#add('tpope/vim-dispatch')
   call dein#add('tpope/vim-surround')
   call dein#add('tmhedberg/matchit')
-  call dein#add('Shougo/vimproc.vim')
+
+  call dein#add('Shougo/vimproc.vim', {
+      \ 'build': {
+      \     'windows' : 'tools\\update-dll-mingw',
+      \     'cygwin'  : 'make -f make_cygwin.mak',
+      \     'mac'     : 'make -f make_mac.mak',
+      \     'linux'   : 'make',
+      \     'unix'    : 'gmake',
+      \    },
+      \ })
+
   call dein#add('thinca/vim-quickrun')
   call dein#add('tommcdo/vim-exchange')
   call dein#add('kana/vim-textobj-user')
@@ -74,7 +84,9 @@ if dein#load_state(s:dein_dir)
   call dein#add('bronson/vim-visual-star-search')
 
   " auto complete
-  " call dein#add('Shougo/deoplete.nvim')
+  call dein#add('Shougo/deoplete.nvim')
+  call dein#add('roxma/nvim-yarp')
+  call dein#add('roxma/vim-hug-neovim-rpc')
   call dein#add('Shougo/neosnippet')
   call dein#add('Shougo/neosnippet-snippets')
 
@@ -92,11 +104,11 @@ if dein#load_state(s:dein_dir)
   call dein#add('fatih/vim-go')
 
   " python
-  " call dein#add('zchee/deoplete-jedi')
+  call dein#add('zchee/deoplete-jedi')
   call dein#add('davidhalter/jedi-vim')
 
   " javascript
-  " call dein#add('carlitux/deoplete-ternjs')
+  call dein#add('carlitux/deoplete-ternjs')
 
   " toml
   call dein#add('cespare/vim-toml')
@@ -135,31 +147,32 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 
 "---------------------------------------------------------------------
-" neocomplete
+" deoplete
 "---------------------------------------------------------------------
-" let g:neocomplete#enable_at_startup = 1
-" let g:neocomplete#enable_smart_case = 1
-" let g:neocomplete#sources#syntax#min_keyword_length = 3
-" let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-" if !exists('g:neocomplete#keyword_patterns')
-"   let g:neocomplete#keyword_patterns = {}
-" endif
-" let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-" inoremap <expr><C-g> neocomplete#undo_completion()
-" inoremap <expr><C-l> neocomplete#complete_common_string()
-" 
-" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-" function! s:my_cr_function()
-"   return neocomplete#close_popup() . "\<CR>"
-" endfunction
-" inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-" inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-" inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-" 
-" if !exists('g:neocomplete#force_omni_input_patterns')
-"   let g:neocomplete#force_omni_input_patterns = {}
-" endif
-" let g:neocomplete#force_omni_input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_delay = 0
+let g:deoplete#auto_complete_start_length = 1
+let g:deoplete#enable_camel_case = 1
+let g:deoplete#file#enable_buffer_path = 1
+let g:deoplete#max_list = 1000
+
+" profiling
+let g:deoplete#enable_profile = 0
+
+" omnifunc
+let g:deoplete#omni#input_patterns = {}
+
+" ignore_source
+let g:deoplete#ignore_sources = {}
+
+" python
+let g:deoplete#ignore_sources.python =
+      \ ['buffer', 'dictionary', 'tag', 'syntax', 'neosnippet']
+let g:deoplete#sources#jedi#statement_length = 0
+let g:deoplete#sources#jedi#enable_cache = 1
+let g:deoplete#sources#jedi#short_types = 1
+let g:deoplete#sources#jedi#show_docstring = 0
+let g:deoplete#sources#jedi#debug_enabled = 0
 
 "---------------------------------------------------------------------
 " neosnippet
