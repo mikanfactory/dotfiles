@@ -12,7 +12,6 @@ install/vim-plugin: simlink
 	cd ~/.cache/dein/repos/github.com/Shougo/vimproc.vim && make
 	pip3 install --upgrade neovim
 
-.PHONY: link/vimrc
 simlink:
 	ln -s $(shell pwd)/.gitconfig $(HOME)/.gitconfig && \
 	ln -s $(shell pwd)/.tmux.conf $(HOME)/.tmux.conf && \
