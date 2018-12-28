@@ -37,6 +37,9 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export PATH="/usr/local/opt/go@1.9/bin:$PATH"
 
+# pipenv
+export PIPENV_VENV_IN_PROJECT=true
+
 # alias
 alias :q="exit"
 alias cd="pushd"
@@ -44,7 +47,7 @@ alias pop="popd"
 alias end="popd"
 alias dirs="dirs -v"
 alias vinit="virtualenv venv && venv"
-alias venv=". venv/bin/activate"
+alias venv=". .venv/bin/activate"
 alias vexit="deactivate"
 alias gcd='cd $(ghq root)/$(ghq list | peco)'
 # alias vim=nvim

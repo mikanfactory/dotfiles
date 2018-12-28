@@ -5,6 +5,7 @@ env
 .ipynb_checkpoints/
 .mypy_cache
 .pytest_cache/
+.vscode
 
 # zgok-ms
 parameters.yml
