@@ -1,0 +1,19 @@
+.PHONY: install
+install: install/vim-plugin
+
+.PHONY: install/*
+install/vim-plugin: simlink
+	curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+	sh ./installer.sh ~/.cache/dein
+	rm ./installer.sh
+	vim +":silent call dein#install()" +:q
+	mkdir -p ~/.vim/colors
+	cp ~/.cache/dein/repos/github.com/jpo/vim-railscasts-theme/colors/railscasts.vim ~/.vim/colors/
+
+.PHONY: link/vimrc
+simlink:
+	ln -s $(shell pwd)/.gitconfig $(HOME)/.gitconfig && \
+	ln -s $(shell pwd)/.tmux.conf $(HOME)/.tmux.conf && \
+	ln -s $(shell pwd)/.vimrc $(HOME)/.vimrc && \
+	ln -s $(shell pwd)/.zshrc $(HOME)/.zshrc && \
+	touch simlink
