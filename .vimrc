@@ -37,61 +37,92 @@ hi PmenuSbar ctermbg=255 ctermfg=0 guifg=#000000 guibg=#FFFFFF
 au BufRead,BufNewFile *.tpl setl ft=gohtmltmpl
 
 "---------------------------------------------------------------------
-" Start Neobundle Settings.
+" Start dein Settings.
 "---------------------------------------------------------------------
-set runtimepath+=~/.vim/bundle/neobundle.vim/
+let s:dein_dir = expand('~/.cache/dein')
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-" Required:
-call neobundle#begin(expand('~/.vim/bundle/'))
+if &compatible
+  set nocompatible
+endif
+" Add the dein installation directory into runtimepath
+set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
 
-NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'grep.vim'
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimshell.vim'
-NeoBundle 'jpo/vim-railscasts-theme'
-NeoBundle 'tomasr/molokai'
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'kana/vim-textobj-entire'
-NeoBundle 'tmhedberg/matchit'
-NeoBundle 'tommcdo/vim-exchange'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'bronson/vim-visual-star-search'
-NeoBundle 'Align'
-NeoBundle 'kien/rainbow_parentheses.vim'
-NeoBundle 'Shougo/vimproc', {
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
+
+  " dein
+  call dein#add('Shougo/dein.vim')
+
+  " color scheme
+  call dein#add('jpo/vim-railscasts-theme')
+  call dein#add('itchyny/lightline.vim')
+
+  " util
+  call dein#add('vim-scripts/Align')
+  call dein#add('vim-scripts/grep.vim')
+  call dein#add('tpope/vim-dispatch')
+  call dein#add('tpope/vim-surround')
+  call dein#add('tmhedberg/matchit')
+
+  call dein#add('Shougo/vimproc.vim', {
       \ 'build': {
-      \ 'mac': 'make -f make_mac.mak',
-      \ 'unix': 'make -f make_unix.mak',
-      \ }
-      \}
-NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'kmnk/vim-unite-giti'
-NeoBundle 'tpope/vim-dispatch'
-NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'}
-NeoBundle 'glidenote/memolist.vim'
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'fatih/vim-go'
-NeoBundle 'ternjs/tern_for_vim'
-NeoBundle 'maverickg/stan.vim'
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'davidhalter/jedi-vim'
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'w0rp/ale'
+      \     'windows' : 'tools\\update-dll-mingw',
+      \     'cygwin'  : 'make -f make_cygwin.mak',
+      \     'mac'     : 'make -f make_mac.mak',
+      \     'linux'   : 'make',
+      \     'unix'    : 'gmake',
+      \    },
+      \ })
 
-"-----------------------------------------------------------------------
-call neobundle#end()
-" Required:
-filetype plugin indent on
+  call dein#add('thinca/vim-quickrun')
+  call dein#add('tommcdo/vim-exchange')
+  call dein#add('kana/vim-textobj-user')
+  call dein#add('kana/vim-textobj-entire')
+  call dein#add('glidenote/memolist.vim')
+  call dein#add('kien/rainbow_parentheses.vim')
+  call dein#add('bronson/vim-visual-star-search')
 
-NeoBundleCheck
+  " auto complete
+  call dein#add('Shougo/deoplete.nvim')
+  call dein#add('roxma/nvim-yarp')
+  call dein#add('roxma/vim-hug-neovim-rpc')
+  call dein#add('Shougo/neosnippet')
+  call dein#add('Shougo/neosnippet-snippets')
+
+  " unite
+  call dein#add('Shougo/vimfiler')
+  call dein#add('Shougo/neomru.vim')
+  call dein#add('Shougo/unite.vim')
+  call dein#add('thinca/vim-unite-history')
+  call dein#add('kmnk/vim-unite-giti')
+
+  " syntax and language
+  call dein#add('w0rp/ale')
+
+  " go
+  call dein#add('fatih/vim-go')
+
+  " python
+  call dein#add('zchee/deoplete-jedi')
+  call dein#add('davidhalter/jedi-vim')
+
+  " javascript
+  call dein#add('carlitux/deoplete-ternjs')
+
+  " toml
+  call dein#add('cespare/vim-toml')
+
+  call dein#end()
+  call dein#save_state()
+endif
+
+if dein#check_install()
+  call dein#install()
+endif
 
 "---------------------------------------------------------------------
-" End Neobundle Settings.
+" End dein Settings.
 "---------------------------------------------------------------------
 
 "--------------------------------------------------------------------
@@ -116,31 +147,32 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 
 "---------------------------------------------------------------------
-" neocomplete
+" deoplete
 "---------------------------------------------------------------------
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-if !exists('g:neocomplete#keyword_patterns')
-  let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-inoremap <expr><C-g> neocomplete#undo_completion()
-inoremap <expr><C-l> neocomplete#complete_common_string()
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_delay = 0
+let g:deoplete#auto_complete_start_length = 1
+let g:deoplete#enable_camel_case = 1
+let g:deoplete#file#enable_buffer_path = 1
+let g:deoplete#max_list = 1000
 
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return neocomplete#close_popup() . "\<CR>"
-endfunction
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" profiling
+let g:deoplete#enable_profile = 0
 
-if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
-endif
-let g:neocomplete#force_omni_input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+" omnifunc
+let g:deoplete#omni#input_patterns = {}
+
+" ignore_source
+let g:deoplete#ignore_sources = {}
+
+" python
+let g:deoplete#ignore_sources.python =
+      \ ['buffer', 'dictionary', 'tag', 'syntax', 'neosnippet']
+let g:deoplete#sources#jedi#statement_length = 0
+let g:deoplete#sources#jedi#enable_cache = 1
+let g:deoplete#sources#jedi#short_types = 1
+let g:deoplete#sources#jedi#show_docstring = 0
+let g:deoplete#sources#jedi#debug_enabled = 0
 
 "---------------------------------------------------------------------
 " neosnippet
