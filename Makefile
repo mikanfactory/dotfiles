@@ -18,3 +18,8 @@ simlink:
 	ln -s $(shell pwd)/.vimrc $(HOME)/.vimrc && \
 	ln -s $(shell pwd)/.zshrc $(HOME)/.zshrc && \
 	touch simlink
+
+simlink_ipython:
+	mkdir -p $(HOME)/.ipython/profile_default && \
+	ln -s $(shell pwd)/startup $(HOME)/.ipython/profile_default && \
+	touch simlink_ipython
