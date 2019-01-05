@@ -21,5 +21,6 @@ simlink:
 
 simlink_ipython:
 	mkdir -p $(HOME)/.ipython/profile_default && \
-	ln -s $(shell pwd)/startup $(HOME)/.ipython/profile_default && \
+	ln -s $(shell pwd)/jupyter_configs/startup $(HOME)/.ipython/profile_default && \
+	ln -s $(shell pwd)/jupyter_configs/custom $(HOME)/.jupyter && \
 	touch simlink_ipython
