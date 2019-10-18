@@ -43,17 +43,24 @@ export PATH="/usr/local/opt/go@1.9/bin:$PATH"
 # pipenv
 export PIPENV_VENV_IN_PROJECT=true
 
+# poetry
+export PATH="$HOME/.poetry/bin:$PATH"
+
+# embulk
+export PATH="$HOME/.embulk/bin:$PATH"
+
 # alias
 alias :q="exit"
 alias cd="pushd"
 alias pop="popd"
 alias end="popd"
 alias dirs="dirs -v"
-alias vinit="virtualenv venv && venv"
+alias vinit="python3 -m venv venv && venv"
 alias venv=". .venv/bin/activate"
 alias vexit="deactivate"
-alias gcd='cd $(ghq root)/$(ghq list | peco)'
-# alias vim=nvim
+alias ll='exa -bghml --git'
+alias vim=/usr/local/bin/vim
+alias diff=colordiff
 
 # global alias
 alias -g H='| head'
@@ -62,26 +69,13 @@ alias -g G='| grep'
 alias -g L="| less"
 alias -g P="| peco"
 alias -g J="| jq ."
+alias -g W="| wc -l"
 
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then source "$HOME/google-cloud-sdk/path.zsh.inc"; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then source "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
-
-case ${OSTYPE} in
-  darwin*)
-    _tac='tail -r'
-    ;;
-  linux*)
-    _tac='tac'
-    ;;
-esac
+tac=${commands[tac]:-"tail -r"}
 
 # peco history
 function peco-history-selection() {
-BUFFER=`\history -n 1 | $_tac | awk '!a[$0]++' | peco`
+BUFFER=`\history -n 1 | eval $tac | awk '!a[$0]++' | peco`
 CURSOR=$#BUFFER
   zle reset-prompt
 }
