@@ -75,6 +75,8 @@ if dein#load_state(s:dein_dir)
       \    },
       \ })
 
+  call dein#add('bronson/vim-trailing-whitespace')
+  call dein#add('roxma/vim-hug-neovim-rpc')
   call dein#add('thinca/vim-quickrun')
   call dein#add('tommcdo/vim-exchange')
   call dein#add('kana/vim-textobj-user')
@@ -138,7 +140,7 @@ endif
 "--------------------------------------------------------------------
 " quickrun.vim
 "--------------------------------------------------------------------
-nnoremap <silent> ,qr :QuickRun -outputter/buffer/split 
+nnoremap <silent> ,qr :QuickRun -outputter/buffer/split
       \ ":botright 8sp" -hook/time/enable 1<CR>
 
 
