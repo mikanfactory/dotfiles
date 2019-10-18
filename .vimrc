@@ -113,6 +113,9 @@ if dein#load_state(s:dein_dir)
   " toml
   call dein#add('cespare/vim-toml')
 
+  " whitespace
+  call dein#add('bronson/vim-trailing-whitespace')
+
   call dein#end()
   call dein#save_state()
 endif
@@ -269,7 +272,7 @@ au FileType go nmap ,gi <Plug>(go-imports)
 "-------------------------------------------------------------------
 " memolist-vim
 "--------------------------------------------------------------------
-let g:memolist_path = "$HOME/Dropbox/1writer"
+let g:memolist_path = "$HOME/Documents/memolist"
 let g:memolist_memo_date = "%Y-%m-%d %H:%M"
 let g:memolist_memo_date = "epoch"
 let g:memolist_memo_date = "%D %T"
@@ -277,7 +280,7 @@ let g:memolist_prompt_tags = 1
 let g:memolist_prompt_categories = 1
 let g:memolist_qfixgrep = 1
 let g:memolist_vimfiler = 1
-let g:memolist_template_dir_path = "$HOME/Dropbox/1writer"
+let g:memolist_template_dir_path = "$HOME/Documents/memolist"
 
 "--------------------------------------------------------------------
 " lightline

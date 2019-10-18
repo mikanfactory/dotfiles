@@ -22,9 +22,7 @@ div.output_area pre {
   font-family: "Menlo", "Monaco", "monospace";
   font-size: 11pt;
 }
-div.text_cell,
-  div.text_cell_render pre,
-  div.text_cell_render {
-    font-family: "Menlo", "Monaco", "monospace";
-    font-size: 11pt;
-  }
+div.text_cell, div.text_cell_render pre, div.text_cell_render {
+  font-family: "Menlo", "Monaco", "monospace";
+  font-size: 11pt;
+}
