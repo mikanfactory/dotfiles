@@ -9,6 +9,8 @@
   co = checkout
   cm = commit
   st = status --branch
+  sw = switch
+  rst = restore
   branches = branch -a
   remotes = remote -v
   b = branch

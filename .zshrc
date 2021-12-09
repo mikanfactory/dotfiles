@@ -25,29 +25,14 @@ setopt nolistbeep
 setopt list_packed
 disable r
 
-export EDITOR=/usr/local/bin/vim
+export EDITOR=/usr/bin/vim
 export SHELL=/bin/zsh
 export PATH="/usr/local/sbin:$PATH"
-
-# kaggle
-export PATH="$HOME/.local/bin:$PATH"
-
-# nodebrew
+export PATH="/Users/shoji.sugai/.local/bin:$PATH"
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 
-# go
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
-export PATH="/usr/local/opt/go@1.9/bin:$PATH"
-
-# pipenv
-export PIPENV_VENV_IN_PROJECT=true
-
-# poetry
-export PATH="$HOME/.poetry/bin:$PATH"
-
-# embulk
-export PATH="$HOME/.embulk/bin:$PATH"
+export AWS_PROFILE=andpad-production
+export GOOGLE_APPLICATION_CREDENTIALS=$HOME/code/bqloader/config/gcp.json
 
 # alias
 alias :q="exit"
@@ -59,7 +44,7 @@ alias vinit="python3 -m venv venv && venv"
 alias venv=". .venv/bin/activate"
 alias vexit="deactivate"
 alias ll='exa -bghml --git'
-alias vim=/usr/local/bin/vim
+alias vim=/usr/bin/vim
 alias diff=colordiff
 
 # global alias
@@ -110,3 +95,9 @@ function peco-ps() {
 }
 zle -N peco-ps
 bindkey '^}' peco-ps
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/shoji.sugai/code/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shoji.sugai/code/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/shoji.sugai/code/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shoji.sugai/code/google-cloud-sdk/completion.zsh.inc'; fi
