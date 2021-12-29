@@ -1,7 +1,7 @@
 colorscheme railscasts
 syntax enable
 
-lang C
+lang en_US.UTF-8
 set number
 set cursorline
 set expandtab
@@ -34,6 +34,7 @@ hi PmenuSbar ctermbg=0 ctermfg=9
 hi PmenuSbar ctermbg=255 ctermfg=0 guifg=#000000 guibg=#FFFFFF
 
 augroup filetypes
+  au BufRead,BufNewFile *.sql              setl ft=sql
   au BufRead,BufNewFile *.go               setl ft=go
   au BufRead,BufNewFile *.py               setl ft=python
   au BufRead,BufNewFile *.rb               setl ft=ruby
@@ -54,6 +55,11 @@ augroup END
 " trim whitespace
 autocmd BufWritePre * :%s/\s\+$//ge
 
+let mapleader = ","
+
+" clipboard
+set clipboard+=unnamedplus
+
 "---------------------------------------------------------------------
 " Start dein Settings.
 "---------------------------------------------------------------------
@@ -72,14 +78,14 @@ if dein#load_state(s:dein_dir)
 
   " dein
   call dein#add('Shougo/dein.vim')
+  call dein#add('roxma/nvim-yarp')
+  call dein#add('roxma/vim-hug-neovim-rpc')
 
   " color scheme
   call dein#add('jpo/vim-railscasts-theme')
   call dein#add('itchyny/lightline.vim')
 
   " util
-  call dein#add('Align')
-  call dein#add('grep.vim')
   call dein#add('tpope/vim-dispatch')
   call dein#add('tpope/vim-surround')
   call dein#add('tmhedberg/matchit')
@@ -98,7 +104,8 @@ if dein#load_state(s:dein_dir)
   call dein#add('Shougo/neosnippet-snippets')
 
   " unite
-  call dein#add('Shougo/vimfiler')
+  call dein#add('Shougo/defx.nvim')
+  " call dein#add('Shougo/vimfiler')
   call dein#add('Shougo/neomru.vim')
   call dein#add('Shougo/unite.vim')
   call dein#add('thinca/vim-unite-history')
@@ -119,6 +126,10 @@ if dein#load_state(s:dein_dir)
 
   " toml
   call dein#add('cespare/vim-toml')
+
+  " auto pair
+  call dein#add('jiangmiao/auto-pairs')
+
 
   call dein#end()
   call dein#save_state()
@@ -175,47 +186,6 @@ au Syntax * RainbowParenthesesLoadSquare
 "---------------------------------------------------------------------
 " deoplete
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#auto_complete_delay = 0
-let g:deoplete#auto_complete_start_length = 1
-let g:deoplete#enable_camel_case = 1
-let g:deoplete#file#enable_buffer_path = 1
-let g:deoplete#max_list = 1000
-
-call deoplete#custom#set('_', 'converters',
-      \ ['converter_auto_paren', 'converter_remove_overlap'])
-call deoplete#custom#set('_', 'matchers', ['matcher_fuzzy'])
-
-" profiling
-let g:deoplete#enable_profile = 0
-
-" omnifunc
-let g:deoplete#omni#input_patterns = {}
-
-" ignore_source
-let g:deoplete#ignore_sources = {}
-
-" python
-let g:deoplete#ignore_sources.python =
-      \ ['buffer', 'dictionary', 'tag', 'syntax', 'neosnippet']
-let g:deoplete#sources#jedi#statement_length = 0
-let g:deoplete#sources#jedi#enable_cache = 1
-let g:deoplete#sources#jedi#short_types = 1
-let g:deoplete#sources#jedi#show_docstring = 0
-let g:deoplete#sources#jedi#debug_enabled = 0
-
-" neosnippet
-imap <C-k> <Plug>(neosnippet_expand_or_jump)
-smap <C-k> <Plug>(neosnippet_expand_or_jump)
-xmap <C-k> <Plug>(neosnippet_expand_target)
-imap <expr><Tab> neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)"
-      \: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><Tab> neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)"
-      \: "\<Tab>"
-if has('conceal')
-  set conceallevel=2 concealcursor=i
-endif
 
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 
@@ -262,6 +232,80 @@ nnoremap <silent> ,f :<C-u>call DispatchUniteFileRecAsyncOrGit()<CR>
 nnoremap <silent> ,y :<C-u>Unite history/yank<CR>
 nnoremap <silent> ,s :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
 
+
+"--------------------------------------------------------------------
+" defx
+"---------------------------------------------------------------------
+" autocmd VimEnter * execute 'Defx'
+nnoremap <silent> <Leader>f :<C-u> Defx <CR>
+
+autocmd FileType defx call s:defx_my_settings()
+
+function! s:defx_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+   \ defx#do_action('drop')
+  nnoremap <silent><buffer><expr> c
+  \ defx#do_action('copy')
+  nnoremap <silent><buffer><expr> m
+  \ defx#do_action('move')
+  nnoremap <silent><buffer><expr> p
+  \ defx#do_action('paste')
+  nnoremap <silent><buffer><expr> l
+  \ defx#do_action('drop')
+  nnoremap <silent><buffer><expr> t
+  \ defx#do_action('open','tabnew')
+  nnoremap <silent><buffer><expr> E
+  \ defx#do_action('drop', 'vsplit')
+  nnoremap <silent><buffer><expr> P
+  \ defx#do_action('drop', 'pedit')
+  nnoremap <silent><buffer><expr> o
+  \ defx#do_action('open_or_close_tree')
+  nnoremap <silent><buffer><expr> K
+  \ defx#do_action('new_directory')
+  nnoremap <silent><buffer><expr> N
+  \ defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> M
+  \ defx#do_action('new_multiple_files')
+  nnoremap <silent><buffer><expr> C
+  \ defx#do_action('toggle_columns',
+  \                'mark:indent:icon:filename:type:size:time')
+  nnoremap <silent><buffer><expr> S
+  \ defx#do_action('toggle_sort', 'time')
+  nnoremap <silent><buffer><expr> d
+  \ defx#do_action('remove')
+  nnoremap <silent><buffer><expr> r
+  \ defx#do_action('rename')
+  nnoremap <silent><buffer><expr> !
+  \ defx#do_action('execute_command')
+  nnoremap <silent><buffer><expr> x
+  \ defx#do_action('execute_system')
+  nnoremap <silent><buffer><expr> yy
+  \ defx#do_action('yank_path')
+  nnoremap <silent><buffer><expr> .
+  \ defx#do_action('toggle_ignored_files')
+  nnoremap <silent><buffer><expr> ;
+  \ defx#do_action('repeat')
+  nnoremap <silent><buffer><expr> h
+  \ defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> ~
+  \ defx#do_action('cd')
+  nnoremap <silent><buffer><expr> q
+  \ defx#do_action('quit')
+  nnoremap <silent><buffer><expr> <Space>
+  \ defx#do_action('toggle_select') . 'j'
+  nnoremap <silent><buffer><expr> *
+  \ defx#do_action('toggle_select_all')
+  nnoremap <silent><buffer><expr> j
+  \ line('.') == line('$') ? 'gg' : 'j'
+  nnoremap <silent><buffer><expr> k
+  \ line('.') == 1 ? 'G' : 'k'
+  nnoremap <silent><buffer><expr> <C-l>
+  \ defx#do_action('redraw')
+  nnoremap <silent><buffer><expr> <C-g>
+  \ defx#do_action('print')
+  nnoremap <silent><buffer><expr> cd
+  \ defx#do_action('change_vim_cwd')
+endfunction
 
 "--------------------------------------------------------------------
 " syntax and language
