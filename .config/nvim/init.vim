@@ -49,7 +49,9 @@ augroup filetypes
   au BufRead,BufNewFile *.sh               setl ft=zsh
   au BufRead,BufNewFile *.vim,.vimrc       setl ft=vim
   au BufRead,BufNewFile *.md,.markdown     setl ft=markdown
-  au BufRead,BufNewFile *.mk,makefile,Makefile  setl ft=make noexpandtab
+  au BufRead,BufNewFile makefile,Makefile  setl ft=make noexpandtab
+  au BufRead,BufNewFile *.mk               setl ft=make noexpandtab
+  au BufRead,BufNewFile .tmux.conf         setl ft=tmux noexpandtab
 augroup END
 
 " trim whitespace
