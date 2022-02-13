@@ -1,8 +1,8 @@
-DOT_CONFIG_SRC := $(HOME)/code/dotfiles
+DOT_CONFIG_SRC := $(HOME)/code/dotfiles/.config
 
 
 .PHONY: install
-install: install/color_schema install/plugins install/nvim link
+install: install/color_schema install/plugins install/neovim link
 
 
 .PHONY: install/*
@@ -15,11 +15,11 @@ install/plugins:
 	curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
 	sh ./installer.sh ~/.cache/dein
 	rm ./installer.sh
-	nvim +":silent call dein#install()" +:q
+	vim +":silent call dein#install()" +:q
 	cd ~/.cache/dein/repos/github.com/Shougo/vimproc.vim && make
 
 
-install/nvim:
+install/neovim:
 	pip3 install --upgrade neovim
 
 

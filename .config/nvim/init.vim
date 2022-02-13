@@ -49,7 +49,7 @@ augroup filetypes
   au BufRead,BufNewFile *.sh               setl ft=zsh
   au BufRead,BufNewFile *.vim,.vimrc       setl ft=vim
   au BufRead,BufNewFile *.md,.markdown     setl ft=markdown
-  au BufRead,BufNewFile makefile,Makefile  setl ft=make noexpandtab
+  au BufRead,BufNewFile *.mk,makefile,Makefile  setl ft=make noexpandtab
 augroup END
 
 " trim whitespace

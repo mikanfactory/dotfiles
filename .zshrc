@@ -66,6 +66,10 @@ source "$HOME/code/dotfiles/.config/zsh/rc/custom_env.sh"
 # auto suggestion
 # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+# pyenv
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+
 # starship
 eval "$(starship init zsh)"
 
