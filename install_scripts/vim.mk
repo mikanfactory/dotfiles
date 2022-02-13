@@ -1,3 +1,6 @@
+DOT_CONFIG_SRC := $(HOME)/code/dotfiles
+
+
 .PHONY: install
 install: install/color_schema install/plugins install/nvim link
 

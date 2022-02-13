@@ -1,0 +1,10 @@
+bat
+curl
+exa
+git
+navi
+neovim
+peco
+starship
+tig
+tmux
