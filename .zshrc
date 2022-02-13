@@ -1,8 +1,6 @@
-# lang
-export LANG=ja_JP.UTF-8
-
-
 # fundamental
+WORDCHARS='*?_-[]~&;!#$%^(){}<>|.'
+
 autoload -U compinit
 compinit
 HISTFILE=~/.zsh_history
@@ -17,11 +15,16 @@ setopt nolistbeep
 setopt list_packed
 disable r
 
-export EDITOR=/usr/bin/vim
+# editor
+if builtin command -v nvim > /dev/null 2>&1; then
+  export EDITOR=${EDITOR:-nvim}
+else
+  export EDITOR=${EDITOR:-vim}
+fi
+
+# path
 export SHELL=/bin/zsh
 export PATH="/usr/local/sbin:$PATH"
-export PATH="/Users/shoji.sugai/.local/bin:$PATH"
-export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # alias
 alias :q="exit"
@@ -61,7 +64,10 @@ alias -g W="| wc -l"
 source "$ZRCDIR/peco.sh"
 
 # export custom environment
-source "$ZRCDIR/custom_env.sh"
+local_env="$ZRCDIR/local_env.sh"
+if [ -e $local_env ]; then
+  source $local_env
+fi
 
 # auto suggestion
 # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -73,6 +79,4 @@ eval "$(pyenv init -)"
 # starship
 eval "$(starship init zsh)"
 
-# config
-WORDCHARS='*?_-[]~&;!#$%^(){}<>|.'
 

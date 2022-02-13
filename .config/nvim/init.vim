@@ -45,7 +45,7 @@ augroup filetypes
   au BufRead,BufNewFile *.scss             setl ft=scss
   au BufRead,BufNewFile *.html             setl ft=html
   au BufRead,BufNewFile *.toml             setl ft=toml
-  au BufRead,BufNewFile .zshrc             setl ft=zsh
+  au BufRead,BufNewFile .zshrc,.zshenv     setl ft=zsh
   au BufRead,BufNewFile *.sh               setl ft=zsh
   au BufRead,BufNewFile *.vim,.vimrc       setl ft=vim
   au BufRead,BufNewFile *.md,.markdown     setl ft=markdown
