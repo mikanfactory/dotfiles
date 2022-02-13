@@ -37,7 +37,7 @@ alias diff=colordiff
 
 if command -v exa &> /dev/null
 then
-    alias ll='exa -bghml --git'
+    alias ll='exa -bghmla --git'
 fi
 
 if command -v peco &> /dev/null
@@ -58,11 +58,17 @@ alias -g L="| less"
 alias -g W="| wc -l"
 
 # export peco custom functions
-source "$HOME/code/dotfiles/zsh/peco.sh"
+source "$HOME/code/dotfiles/.config/zsh/rc/peco.sh"
 
 # export custom environment
-source "$HOME/code/dotfiles/zsh/custom_env.sh"
+source "$HOME/code/dotfiles/.config/zsh/rc/custom_env.sh"
+
+# auto suggestion
+# source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # starship
 eval "$(starship init zsh)"
+
+# config
+WORDCHARS='*?_-[]~&;!#$%^(){}<>|.'
 
