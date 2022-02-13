@@ -26,6 +26,6 @@
 [github]
   user = mikanfactory
 [core]
-  excludesfile = ~/dotfiles/.gitignore_global
+  excludesfile = ~/.gitignore_global
 [ghq]
   root = ~/.go/src

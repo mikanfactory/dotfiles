@@ -1,16 +1,10 @@
 .DS_Store
 *.swp
+.venv
 venv
 env
 .ipynb_checkpoints/
 .mypy_cache
 .pytest_cache/
 .vscode
-
-# zgok-ms
-parameters.yml
-composer.phar
-goutte.phar
-tools/devstacks/docker-sync.yml
-memcached.so
-php-cs-fixer.phar
+.idea
