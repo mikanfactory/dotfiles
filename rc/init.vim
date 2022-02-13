@@ -1,4 +1,4 @@
-colorscheme railscasts
+colorscheme hybrid
 syntax enable
 
 lang en_US.UTF-8
@@ -39,7 +39,6 @@ augroup filetypes
   au BufRead,BufNewFile *.py               setl ft=python
   au BufRead,BufNewFile *.rb               setl ft=ruby
   au BufRead,BufNewFile *.js,              setl ft=javascript
-  " au BufRead,BufNewFile *.jsx,             setl ft=javascript.jsx
   au BufRead,BufNewFile *.css              setl ft=css
   au BufRead,BufNewFile *.tpl              setl ft=gohtmltmpl
   au BufRead,BufNewFile *.json             setl ft=json
@@ -47,6 +46,7 @@ augroup filetypes
   au BufRead,BufNewFile *.html             setl ft=html
   au BufRead,BufNewFile *.toml             setl ft=toml
   au BufRead,BufNewFile .zshrc             setl ft=zsh
+  au BufRead,BufNewFile *.sh               setl ft=zsh
   au BufRead,BufNewFile *.vim,.vimrc       setl ft=vim
   au BufRead,BufNewFile *.md,.markdown     setl ft=markdown
   au BufRead,BufNewFile makefile,Makefile  setl ft=make noexpandtab
@@ -128,7 +128,7 @@ if dein#load_state(s:dein_dir)
   call dein#add('cespare/vim-toml')
 
   " auto pair
-  call dein#add('jiangmiao/auto-pairs')
+  " call dein#add('jiangmiao/auto-pairs')
 
 
   call dein#end()
@@ -312,11 +312,8 @@ endfunction
 "---------------------------------------------------------------------
 " neomake
 let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_javascript_enabled_makers = ['eslint_d']
 augroup neomake_run
   autocmd! BufWritePost,BufEnter * Neomake
-  autocmd! InsertLeave *.js,*jsx Neomake
-  autocmd! VimLeave *.js,*jsx !eslint_d stop
 augroup END
 
 " go
