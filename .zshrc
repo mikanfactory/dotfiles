@@ -58,10 +58,10 @@ alias -g L="| less"
 alias -g W="| wc -l"
 
 # export peco custom functions
-source "$HOME/code/dotfiles/.config/zsh/rc/peco.sh"
+source "$ZRCDIR/peco.sh"
 
 # export custom environment
-source "$HOME/code/dotfiles/.config/zsh/rc/custom_env.sh"
+source "$ZRCDIR/custom_env.sh"
 
 # auto suggestion
 # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
