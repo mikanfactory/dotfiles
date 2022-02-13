@@ -307,6 +307,13 @@ function! s:defx_my_settings() abort
   \ defx#do_action('change_vim_cwd')
 endfunction
 
+call defx#custom#option('_', {
+      \ 'winwidth': 30,
+      \ 'split': 'vertical',
+      \ 'direction': 'topleft',
+      \ 'show_ignored_files': 1,
+      \ })
+
 "--------------------------------------------------------------------
 " syntax and language
 "---------------------------------------------------------------------
