@@ -11,7 +11,7 @@ install/brew_formulae:
 
 
 install/brew_cask_formulae:
-	brew install $(shell $(PYTHON) install_scripts/lib/line_up_lists.py install_scripts/brew_cask_formulae.txt)
+	brew install --cask $(shell $(PYTHON) install_scripts/lib/line_up_lists.py install_scripts/brew_cask_formulae.txt)
 
 
 .PHONY: dump
