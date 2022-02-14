@@ -71,10 +71,7 @@ alias -g W="| wc -l"
 source "$ZRCDIR/peco.sh"
 
 # export custom environment
-local_env="$ZRCDIR/local_env.sh"
-if [ -e $local_env ]; then
-  source $local_env
-fi
+source "$ZRCDIR/local_env.sh"
 
 # auto suggestion
 # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
