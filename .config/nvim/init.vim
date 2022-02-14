@@ -316,6 +316,10 @@ call defx#custom#option('_', {
       \ 'show_ignored_files': 1,
       \ })
 
+
+autocmd BufWritePost * call defx#redraw()
+autocmd BufEnter * call defx#redraw()
+
 "--------------------------------------------------------------------
 " syntax and language
 "---------------------------------------------------------------------

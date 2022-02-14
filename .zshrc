@@ -26,6 +26,10 @@ fi
 export SHELL=/bin/zsh
 export PATH="/usr/local/sbin:$PATH"
 
+export LC_ALL=en_US.UTF-8
+export LC_TYPE=en_US.UTF-8
+export LANG=en_US.UTF-8
+
 # alias
 alias :q="exit"
 alias cd="pushd"
@@ -36,6 +40,9 @@ alias vinit="python3 -m venv venv && venv"
 alias venv=". .venv/bin/activate"
 alias vexit="deactivate"
 alias vim=/usr/bin/vim
+alias tmux="tmux -u -2"
+# alias vim=/usr/local/bin/nvim
+
 alias diff=colordiff
 
 if command -v exa &> /dev/null
@@ -78,5 +85,3 @@ eval "$(pyenv init -)"
 
 # starship
 eval "$(starship init zsh)"
-
-
