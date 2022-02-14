@@ -8,4 +8,4 @@ install: link
 
 .PHONY: link
 link:
-	ln -s $(DOT_CONFIG_SRC)/.config/starship.toml $(HOME)/.config/starship.toml
+	ln -s $(DOT_CONFIG_SRC)/starship.toml $(HOME)/.config/starship.toml
