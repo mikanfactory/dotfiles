@@ -1,5 +1,5 @@
 PROJECT_ROOT := $(HOME)/code/dotfiles
-DOT_CONFIG_SRC := $(PROJECT_ROOT).config
+DOT_CONFIG_SRC := $(PROJECT_ROOT)/.config
 
 
 .PHONY: install

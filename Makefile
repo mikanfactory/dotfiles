@@ -1,5 +1,5 @@
 PROJECT_ROOT := $(shell pwd)
-makefiles = git.mk tmux.mk zsh.mk nvim.mk font.mk
+makefiles = git.mk homebrew.mk hyper.mk nvim.mk starship.mk tmux.mk zsh.mk
 
 .PHONY: install
 install:
