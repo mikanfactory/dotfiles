@@ -8,7 +8,7 @@ install: install/color_schema install/plugins install/neovim link
 
 .PHONY: install/*
 install/color_schema:
-	mkdir -n ~/.config/nvim/colors
+	mkdir -p ~/.config/nvim/colors
 	curl https://raw.githubusercontent.com/w0ng/vim-hybrid/master/colors/hybrid.vim -o ~/.config/nvim/colors/hybrid.vim
 
 
