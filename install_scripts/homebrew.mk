@@ -24,5 +24,6 @@ dump/formulae:
 
 
 dump/cask:
+	brew tap homebrew/cask-fonts
 	brew list --cask -1 > $(shell pwd)/install_scripts/brew_cask_formulae.txt
 
