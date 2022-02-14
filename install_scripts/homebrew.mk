@@ -11,6 +11,7 @@ install/brew_formulae:
 
 
 install/brew_cask_formulae:
+	brew tap homebrew/cask-fonts
 	brew install --cask $(shell $(PYTHON) install_scripts/lib/line_up_lists.py install_scripts/brew_cask_formulae.txt)
 
 
@@ -24,6 +25,5 @@ dump/formulae:
 
 
 dump/cask:
-	brew tap homebrew/cask-fonts
 	brew list --cask -1 > $(shell pwd)/install_scripts/brew_cask_formulae.txt
 
