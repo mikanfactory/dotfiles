@@ -1,4 +1,4 @@
-colorscheme railscasts
+colorscheme desert
 syntax enable
 
 lang C
