@@ -1,0 +1,11 @@
+# Prompt
+add_newline = true
+scan_timeout = 10
+
+[character]
+success_symbol = "[>](bold green)"
+
+[directory]
+truncation_length = 10
+truncate_to_repo = false
+
