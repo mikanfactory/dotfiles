@@ -1,0 +1,19 @@
+# theme
+import = [
+    "~/.config/alacritty/themes/themes/alacritty_0_12.toml"
+]
+
+[font]
+normal = {family = 'FiraCode Nerd Font', style = "Regular"}
+bold = {family = 'FiraCode Nerd Font', style = "Bold"}
+italic = {family = 'FiraCode Nerd Font', style = "Italic"}
+size = 18
+
+[keyboard]
+bindings = [
+  {action = "ToggleViMode", key = "X", mods = "Control" },
+  {action = "ToggleViMode", key = "Escape", mode = "Vi" },
+  {action = "ToggleViMode", key = "[", mods = "Control", mode = "Vi" },
+  {action = "ToggleViMode", key = "[", mode = "Vi" }
+]
+
