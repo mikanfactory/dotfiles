@@ -51,6 +51,11 @@ then
     alias lt='ls --tree'
 fi
 
+if command -v chezmoi &> /dev/null
+then
+    alias chez='chezmoi'
+fi
+
 if command -v peco &> /dev/null
 then
     alias -g P="| peco"
