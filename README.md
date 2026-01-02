@@ -1,13 +1,6 @@
 # dotfiles
 
-[chezmoi](https://www.chezmoi.io/)で管理する個人用dotfiles
-
-## 特徴
-
-- **複数マシン対応**: マシンIDに基づいて設定を自動適用
-- **テンプレートベース**: 仕事用/個人用で条件分岐
-- **自動セットアップ**: 新規マシンでワンライナーインストール
-- **バージョン管理**: gitで変更履歴を追跡
+mikanfactoryのdotfiles
 
 ## クイックスタート
 
@@ -18,18 +11,7 @@ brew install chezmoi
 chezmoi init --apply mikanfactory/dotfiles
 ```
 
-初回実行時に`machineId`の入力を求められます:
-- `work1` / `work2`: 仕事用マシン（専用のgit設定とパス）
-- その他の名前（例: `mac-mini`）: 個人用マシン設定
-
-### インストールされるもの
-
-- **シェル**: Zsh（カスタム設定付き）
-- **プロンプト**: Starship
-- **エディタ**: Neovim（dein.vimプラグイン）
-- **ターミナル**: Hyper
-- **ツール**: peco, exa, bat, tig, tmux など
-- **マシン固有**: nvm, pnpm, mise, direnv, Google Cloud SDK（自動設定）
+初回実行時に`machineId`の入力を求められます。
 
 ## パッケージ管理
 
