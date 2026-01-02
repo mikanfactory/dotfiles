@@ -1,187 +1,187 @@
 # dotfiles
 
-Personal dotfiles managed with [chezmoi](https://www.chezmoi.io/).
+[chezmoi](https://www.chezmoi.io/)で管理する個人用dotfiles
 
-## Features
+## 特徴
 
-- **Multi-machine support**: Automatically adapts configuration based on machine ID
-- **Template-based configuration**: Conditional settings for work/personal machines
-- **Automated setup**: One-liner installation for new machines
-- **Version controlled**: Track changes with git
+- **複数マシン対応**: マシンIDに基づいて設定を自動適用
+- **テンプレートベース**: 仕事用/個人用で条件分岐
+- **自動セットアップ**: 新規マシンでワンライナーインストール
+- **バージョン管理**: gitで変更履歴を追跡
 
-## Quick Start
+## クイックスタート
 
-### New Machine Setup
+### 新規マシンでのセットアップ
 
 ```bash
-# One-liner installation
+# ワンライナーインストール
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply mikanfactory/dotfiles
 ```
 
-Or with Homebrew:
+Homebrewを使う場合:
 
 ```bash
 brew install chezmoi
 chezmoi init --apply mikanfactory/dotfiles
 ```
 
-On first run, you'll be prompted to enter a `machineId`:
-- `work1` / `work2`: Work machines (custom git config and paths)
-- Any other name (e.g., `mac-mini`): Personal machine settings
+初回実行時に`machineId`の入力を求められます:
+- `work1` / `work2`: 仕事用マシン（専用のgit設定とパス）
+- その他の名前（例: `mac-mini`）: 個人用マシン設定
 
-### What Gets Installed
+### インストールされるもの
 
-- **Shell**: Zsh with custom configuration
-- **Prompt**: Starship
-- **Editor**: Neovim with plugins (dein.vim)
-- **Terminal**: Hyper
-- **Tools**: peco, exa, bat, tig, tmux, and more
-- **Machine-specific**: nvm, pnpm, mise, direnv, Google Cloud SDK (auto-configured)
+- **シェル**: Zsh（カスタム設定付き）
+- **プロンプト**: Starship
+- **エディタ**: Neovim（dein.vimプラグイン）
+- **ターミナル**: Hyper
+- **ツール**: peco, exa, bat, tig, tmux など
+- **マシン固有**: nvm, pnpm, mise, direnv, Google Cloud SDK（自動設定）
 
-## Daily Usage
+## 日常的な使い方
 
-### Editing Configuration
+### 設定の編集
 
 ```bash
-# Edit a dotfile
+# dotfileを編集
 chezmoi edit ~/.zshrc
 
-# Edit machine-specific settings
+# マシン固有の設定を編集
 chezmoi edit ~/.config/zsh/rc/local_env.sh
 ```
 
-### Applying Changes
+### 変更の適用
 
 ```bash
-# Preview changes
+# 変更をプレビュー
 chezmoi diff
 
-# Apply changes to home directory
+# ホームディレクトリに変更を適用
 chezmoi apply
 
-# Apply with verbose output
+# 詳細出力で適用
 chezmoi apply -v
 ```
 
-### Syncing Across Machines
+### マシン間での同期
 
 ```bash
-# Update from remote repository
+# リモートリポジトリから更新
 chezmoi update
 
-# Or manually
+# または手動で
 cd ~/.local/share/chezmoi
 git pull
 chezmoi apply
 ```
 
-### Making Changes to Dotfiles
+### dotfilesの変更方法
 
 ```bash
-# Navigate to source directory
+# ソースディレクトリに移動
 cd ~/.local/share/chezmoi
 
-# Or use the symlink (if using .chezmoiroot)
+# または（.chezmoirootを使用している場合）
 cd ~/dotfiles
 
-# Make changes and commit
+# 変更してコミット
 git add -A
-git commit -m "Update configuration"
+git commit -m "設定を更新"
 git push
 
-# Apply to other machines
-chezmoi update  # on other machines
+# 他のマシンで適用
+chezmoi update  # 他のマシンで実行
 ```
 
-## Machine-Specific Configuration
+## マシン固有の設定
 
-Configuration is automatically customized based on `machineId`:
+`machineId`に基づいて設定が自動的にカスタマイズされます:
 
-### Work Machines (work1/work2)
-- Custom git user/email
-- Work-specific project directories
-- Machine-specific Google Cloud SDK paths
+### 仕事用マシン（work1/work2）
+- カスタムgitユーザー/メール
+- 仕事用プロジェクトディレクトリ
+- マシン別のGoogle Cloud SDKパス
 
-### Personal Machines
-- Personal git user/email
-- Development tools: nvm, pnpm, mise, direnv
-- Personal project directories
+### 個人用マシン
+- 個人用gitユーザー/メール
+- 開発ツール: nvm, pnpm, mise, direnv
+- 個人用プロジェクトディレクトリ
 
-### Adding New Machine-Specific Settings
+### 新しいマシン固有設定の追加
 
-Edit `home/private_dot_config/zsh/rc/local_env.sh.tmpl` and add conditional blocks:
+`home/private_dot_config/zsh/rc/local_env.sh.tmpl`を編集して条件分岐を追加:
 
 ```bash
 {{- if eq .machineId "new-machine" }}
-# New machine specific settings
+# 新しいマシン固有の設定
 export CUSTOM_VAR="value"
 {{- end }}
 ```
 
-## Directory Structure
+## ディレクトリ構造
 
 ```
 ~/dotfiles/
-├── .chezmoiroot              # Points to home/ as source
-├── home/                     # chezmoi source directory
-│   ├── .chezmoi.toml.tmpl   # Machine configuration template
-│   ├── .chezmoiignore       # Files to ignore
+├── .chezmoiroot              # home/をソースとして指定
+├── home/                     # chezmoiソースディレクトリ
+│   ├── .chezmoi.toml.tmpl   # マシン設定テンプレート
+│   ├── .chezmoiignore       # 無視するファイル
 │   ├── dot_zshrc            # ~/.zshrc
-│   ├── dot_gitconfig.tmpl   # ~/.gitconfig (templated)
+│   ├── dot_gitconfig.tmpl   # ~/.gitconfig（テンプレート）
 │   ├── private_dot_config/  # ~/.config/
 │   │   ├── nvim/
 │   │   ├── starship.toml
 │   │   └── zsh/rc/
-│   │       └── local_env.sh.tmpl  # Machine-specific settings
-│   └── .chezmoiscripts/     # Setup scripts
+│   │       └── local_env.sh.tmpl  # マシン固有設定
+│   └── .chezmoiscripts/     # セットアップスクリプト
 │       ├── run_once_before_install-homebrew.sh.tmpl
 │       ├── run_once_after_install-packages.sh.tmpl
 │       └── run_once_after_setup-nvim.sh.tmpl
-└── install_scripts/         # Legacy (for reference)
+└── install_scripts/         # 旧バージョン（参照用）
 ```
 
-## Troubleshooting
+## トラブルシューティング
 
-### Re-initialize Configuration
+### machineIdの再設定
 
-If you need to change your machineId:
+machineIdを変更する場合:
 
 ```bash
-# Edit local config
+# ローカル設定を編集
 vim ~/.config/chezmoi/chezmoi.toml
 
-# Or re-run init
+# または再初期化
 chezmoi init
 ```
 
-### Check What Would Change
+### 変更内容の確認
 
 ```bash
 chezmoi diff
 ```
 
-### Force Apply
+### 強制適用
 
 ```bash
 chezmoi apply --force
 ```
 
-### View Managed Files
+### 管理対象ファイルの表示
 
 ```bash
 chezmoi managed
 ```
 
-## Resources
+## リソース
 
-- [chezmoi Documentation](https://www.chezmoi.io/)
-- [chezmoi User Guide](https://www.chezmoi.io/user-guide/setup/)
+- [chezmoiドキュメント](https://www.chezmoi.io/)
+- [chezmoiユーザーガイド](https://www.chezmoi.io/user-guide/setup/)
 
-## Legacy Setup (Deprecated)
+## 旧セットアップ方法（非推奨）
 
-The old Makefile-based setup is deprecated. Use chezmoi instead.
+Makefileベースの旧セットアップは非推奨です。chezmoiを使用してください。
 
 ```bash
-# Old method (not recommended)
+# 旧方式（非推奨）
 make install
 ```
