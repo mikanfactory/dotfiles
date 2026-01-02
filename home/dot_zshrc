@@ -16,11 +16,7 @@ setopt list_packed
 disable r
 
 # editor
-if builtin command -v nvim > /dev/null 2>&1; then
-  export EDITOR=${EDITOR:-nvim}
-else
-  export EDITOR=${EDITOR:-vim}
-fi
+export EDITOR=${EDITOR:-vim}
 
 # path
 export SHELL=/bin/zsh
@@ -45,9 +41,17 @@ alias tmux="tmux -u -2"
 
 alias diff=colordiff
 
-if command -v exa &> /dev/null
+if command -v lsd &> /dev/null
 then
-    alias ll='exa -bghmla --git'
+    alias ls='lsd'
+    alias ll='ls -l'
+    alias la='ls -la'
+    alias lt='ls --tree'
+fi
+
+if command -v chezmoi &> /dev/null
+then
+    alias chez='chezmoi'
 fi
 
 if command -v peco &> /dev/null
