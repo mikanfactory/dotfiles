@@ -1,2 +1,0 @@
-font-roboto-mono-nerd-font
-hyper
