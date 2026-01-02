@@ -16,7 +16,8 @@ setopt list_packed
 disable r
 
 # editor
-export EDITOR=${EDITOR:-vim}
+export EDITOR=vim
+export VISUAL=vim
 
 # path
 export SHELL=/bin/zsh
@@ -37,7 +38,6 @@ alias venv=". .venv/bin/activate"
 alias vexit="deactivate"
 alias vim=/usr/bin/vim
 alias tmux="tmux -u -2"
-# alias vim=/usr/local/bin/nvim
 
 alias diff=colordiff
 
