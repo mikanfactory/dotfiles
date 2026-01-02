@@ -1,0 +1,25 @@
+# Brewfile - Homebrew package management
+
+# Taps
+tap "homebrew/cask-fonts"
+
+# Core tools
+brew "bat"          # cat with syntax highlighting
+brew "curl"         # HTTP client
+brew "exa"          # Modern ls replacement
+brew "git"          # Version control
+brew "navi"         # Interactive cheat sheet
+brew "neovim"       # Text editor
+brew "peco"         # Interactive filtering
+brew "starship"     # Cross-shell prompt
+brew "tig"          # Text-mode interface for git
+brew "tmux"         # Terminal multiplexer
+
+# Development tools
+brew "colordiff"    # Colorized diff
+brew "jq"           # JSON processor
+brew "ghq"          # Repository management
+
+# Casks
+cask "font-roboto-mono-nerd-font"  # Nerd Font
+cask "hyper"                        # Terminal emulator

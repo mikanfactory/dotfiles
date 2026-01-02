@@ -14,13 +14,6 @@
 ### 新規マシンでのセットアップ
 
 ```bash
-# ワンライナーインストール
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply mikanfactory/dotfiles
-```
-
-Homebrewを使う場合:
-
-```bash
 brew install chezmoi
 chezmoi init --apply mikanfactory/dotfiles
 ```
@@ -37,6 +30,42 @@ chezmoi init --apply mikanfactory/dotfiles
 - **ターミナル**: Hyper
 - **ツール**: peco, exa, bat, tig, tmux など
 - **マシン固有**: nvm, pnpm, mise, direnv, Google Cloud SDK（自動設定）
+
+## パッケージ管理
+
+### Brewfileの使用
+
+インストールするパッケージは`home/Brewfile`で管理しています。
+
+```bash
+# パッケージを追加
+cd ~/dotfiles
+echo 'brew "package-name"' >> home/Brewfile
+
+# 新規マシンでは自動インストール（run_once_after_install-packages.sh.tmpl）
+# 既存マシンで手動インストール
+brew bundle --file=~/dotfiles/home/Brewfile
+
+# 現在の環境に合わせてBrewfileを更新
+brew bundle dump --file=~/dotfiles/home/Brewfile --force
+
+# インストール済みパッケージの確認
+brew bundle check --file=~/dotfiles/home/Brewfile
+```
+
+### パッケージの追加・削除
+
+```bash
+# 新しいパッケージを追加
+cd ~/dotfiles
+echo 'brew "new-package"' >> home/Brewfile
+brew install new-package
+
+# コミット
+git add home/Brewfile
+git commit -m "Add new-package to Brewfile"
+git push
+```
 
 ## 日常的な使い方
 

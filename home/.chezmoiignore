@@ -5,3 +5,4 @@ macos/
 .idea/
 .DS_Store
 .config/zed/
+Brewfile
