@@ -6,6 +6,9 @@ scan_timeout = 10
 truncation_length = 10
 truncate_to_repo = false
 
+[battery]
+disabled = true
+
 [aws]
 format = 'on [$symbol($profile )]($style)'
 style = "bold red"
