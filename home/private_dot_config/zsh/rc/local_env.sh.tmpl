@@ -1,44 +1,6 @@
 # Machine-specific environment variables
 
-{{- if eq .machineId "work1" }}
-# ==========================================
-# Work PC 1
-# ==========================================
-
-# google-cloud-sdk
-if [ -f '/Users/shoji/google-cloud-sdk/path.zsh.inc' ]; then
-  source '/Users/shoji/google-cloud-sdk/path.zsh.inc'
-fi
-if [ -f '/Users/shoji/google-cloud-sdk/completion.zsh.inc' ]; then
-  source '/Users/shoji/google-cloud-sdk/completion.zsh.inc'
-fi
-
-# Work-specific paths
-export WORK_PROJECT_DIR="$HOME/projects/work"
-export KUBECONFIG="$HOME/.kube/config-work1"
-
-{{- else if eq .machineId "work2" }}
-# ==========================================
-# Work PC 2
-# ==========================================
-
-# google-cloud-sdk (Homebrew Cask location)
-if [ -f '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc' ]; then
-  source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-fi
-if [ -f '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc' ]; then
-  source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-fi
-
-# Work-specific paths
-export WORK_PROJECT_DIR="$HOME/work"
-export KUBECONFIG="$HOME/.kube/config-work2"
-
-{{- else }}
-# ==========================================
-# Personal Machine ({{ .machineId }})
-# ==========================================
-
+{{- if eq .machineId "mac-mini" }}
 export PERSONAL_PROJECT_DIR="$HOME/projects"
 
 # bun
@@ -63,12 +25,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
-# kiro terminal integration
-[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
-
-# Antigravity
-export PATH="/Users/shoji/.antigravity/antigravity/bin:$PATH"
-
 # Google Cloud SDK
 if [ -f '/Users/shoji/code/google-cloud-sdk/path.zsh.inc' ]; then
   . '/Users/shoji/code/google-cloud-sdk/path.zsh.inc'
@@ -83,6 +39,9 @@ eval "$(direnv hook zsh)"
 # mise
 eval "$(mise activate zsh)"
 
+{{- else if eq .machineId "macbook-air" }}
+
+{{- else }}
+
 {{- end }}
 
-# Add any additional machine-specific configurations here

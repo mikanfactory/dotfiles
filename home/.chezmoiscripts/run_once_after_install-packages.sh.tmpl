@@ -3,8 +3,8 @@
 echo "Installing Homebrew packages from Brewfile..."
 
 # Install packages from Brewfile
-if [ -f "{{ .chezmoi.sourceDir }}/Brewfile" ]; then
-    brew bundle --no-lock --file="{{ .chezmoi.sourceDir }}/Brewfile"
+if [ -f "{{ .chezmoi.sourceDir }}/home/Brewfile" ]; then
+    brew bundle --file="{{ .chezmoi.sourceDir }}/home/Brewfile"
 else
     echo "Warning: Brewfile not found"
 fi

@@ -1,25 +1,49 @@
-# Brewfile - Homebrew package management
-
-# Taps
+tap "databricks/tap"
+tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
-
-# Core tools
-brew "bat"          # cat with syntax highlighting
-brew "curl"         # HTTP client
-brew "exa"          # Modern ls replacement
-brew "git"          # Version control
-brew "navi"         # Interactive cheat sheet
-brew "neovim"       # Text editor
-brew "peco"         # Interactive filtering
-brew "starship"     # Cross-shell prompt
-brew "tig"          # Text-mode interface for git
-brew "tmux"         # Terminal multiplexer
-
-# Development tools
-brew "colordiff"    # Colorized diff
-brew "jq"           # JSON processor
-brew "ghq"          # Repository management
-
-# Casks
-cask "font-roboto-mono-nerd-font"  # Nerd Font
-cask "hyper"                        # Terminal emulator
+tap "supabase/tap"
+brew "webp"
+brew "jpeg-xl"
+brew "aom"
+brew "bat"
+brew "glib"
+brew "chezmoi"
+brew "curl"
+brew "direnv"
+brew "exa"
+brew "gnutls"
+brew "harfbuzz"
+brew "openjpeg"
+brew "libass"
+brew "libmicrohttpd"
+brew "librist"
+brew "pango"
+brew "tesseract"
+brew "ffmpeg"
+brew "gh"
+brew "git"
+brew "imagemagick"
+brew "jq"
+brew "lsd"
+brew "mise"
+brew "navi"
+brew "neovim"
+brew "openvino"
+brew "peco"
+brew "pnpm"
+brew "poppler"
+brew "postgresql@14"
+brew "pyenv"
+brew "starship"
+brew "tfenv"
+brew "tig"
+brew "tmux"
+brew "databricks/tap/databricks"
+brew "supabase/tap/supabase"
+cask "alacritty"
+cask "font-hack-nerd-font"
+cask "font-roboto-mono-nerd-font"
+cask "monitorcontrol"
+cask "ngrok"
+cask "zed"
+go "github.com/wailsapp/wails/v2/cmd/wails"
