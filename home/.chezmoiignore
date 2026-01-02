@@ -1,0 +1,7 @@
+README.md
+Makefile
+install_scripts/
+macos/
+.idea/
+.DS_Store
+.config/zed/

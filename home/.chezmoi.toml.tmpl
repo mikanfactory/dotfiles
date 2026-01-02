@@ -1,0 +1,4 @@
+{{- $machineId := promptStringOnce . "machineId" "Machine ID (personal/work1/work2)" -}}
+
+[data]
+    machineId = {{ $machineId | quote }}

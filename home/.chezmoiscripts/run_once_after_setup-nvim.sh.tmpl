@@ -1,0 +1,22 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "darwin" -}}
+
+echo "Setting up Neovim..."
+
+# Neovim color scheme
+mkdir -p ~/.config/nvim/colors
+if [ ! -f ~/.config/nvim/colors/hybrid.vim ]; then
+    curl -fsSL https://raw.githubusercontent.com/w0ng/vim-hybrid/master/colors/hybrid.vim \
+        -o ~/.config/nvim/colors/hybrid.vim
+fi
+
+# dein.vim (plugin manager)
+DEIN_DIR="$HOME/.cache/dein"
+if [ ! -d "$DEIN_DIR" ]; then
+    curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh | sh -s "$DEIN_DIR"
+fi
+
+# Python support for neovim
+pip3 install --upgrade neovim 2>/dev/null || pip3 install --user --upgrade neovim
+
+{{ end -}}

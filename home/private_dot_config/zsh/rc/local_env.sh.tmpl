@@ -1,0 +1,88 @@
+# Machine-specific environment variables
+
+{{- if eq .machineId "work1" }}
+# ==========================================
+# Work PC 1
+# ==========================================
+
+# google-cloud-sdk
+if [ -f '/Users/shoji/google-cloud-sdk/path.zsh.inc' ]; then
+  source '/Users/shoji/google-cloud-sdk/path.zsh.inc'
+fi
+if [ -f '/Users/shoji/google-cloud-sdk/completion.zsh.inc' ]; then
+  source '/Users/shoji/google-cloud-sdk/completion.zsh.inc'
+fi
+
+# Work-specific paths
+export WORK_PROJECT_DIR="$HOME/projects/work"
+export KUBECONFIG="$HOME/.kube/config-work1"
+
+{{- else if eq .machineId "work2" }}
+# ==========================================
+# Work PC 2
+# ==========================================
+
+# google-cloud-sdk (Homebrew Cask location)
+if [ -f '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc' ]; then
+  source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+fi
+if [ -f '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc' ]; then
+  source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+fi
+
+# Work-specific paths
+export WORK_PROJECT_DIR="$HOME/work"
+export KUBECONFIG="$HOME/.kube/config-work2"
+
+{{- else }}
+# ==========================================
+# Personal Machine ({{ .machineId }})
+# ==========================================
+
+export PERSONAL_PROJECT_DIR="$HOME/projects"
+
+# bun
+export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# local bin
+if [ -f "$HOME/.local/bin/env" ]; then
+  . "$HOME/.local/bin/env"
+fi
+export PATH="$HOME/.local/bin/env:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/shoji/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# kiro terminal integration
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+
+# Antigravity
+export PATH="/Users/shoji/.antigravity/antigravity/bin:$PATH"
+
+# Google Cloud SDK
+if [ -f '/Users/shoji/code/google-cloud-sdk/path.zsh.inc' ]; then
+  . '/Users/shoji/code/google-cloud-sdk/path.zsh.inc'
+fi
+if [ -f '/Users/shoji/code/google-cloud-sdk/completion.zsh.inc' ]; then
+  . '/Users/shoji/code/google-cloud-sdk/completion.zsh.inc'
+fi
+
+# direnv
+eval "$(direnv hook zsh)"
+
+# mise
+eval "$(mise activate zsh)"
+
+{{- end }}
+
+# Add any additional machine-specific configurations here
