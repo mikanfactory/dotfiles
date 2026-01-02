@@ -67,6 +67,28 @@ git commit -m "Add new-package to Brewfile"
 git push
 ```
 
+### 便利なコマンド
+
+```bash
+# 現在インストール済みのパッケージからBrewfileを生成
+brew bundle dump --file=~/dotfiles/home/Brewfile --force
+
+# Brewfile内のパッケージがすべてインストールされているか確認
+brew bundle check --file=~/dotfiles/home/Brewfile
+
+# Brewfileに記載されていない不要なパッケージを削除
+brew bundle cleanup --file=~/dotfiles/home/Brewfile
+
+# 削除されるパッケージをドライラン（実際には削除しない）
+brew bundle cleanup --file=~/dotfiles/home/Brewfile --dry-run
+
+# Brewfileの内容をリスト表示
+brew bundle list --file=~/dotfiles/home/Brewfile
+
+# 依存関係を含めてインストール
+brew bundle install --file=~/dotfiles/home/Brewfile
+```
+
 ## 日常的な使い方
 
 ### 設定の編集
@@ -205,12 +227,3 @@ chezmoi managed
 
 - [chezmoiドキュメント](https://www.chezmoi.io/)
 - [chezmoiユーザーガイド](https://www.chezmoi.io/user-guide/setup/)
-
-## 旧セットアップ方法（非推奨）
-
-Makefileベースの旧セットアップは非推奨です。chezmoiを使用してください。
-
-```bash
-# 旧方式（非推奨）
-make install
-```
