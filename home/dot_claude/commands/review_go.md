@@ -1,6 +1,6 @@
 ---
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(find:*), Bash(ls:*), Read, Glob, Grep
-description: Perform comprehensive backend code review using multiple specialized agents
+description: Perform comprehensive Go backend code review using multiple specialized agents
 ---
 
 ## Context
@@ -13,11 +13,11 @@ description: Perform comprehensive backend code review using multiple specialize
 
 ## Your task
 
-Orchestrate a comprehensive backend code review by coordinating multiple specialized agents through the `backend-review-orchestrator` agent.
+Orchestrate a comprehensive Go backend code review by coordinating multiple specialized agents through the `backend-review-orchestrator` agent.
 
 ### Step 1: Determine review scope
 
-Identify which files to review based on the following priority:
+Identify which Go files to review based on the following priority:
 
 **Option A: Review changed/staged files (default)**
 If there are staged or uncommitted changes, review those files:
@@ -27,27 +27,27 @@ git diff --name-only HEAD
 ```
 
 **Option B: Review specific path**
-If user specified a path argument (e.g., `/review_backend src/api/`), use that path as the review target.
+If user specified a path argument (e.g., `/review_go cmd/api/`), use that path as the review target.
 
-**Option C: Review all backend files**
-If user requests full review or no changes exist, scan for all backend files:
+**Option C: Review all Go backend files**
+If user requests full review or no changes exist, scan for all Go backend files:
 ```bash
-find . -type f \( -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.ts" \) \
-  ! -path "*/node_modules/*" ! -path "*/.venv/*" ! -path "*/__pycache__/*" ! -path "*/.git/*"
+find . -type f -name "*.go" \
+  ! -path "*/vendor/*" ! -path "*/.git/*"
 ```
 
 **File filtering:**
-- Include: `*.py`, `*.go`, `*.js`, `*.ts` in backend-relevant paths
-- Exclude: `node_modules/`, `.venv/`, `__pycache__/`, `.git/`, `*.min.js`
+- Include: `*.go` in backend-relevant paths
+- Exclude: `vendor/`, `.git/`
 - Maximum: 50 files per review session
 
 ### Step 2: Analyze file context
 
 For each file to review, gather:
 1. File path and size
-2. Primary language (based on extension)
-3. Functional area hints (from path: api/, services/, models/, auth/, db/)
-4. Framework detection (FastAPI, Django, Flask, Express, etc.)
+2. Primary language (Go)
+3. Functional area hints (from path: cmd/, internal/, pkg/, api/, services/, models/, auth/, db/)
+4. Framework detection (Gin, Echo, Chi, etc.)
 
 Create a review manifest:
 ```json
@@ -57,10 +57,10 @@ Create a review manifest:
   "branch": "<current branch>",
   "files": [
     {
-      "path": "src/api/users.py",
-      "language": "python",
+      "path": "internal/api/users.go",
+      "language": "go",
       "area": "api",
-      "framework_hints": ["fastapi"]
+      "framework_hints": ["gin"]
     }
   ],
   "git_context": {
@@ -76,13 +76,22 @@ Pass the review manifest to the `backend-review-orchestrator` agent.
 
 The orchestrator will:
 1. Dispatch files to appropriate specialized agents:
-   - **python-pro**: Python type safety, patterns, testing
+   - **golang-pro**: Go best practices, idioms, concurrency patterns
    - **backend-developer**: API design, database, microservices
-   - **fullstack-developer**: Cross-layer consistency
    - **security-engineer**: Vulnerabilities, auth, OWASP
+   - **database-administrator**: Database performance, query optimization, schema design
 2. Collect JSON-formatted review outputs
 3. Aggregate and deduplicate findings
 4. Generate unified report
+
+**Go-specific review focus areas:**
+- **Goroutine management**: Proper goroutine lifecycle, leak detection
+- **Race conditions**: Concurrent access to shared resources
+- **Error handling**: Proper error wrapping and handling patterns
+- **Context usage**: Proper context propagation for cancellation and timeouts
+- **Defer usage**: Appropriate use of defer for resource cleanup
+- **Interface design**: Proper abstraction and dependency injection
+- **Memory management**: Efficient allocation and garbage collection impact
 
 ### Step 4: Present review results
 
@@ -90,7 +99,7 @@ Display the aggregated report from the orchestrator:
 
 **1. Executive Summary**
 ```markdown
-# Backend Code Review Report
+# Go Backend Code Review Report
 
 **Files Reviewed:** X
 **Total Issues:** Y
@@ -103,7 +112,8 @@ Display the aggregated report from the orchestrator:
 | Low | X |
 
 ## Top Critical Issues (if any)
-1. **SE-001** SQL Injection in `src/db/queries.py:67`
+1. **GP-001** Goroutine leak in `internal/services/processor.go:45`
+2. **SE-001** SQL Injection in `internal/db/queries.go:67`
 ```
 
 **2. Detailed Findings by Severity**
@@ -115,7 +125,7 @@ List all issues from Critical to Low with:
 - Code suggestion (if available)
 
 **3. Category Summary**
-Group issues by category (Security, Performance, Design, etc.)
+Group issues by category (Security, Performance, Concurrency, Error Handling, Database, etc.)
 
 **4. Positive Findings**
 Highlight well-implemented patterns found during review
@@ -130,25 +140,25 @@ Prioritized recommendations:
 
 ```bash
 # Review changed files (default)
-/review_backend
+/review_go
 
 # Review specific directory
-/review_backend src/api/
+/review_go internal/api/
 
 # Review specific file
-/review_backend src/services/user_service.py
+/review_go internal/services/user_service.go
 
-# Review all backend files
-/review_backend --all
+# Review all Go backend files
+/review_go --all
 ```
 
 ## Constraints
 
-- Only review backend-relevant files (exclude frontend, static assets, configs)
+- Only review Go files (exclude frontend, static assets, configs)
 - Exclude test files from security review unless specifically requested
 - Maximum 50 files per review to ensure thorough analysis
 - Total timeout: 10 minutes
-- If no backend files found, report clearly and exit
+- If no Go files found, report clearly and exit
 - Always output results in Japanese when communicating with user
 
 ## Communication Style
