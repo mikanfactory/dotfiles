@@ -43,3 +43,4 @@ Use the `git-commit-organizer` agent to:
 - DO NOT add Claude co-authorship footer to commits
 - Run formatters BEFORE organizing commits to include formatting changes
 - Each commit should be atomic and could be reverted independently
+- **ALL commit messages MUST be written in English**
