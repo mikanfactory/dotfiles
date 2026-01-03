@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "MultiEdit",
+      "WebSearch",
+      "WebFetch"
+    ],
+    "deny": [
+      "Read(.env)"
+    ],
+    "ask": [
+      "Bash(rm:*)"
+    ]
+  },
+  "model": "opusplan",
+  "enabledMcpjsonServers": [
+    "context7",
+    "serena",
+    "jetbrains",
+    "brave-search"
+  ]
+}

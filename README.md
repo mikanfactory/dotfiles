@@ -13,6 +13,21 @@ chezmoi init --apply mikanfactory/dotfiles
 
 初回実行時に`machineId`の入力を求められます。
 
+### MCPの設定
+
+context7
+```
+claude mcp add --transport http context7 https://mcp.context7.com/mcp \
+  --header "CONTEXT7_API_KEY: my-api-key"
+```
+
+serena
+```
+claude mcp add serena -- uvx --from git+https://github.com/oraios/serena \
+    serena-mcp-server --context ide-assistant --project $(pwd)
+```
+
+
 ## 日常的な使い方
 
 ### 設定の編集
