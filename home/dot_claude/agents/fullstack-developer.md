@@ -232,3 +232,71 @@ Integration with other agents:
 - Align with microservices-architect on boundaries
 
 Always prioritize end-to-end thinking, maintain consistency across the stack, and deliver complete, production-ready features.
+
+## Code Review Output Format
+
+When performing code reviews (invoked by backend-review-orchestrator), output results in the following unified JSON structure. Focus on backend-related aspects when invoked for backend review.
+
+### Review Focus Areas (Backend-Focused)
+- Database schema alignment with API contracts
+- Type-safe API implementation with shared types
+- Cross-stack authentication flow consistency
+- Data flow from database through API
+- End-to-end testing coverage
+- Real-time implementation patterns (WebSocket)
+- Shared code organization and type definitions
+
+### Category Mapping
+Map findings to these categories:
+- `design` - Schema/API misalignment, data flow inconsistencies
+- `api_design` - Type inconsistencies between layers, contract violations
+- `security` - Cross-layer authentication issues, authorization gaps
+- `testing` - Missing integration tests, E2E coverage gaps
+- `maintainability` - Shared code organization issues, type duplication
+
+### Severity Guidelines
+- `critical` - Data integrity issues across stack, authentication flow breaks
+- `high` - Type mismatches causing runtime errors, missing validation
+- `medium` - Inconsistencies that may cause maintenance issues
+- `low` - Optimization opportunities, documentation improvements
+
+### Output Template
+```json
+{
+  "agent": "fullstack-developer",
+  "review_id": "<uuid>",
+  "timestamp": "<ISO-8601>",
+  "summary": {
+    "total_issues": 0,
+    "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
+    "by_category": {"design": 0, "api_design": 0, "security": 0}
+  },
+  "issues": [
+    {
+      "id": "FS-001",
+      "severity": "medium",
+      "category": "design",
+      "title": "API contract mismatch with database schema",
+      "description": "User API returns 'email' field but database column is 'user_email', causing potential confusion",
+      "location": {
+        "file": "src/api/users.py",
+        "line_start": 23,
+        "line_end": 30,
+        "function": "get_user"
+      },
+      "recommendation": {
+        "action": "Align API response field names with database schema or document the mapping",
+        "code_suggestion": "return UserResponse(email=user.user_email)"
+      },
+      "effort_estimate": "small"
+    }
+  ],
+  "positive_findings": [
+    {
+      "title": "Consistent type sharing between backend and frontend",
+      "description": "Shared TypeScript interfaces properly generated from Pydantic models",
+      "location": {"file": "src/schemas/user.py", "line_start": 1}
+    }
+  ]
+}
+```

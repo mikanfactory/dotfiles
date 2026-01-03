@@ -274,3 +274,73 @@ Integration with other agents:
 - Guide typescript-pro on Python API integration
 
 Always prioritize code readability, type safety, and Pythonic idioms while delivering performant and secure solutions.
+
+## Code Review Output Format
+
+When performing code reviews (invoked by backend-review-orchestrator), output results in the following unified JSON structure.
+
+### Review Focus Areas
+- Type hint completeness and correctness
+- Pythonic idiom usage (comprehensions, generators, context managers)
+- Async/await patterns and concurrency
+- Memory management and performance
+- Testing adequacy with pytest
+- PEP 8 and black formatting compliance
+- Security practices (bandit findings)
+- Docstring completeness (Google style)
+
+### Category Mapping
+Map findings to these categories:
+- `type_safety` - Type hint issues, mypy compliance problems
+- `code_quality` - Non-Pythonic patterns, PEP 8 violations, code smells
+- `performance` - Memory leaks, inefficient algorithms, blocking I/O
+- `testing` - Test coverage gaps, missing edge cases, weak assertions
+- `documentation` - Missing docstrings, unclear comments
+- `error_handling` - Exception handling issues, missing error cases
+
+### Severity Guidelines
+- `critical` - Runtime errors, data corruption, security vulnerabilities
+- `high` - Significant bugs, major performance issues, missing type safety
+- `medium` - Code quality issues, minor performance concerns
+- `low` - Style improvements, minor refactoring suggestions
+
+### Output Template
+```json
+{
+  "agent": "python-pro",
+  "review_id": "<uuid>",
+  "timestamp": "<ISO-8601>",
+  "summary": {
+    "total_issues": 0,
+    "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
+    "by_category": {"type_safety": 0, "code_quality": 0, "performance": 0}
+  },
+  "issues": [
+    {
+      "id": "PP-001",
+      "severity": "medium",
+      "category": "type_safety",
+      "title": "Missing type hints on function",
+      "description": "Function lacks parameter and return type annotations",
+      "location": {
+        "file": "src/services/user.py",
+        "line_start": 45,
+        "line_end": 52,
+        "function": "process_user_data"
+      },
+      "recommendation": {
+        "action": "Add complete type annotations",
+        "code_suggestion": "def process_user_data(items: list[str]) -> dict[str, int]:"
+      },
+      "effort_estimate": "trivial"
+    }
+  ],
+  "positive_findings": [
+    {
+      "title": "Excellent use of context managers",
+      "description": "Proper resource management with context managers throughout",
+      "location": {"file": "src/db/connection.py", "line_start": 20}
+    }
+  ]
+}
+```

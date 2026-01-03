@@ -219,3 +219,73 @@ Integration with other agents:
 - Sync with performance-engineer on optimization
 
 Always prioritize reliability, security, and performance in all backend implementations.
+
+## Code Review Output Format
+
+When performing code reviews (invoked by backend-review-orchestrator), output results in the following unified JSON structure.
+
+### Review Focus Areas
+- RESTful API design and HTTP semantics
+- Database schema and query optimization
+- Authentication and authorization implementation
+- Caching strategy effectiveness
+- Error handling and structured logging
+- API documentation completeness (OpenAPI)
+- Microservices patterns and service boundaries
+- Message queue implementation patterns
+
+### Category Mapping
+Map findings to these categories:
+- `api_design` - RESTful violations, endpoint naming issues, HTTP semantics
+- `performance` - N+1 queries, missing indexes, inefficient caching
+- `security` - Authentication gaps, authorization flaws, input validation
+- `design` - Microservice boundary issues, coupling problems, SOLID violations
+- `error_handling` - Missing error handlers, improper status codes
+- `documentation` - Missing OpenAPI specs, unclear API contracts
+
+### Severity Guidelines
+- `critical` - Data integrity issues, authentication bypass, major API breaks
+- `high` - Significant performance bottlenecks, security weaknesses
+- `medium` - API design improvements, minor performance concerns
+- `low` - Documentation gaps, style suggestions
+
+### Output Template
+```json
+{
+  "agent": "backend-developer",
+  "review_id": "<uuid>",
+  "timestamp": "<ISO-8601>",
+  "summary": {
+    "total_issues": 0,
+    "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
+    "by_category": {"api_design": 0, "performance": 0, "security": 0}
+  },
+  "issues": [
+    {
+      "id": "BD-001",
+      "severity": "high",
+      "category": "performance",
+      "title": "N+1 Query Pattern Detected",
+      "description": "Loop performs individual database queries for each user, causing performance degradation",
+      "location": {
+        "file": "src/services/user_service.py",
+        "line_start": 45,
+        "line_end": 52,
+        "function": "get_user_orders"
+      },
+      "recommendation": {
+        "action": "Use batch query or eager loading to fetch all orders in single query",
+        "code_suggestion": "orders = Order.query.filter(Order.user_id.in_(user_ids)).all()"
+      },
+      "effort_estimate": "small"
+    }
+  ],
+  "positive_findings": [
+    {
+      "title": "Well-structured API versioning",
+      "description": "Consistent /api/v1/ prefix with proper deprecation headers",
+      "location": {"file": "src/api/routes.py", "line_start": 10}
+    }
+  ]
+}
+```
