@@ -4,9 +4,11 @@
       "Bash",
       "Read",
       "Edit",
+      "Skill",
       "MultiEdit",
       "WebSearch",
-      "WebFetch"
+      "WebFetch",
+      "Search"
     ],
     "deny": [
       "Read(.env)"
