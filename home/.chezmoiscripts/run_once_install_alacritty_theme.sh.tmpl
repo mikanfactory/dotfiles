@@ -1,0 +1,9 @@
+#!/bin/bash
+
+{{ if eq .chezmoi.os "darwin" }}
+
+mkdir -p ~/.config/alacritty/themes
+git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
+brew bundle --file="$HOME/.Brewfile"
+
+{{ end }}
