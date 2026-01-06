@@ -32,7 +32,7 @@ Create commits following these principles:
 - **Functional grouping**: Related changes (e.g., feature + tests + docs for that feature) go together
 - **Separation of concerns**: Bug fixes separate from features, refactoring separate from new functionality
 - **Build preservation**: Each commit should ideally leave the codebase in a working state
-- **Bracket prefixes**: Use prefixes like `[feat]`, `[fix]`, `[refactor]`, `[docs]`, `[test]`, `[chore]` when appropriate
+- **Bracket prefixes**: Use prefixes like `feat:`, `fix:`, `refactor:`, `docs:`, `test:`, `chore:` when appropriate
 
 ## Commit Message Guidelines
 
@@ -43,20 +43,20 @@ Write commit messages in English that:
 - Include additional context in the body if the change is complex
 - Follow this structure:
   ```
-  [type] Short description
+  type: Short description
 
   Optional detailed description if needed
   ```
 
 ### Prefix Types
 
-- `[feat]` - New feature or functionality
-- `[fix]` - Bug fix
-- `[refactor]` - Code refactoring without changing behavior
-- `[docs]` - Documentation changes
-- `[test]` - Adding or modifying tests
-- `[chore]` - Maintenance tasks, dependency updates, etc.
-- `[style]` - Code style/formatting changes
+- `feat` - New feature or functionality
+- `fix` - Bug fix
+- `refactor` - Code refactoring without changing behavior
+- `docs` - Documentation changes
+- `test` - Adding or modifying tests
+- `chore` - Maintenance tasks, dependency updates, etc.
+- `style` - Code style/formatting changes
 
 ## Execution Workflow
 

@@ -20,7 +20,7 @@ Analyze the git diff to identify which programming languages are involved based 
 - `.ts`, `.tsx`, `.js`, `.jsx` → TypeScript/JavaScript
 - `.go` → Go
 
-### Step 2: Run language-specific formatters
+### Step 2: Run language-specific formatter skills
 
 For each detected language, invoke the corresponding formatter skill:
 
@@ -28,14 +28,15 @@ For each detected language, invoke the corresponding formatter skill:
 - **TypeScript/JavaScript**: `run_typescript_formatter` skill
 - **Go**: `run_go_formatter` skill
 
+It is a skill, not a command!
 If multiple languages are detected, run all applicable formatters.
 
-### Step 3: Organize and create commits
+### Step 3: Split and create commits
 
-Use the `git-commit-organizer` agent to:
+Use the `git-commit-splitter` agent to:
 
 1. Analyze all changes (including formatter modifications)
-2. Group related changes into logical, atomic commits
+2. Split changes into logical, atomic commits
 3. Create separate commits for each logical group with clear, descriptive messages
 
 ## Constraints
