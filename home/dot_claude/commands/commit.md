@@ -12,26 +12,7 @@ description: Create a git commit
 
 ## Your task
 
-### Step 1: Detect languages from changed files
-
-Analyze the git diff to identify which programming languages are involved based on file extensions:
-
-- `.py` → Python
-- `.ts`, `.tsx`, `.js`, `.jsx` → TypeScript/JavaScript
-- `.go` → Go
-
-### Step 2: Run language-specific formatter skills
-
-For each detected language, invoke the corresponding formatter skill:
-
-- **Python**: `run_python_formatter` skill
-- **TypeScript/JavaScript**: `run_typescript_formatter` skill
-- **Go**: `run_go_formatter` skill
-
-It is a skill, not a command!
-If multiple languages are detected, run all applicable formatters.
-
-### Step 3: Split and create commits
+### Step 1: Split and create commits
 
 Use the `git-commit-splitter` agent to:
 
@@ -42,6 +23,5 @@ Use the `git-commit-splitter` agent to:
 ## Constraints
 
 - DO NOT add Claude co-authorship footer to commits
-- Run formatters BEFORE organizing commits to include formatting changes
 - Each commit should be atomic and could be reverted independently
 - **ALL commit messages MUST be written in English**

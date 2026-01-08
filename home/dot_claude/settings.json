@@ -8,7 +8,7 @@
       "MultiEdit",
       "WebSearch",
       "WebFetch",
-      "Search"
+      "Search(*)"
     ],
     "deny": [
       "Read(.env)"
@@ -23,5 +23,28 @@
     "serena",
     "jetbrains",
     "brave-search"
-  ]
+  ],
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Invoke Stop event.\" with title \"Claude Code\" sound name \"Glass\"'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Invoke Stop event.\" with title \"Claude Code\" sound name \"Glass\"'"
+          }
+        ]
+      }
+    ]
+  }
 }
