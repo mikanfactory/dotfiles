@@ -17,7 +17,7 @@
       "Bash(rm:*)"
     ]
   },
-  "model": "opusplan",
+  "model": "opus",
   "enabledMcpjsonServers": [
     "context7",
     "serena",
