@@ -24,6 +24,20 @@
     "jetbrains",
     "brave-search"
   ],
+  "mcpServers": {
+    "context7": {
+      "token": "{{ (bitwardenFields "item" "claude-code-mcp-tokens").context7.value }}"
+    },
+    "mlflow-mcp": {
+      "command": "uv",
+      "args": ["run", "--with", "mlflow[mcp]>=3.5.1", "mlflow", "mcp", "run"],
+      "env": {
+        "MLFLOW_TRACKING_URI": "{{ (bitwardenFields "item" "claude-code-mcp-tokens").mlflow_tracking_uri.value }}",
+        "DATABRICKS_HOST": "{{ (bitwardenFields "item" "claude-code-mcp-tokens").databricks_host.value }}",
+        "DATABRICKS_TOKEN": "{{ (bitwardenFields "item" "claude-code-mcp-tokens").databricks_token.value }}",
+      }
+    }
+  },
   "hooks": {
     "Notification": [
       {

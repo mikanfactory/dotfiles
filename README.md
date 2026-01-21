@@ -13,21 +13,6 @@ chezmoi init --apply mikanfactory/dotfiles
 
 初回実行時に`machineId`の入力を求められます。
 
-### MCPの設定
-
-context7
-```
-claude mcp add --transport http context7 https://mcp.context7.com/mcp \
-  --header "CONTEXT7_API_KEY: my-api-key"
-```
-
-serena
-```
-claude mcp add serena -- uvx --from git+https://github.com/oraios/serena \
-    serena-mcp-server --context ide-assistant --project $(pwd)
-```
-
-
 ## 日常的な使い方
 
 ### 設定の編集
@@ -47,6 +32,18 @@ chezmoi apply
 
 # 詳細出力で適用
 chezmoi apply -v
+```
+
+### bitwarden 連携
+```bash
+# Bitwardenにログイン・アンロック
+export BW_SESSION=$(bw unlock --raw)
+
+# テンプレート出力をプレビュー
+chezmoi cat ~/.claude/settings.json
+
+# 適用
+chezmoi apply
 ```
 
 ### マシン間での同期
