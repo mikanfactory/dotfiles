@@ -11,7 +11,9 @@
       "Search(*)"
     ],
     "deny": [
-      "Read(.env)"
+      "Read(.env)",
+      "Bash(terraform:*)",
+      "Bash(git push origin main)"
     ],
     "ask": [
       "Bash(rm:*)"
@@ -26,7 +28,11 @@
   ],
   "mcpServers": {
     "context7": {
-      "token": "{{ (bitwardenFields "item" "claude-code-mcp-tokens").context7.value }}"
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "{{ (bitwardenFields "item" "claude-code-mcp-tokens").context7.value }}"
+      }
     },
     "mlflow-mcp": {
       "command": "uv",
