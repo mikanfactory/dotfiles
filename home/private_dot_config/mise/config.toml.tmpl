@@ -1,0 +1,74 @@
+# mise global configuration
+# Machine: {{ .machineId }}
+
+[settings]
+experimental = true
+
+#-----------------------------------------------------------
+# Dev Tools
+#-----------------------------------------------------------
+[tools]
+node = "lts"
+python = "3.12"
+jq = "latest"
+gh = "latest"
+bat = "latest"
+lsd = "latest"
+starship = "latest"
+peco = "latest"
+direnv = "latest"
+chezmoi = "latest"
+
+{{- if eq .machineId "mac-mini" }}
+terraform = "latest"
+{{- end }}
+
+#-----------------------------------------------------------
+# Environment Variables
+#-----------------------------------------------------------
+[env]
+EDITOR = "vim"
+VISUAL = "vim"
+LC_ALL = "en_US.UTF-8"
+LC_TYPE = "en_US.UTF-8"
+LANG = "en_US.UTF-8"
+
+{{- if eq .machineId "mac-mini" }}
+PNPM_HOME = "/Users/shoji/Library/pnpm"
+BUN_INSTALL = "$HOME/Library/Application Support/reflex/bun"
+{{- end }}
+
+_.path = [
+  "/usr/local/sbin",
+{{- if eq .machineId "mac-mini" }}
+  "$PNPM_HOME",
+  "$BUN_INSTALL/bin",
+  "$HOME/.local/bin",
+{{- end }}
+]
+
+#-----------------------------------------------------------
+# Shell Aliases
+#-----------------------------------------------------------
+[shell_alias]
+":q" = "exit"
+cd = "pushd"
+pop = "popd"
+end = "popd"
+dirs = "dirs -v"
+vim = "/usr/bin/vim"
+tmux = "tmux -u -2"
+diff = "colordiff"
+ls = "lsd"
+ll = "ls -l"
+la = "ls -la"
+lt = "ls --tree"
+chez = "chezmoi"
+
+#-----------------------------------------------------------
+# Tasks
+#-----------------------------------------------------------
+[tasks]
+vinit = "python3 -m venv .venv && source .venv/bin/activate"
+venv = "source .venv/bin/activate"
+vexit = "deactivate"

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#MISE description="SSH host selector with peco"
+#MISE alias="ps"
+
+selected_host=$(awk '
+tolower($1)=="host" {
+  for (i=2; i<=NF; i++) {
+    if ($i !~ "[*?]") {
+      print $i
+    }
+  }
+}
+' ~/.ssh/config | sort | peco)
+
+if [ -n "$selected_host" ]; then
+    ssh "${selected_host}"
+fi
