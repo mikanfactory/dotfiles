@@ -8,7 +8,7 @@
       "skillPath": "skills/react-best-practices/SKILL.md",
       "skillFolderHash": "079b06a135401704ea94ab74c7c9d86c92ba259f",
       "installedAt": "2026-01-29T04:50:41.482Z",
-      "updatedAt": "2026-01-29T04:50:41.482Z"
+      "updatedAt": "2026-01-29T05:46:41.212Z"
     },
     "find-skills": {
       "source": "vercel-labs/skills",
@@ -17,7 +17,16 @@
       "skillPath": "skills/find-skills/SKILL.md",
       "skillFolderHash": "c2f31172b6f256272305a5e6e7228b258446899f",
       "installedAt": "2026-01-29T04:50:45.639Z",
-      "updatedAt": "2026-01-29T04:50:45.639Z"
+      "updatedAt": "2026-01-29T05:46:43.224Z"
+    },
+    "supabase-postgres-best-practices": {
+      "source": "supabase/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/supabase/agent-skills.git",
+      "skillPath": "skills/supabase-postgres-best-practices/SKILL.md",
+      "skillFolderHash": "7c50bf619d9332176007f593d99046d3c1fbebe2",
+      "installedAt": "2026-01-29T05:19:05.261Z",
+      "updatedAt": "2026-01-29T05:46:44.890Z"
     }
   },
   "dismissed": {
