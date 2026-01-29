@@ -1,0 +1,7 @@
+[tools]
+python = "latest"
+node = "lts"
+terraform = "latest"
+
+[settings]
+experimental = true
