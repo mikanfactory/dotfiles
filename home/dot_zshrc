@@ -15,56 +15,15 @@ setopt nolistbeep
 setopt list_packed
 disable r
 
-# editor
-export EDITOR=vim
-export VISUAL=vim
+# NOTE: EDITOR, VISUAL, LC_ALL, LANG, PATH are managed by mise
+# See ~/.config/mise/config.toml
 
-# path
-export SHELL=/bin/zsh
-export PATH="/usr/local/sbin:$PATH"
+# NOTE: Normal aliases are managed by mise shell_alias
+# See ~/.config/mise/config.toml
 
-export LC_ALL=en_US.UTF-8
-export LC_TYPE=en_US.UTF-8
-export LANG=en_US.UTF-8
-
-# alias
-alias :q="exit"
-alias cd="pushd"
-alias pop="popd"
-alias end="popd"
-alias dirs="dirs -v"
-alias vinit="python3 -m venv venv && venv"
-alias venv=". .venv/bin/activate"
-alias vexit="deactivate"
-alias vim=/usr/bin/vim
-alias tmux="tmux -u -2"
-
-alias diff=colordiff
-
-if command -v lsd &> /dev/null
-then
-    alias ls='lsd'
-    alias ll='ls -l'
-    alias la='ls -la'
-    alias lt='ls --tree'
-fi
-
-if command -v chezmoi &> /dev/null
-then
-    alias chez='chezmoi'
-fi
-
-if command -v peco &> /dev/null
-then
-    alias -g P="| peco"
-fi
-
-if command -v jq &> /dev/null
-then
-    alias -g J="| jq ."
-fi
-
-# global alias
+# global alias (zsh-specific, not supported by mise)
+alias -g P="| peco"
+alias -g J="| jq ."
 alias -g H='| head'
 alias -g T='| tail'
 alias -g G='| grep'
@@ -80,9 +39,7 @@ source "$ZRCDIR/local_env.sh"
 # auto suggestion
 # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# pyenv
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+# NOTE: pyenv is managed by mise (mise manages Python version)
 
 # starship
 eval "$(starship init zsh)"

@@ -1,30 +1,15 @@
 # Machine-specific environment variables
+# NOTE: Most environment variables and PATH are managed by mise
+# See ~/.config/mise/config.toml
 
 {{- if eq .machineId "mac-mini" }}
 
-# bun
-export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# nvm
+# nvm (will be migrated to mise later)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# local bin
-if [ -f "$HOME/.local/bin/env" ]; then
-  . "$HOME/.local/bin/env"
-fi
-export PATH="$HOME/.local/bin/env:$PATH"
-
-# pnpm
-export PNPM_HOME="/Users/shoji/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-
-# Google Cloud SDK
+# Google Cloud SDK (not managed by mise)
 if [ -f '/Users/shoji/code/google-cloud-sdk/path.zsh.inc' ]; then
   . '/Users/shoji/code/google-cloud-sdk/path.zsh.inc'
 fi
@@ -32,15 +17,18 @@ if [ -f '/Users/shoji/code/google-cloud-sdk/completion.zsh.inc' ]; then
   . '/Users/shoji/code/google-cloud-sdk/completion.zsh.inc'
 fi
 
-# direnv
-eval "$(direnv hook zsh)"
-
-# mise
+# mise (manages tools, env, aliases)
 eval "$(mise activate zsh)"
 
 {{- else if eq .machineId "macbook-air" }}
 
+# mise (manages tools, env, aliases)
+eval "$(mise activate zsh)"
+
 {{- else }}
+
+# mise (manages tools, env, aliases)
+eval "$(mise activate zsh)"
 
 {{- end }}
 
