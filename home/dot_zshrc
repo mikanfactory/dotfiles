@@ -39,7 +39,5 @@ source "$ZRCDIR/local_env.sh"
 # auto suggestion
 # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# NOTE: pyenv is managed by mise (mise manages Python version)
-
 # starship
 eval "$(starship init zsh)"
