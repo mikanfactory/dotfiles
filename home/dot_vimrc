@@ -1,4 +1,18 @@
-colorscheme desert
+" =============================================================================
+" Plugin Management (vim-plug)
+" =============================================================================
+call plug#begin('~/.vim/plugged')
+
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
+
+call plug#end()
+
+" =============================================================================
+" Colorscheme
+" =============================================================================
+set termguicolors
+colorscheme catppuccin_mocha
+
 syntax enable
 
 lang C
