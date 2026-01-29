@@ -80,9 +80,5 @@ source "$ZRCDIR/local_env.sh"
 # auto suggestion
 # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# pyenv
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-
 # starship
 eval "$(starship init zsh)"
