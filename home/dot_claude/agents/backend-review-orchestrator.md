@@ -1,6 +1,6 @@
 ---
 name: backend-review-orchestrator
-description: Backend code review orchestrator that coordinates multiple specialized agents (python-reviewer, golang-reviewer, fullstack-developer, backend-developer, security-engineer) to perform comprehensive code reviews. Aggregates findings into a unified report with severity and category-based organization.
+description: Backend code review orchestrator that coordinates multiple specialized agents (python-pro, golang-pro, fullstack-developer, backend-developer, security-engineer) to perform comprehensive code reviews. Aggregates findings into a unified report with severity and category-based organization.
 tools: Read, Bash, Glob, Grep
 ---
 
@@ -18,16 +18,16 @@ Determine which agents to invoke based on file types and content:
 
 | File Pattern | Agents to Invoke |
 |--------------|------------------|
-| `*.py` | python-reviewer, security-engineer, backend-developer |
-| `*.go` | golang-reviewer, security-engineer, backend-developer |
-| `*_test.py`, `test_*.py` | python-reviewer (testing focus) |
-| `*_test.go` | golang-reviewer (testing focus) |
+| `*.py` | python-pro, security-engineer, backend-developer |
+| `*.go` | golang-pro, security-engineer, backend-developer |
+| `*_test.py`, `test_*.py` | python-pro (testing focus) |
+| `*_test.go` | golang-pro (testing focus) |
 | `**/api/**`, `**/routes/**` | backend-developer, security-engineer, fullstack-developer |
 | `**/models/**`, `**/schemas/**` | backend-developer, fullstack-developer |
 | `**/auth/**`, `**/security/**` | security-engineer (primary), backend-developer |
-| `**/services/**` | backend-developer, python-reviewer, golang-reviewer |
+| `**/services/**` | backend-developer, python-pro, golang-pro |
 | `**/db/**`, `**/database/**` | backend-developer, security-engineer |
-| `**/internal/**`, `**/pkg/**`, `**/cmd/**` | golang-reviewer, backend-developer |
+| `**/internal/**`, `**/pkg/**`, `**/cmd/**` | golang-pro, backend-developer |
 
 ## Orchestration Protocol
 
@@ -65,8 +65,8 @@ For each relevant agent, provide focused review context:
 ```
 
 **Agent-specific focus:**
-- **python-reviewer**: Type safety, Pythonic patterns, async usage, testing
-- **golang-reviewer**: Concurrency patterns, error handling, interface design, performance
+- **python-pro**: Type safety, Pythonic patterns, async usage, testing
+- **golang-pro**: Concurrency patterns, error handling, interface design, performance
 - **backend-developer**: API design, database queries, caching, microservices
 - **fullstack-developer**: Schema/API alignment, cross-layer consistency
 - **security-engineer**: Vulnerabilities, auth flows, secrets, OWASP compliance
@@ -206,8 +206,8 @@ Generate final report with dual views:
     },
     "by_category": {},
     "by_agent": {
-      "python-reviewer": 0,
-      "golang-reviewer": 0,
+      "python-pro": 0,
+      "golang-pro": 0,
       "backend-developer": 0,
       "fullstack-developer": 0,
       "security-engineer": 0
@@ -275,6 +275,6 @@ Before delivering final report:
 ## Integration with other agents
 
 - Receives review requests from review-python and review-go skills
-- Dispatches to: python-reviewer, golang-reviewer, backend-developer, fullstack-developer, security-engineer
+- Dispatches to: python-pro, golang-pro, backend-developer, fullstack-developer, security-engineer
 - May consult code-reviewer for additional patterns if needed
 - Delivers unified report to user with actionable insights

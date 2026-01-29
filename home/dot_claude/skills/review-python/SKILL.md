@@ -2,7 +2,7 @@
 name: review-python
 description: Perform comprehensive Python backend code review using multiple specialized agents
 context: fork
-agent: python-reviewer
+agent: python-pro
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(find:*), Bash(ls:*), Read, Glob, Grep
 disable-model-invocation: true
 ---
