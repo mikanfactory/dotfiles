@@ -2,15 +2,11 @@ tap "databricks/tap"
 tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
 tap "supabase/tap"
+
+# System libraries (keep in Homebrew)
 brew "jpeg-xl"
 brew "aom"
-brew "awscli"
-brew "bat"
-brew "bitwarden-cli"
 brew "glib"
-brew "chezmoi"
-brew "curl"
-brew "direnv"
 brew "gnutls"
 brew "harfbuzz"
 brew "openjpeg"
@@ -20,23 +16,39 @@ brew "libmicrohttpd"
 brew "librist"
 brew "pango"
 brew "ffmpeg"
-brew "gh"
-brew "git"
 brew "imagemagick"
-brew "jq"
-brew "lsd"
-brew "mise"
-brew "navi"
-brew "peco"
-brew "pnpm"
 brew "poppler"
-brew "postgresql@14"
-brew "pyenv"
-brew "starship"
-brew "tfenv"
+
+# CLI tools (keep in Homebrew - not available in mise or have dependencies)
+brew "awscli"
+brew "bitwarden-cli"
+brew "curl"
+brew "git"
+brew "navi"
+brew "pnpm"
 brew "tig"
 brew "databricks/tap/databricks"
 brew "supabase/tap/supabase"
+
+# Services
+brew "postgresql@14"
+
+# mise (bootstrap - manages other dev tools)
+brew "mise"
+
+# NOTE: The following tools are now managed by mise
+# See ~/.config/mise/config.toml
+# - bat
+# - chezmoi
+# - direnv
+# - gh
+# - jq
+# - lsd
+# - peco
+# - pyenv (replaced by mise python)
+# - starship
+# - tfenv (replaced by mise terraform)
+
 cask "alacritty"
 cask "font-hack-nerd-font"
 cask "font-roboto-mono-nerd-font"
