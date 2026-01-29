@@ -40,7 +40,28 @@ uv run pytest-watch
 3. Verify mocks are correct
 4. Fix implementation, not tests (unless tests are wrong)
 
+## Running Tests (Go)
+
+```bash
+# Run all tests
+go test ./...
+
+# Run with coverage
+go test -cover ./...
+
+# Run specific package
+go test ./pkg/mypackage -v
+
+# Run with race detection
+go test -race ./...
+```
+
 ## Agent Support
 
+### Python
 - **tdd-guide** - Use PROACTIVELY for new features, enforces write-tests-first
 - Use `/tdd` command to invoke TDD workflow
+
+### Go
+- **golang-pro** - Use for Go development
+- **golang-reviewer** - Use for Go code review
