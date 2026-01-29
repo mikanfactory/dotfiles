@@ -1,0 +1,25 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "darwin" -}}
+echo "Installing skills from lock file..."
+
+LOCK_FILE="{{ .chezmoi.homeDir }}/.agents/.skill-lock.json"
+
+# mise のツールを使えるように設定
+if command -v mise &> /dev/null; then
+    eval "$(mise activate bash)"
+fi
+
+if [ -f "$LOCK_FILE" ] && command -v jq &> /dev/null && command -v npx &> /dev/null; then
+    # jq でロックファイルを解析し、各スキルをインストール
+    for skill_info in $(jq -r '.skills | to_entries[] | "\(.key)|\(.value.source)"' "$LOCK_FILE"); do
+        skill_name=$(echo "$skill_info" | cut -d'|' -f1)
+        source=$(echo "$skill_info" | cut -d'|' -f2)
+
+        echo "Installing skill: $skill_name from $source"
+        npx skills add "$source" -g -s "$skill_name" -y 2>/dev/null || true
+    done
+    echo "Skills installation complete."
+else
+    echo "Skipping skills installation (lock file, jq, or npx not found)"
+fi
+{{ end -}}
