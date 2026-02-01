@@ -35,7 +35,7 @@ uv run pytest-watch
 
 ## Troubleshooting Test Failures
 
-1. Use **tdd-guide** agent
+1. Use **tdd-workflow** skill
 2. Check test isolation
 3. Verify mocks are correct
 4. Fix implementation, not tests (unless tests are wrong)
@@ -59,8 +59,7 @@ go test -race ./...
 ## Agent Support
 
 ### Python
-- **tdd-guide** - Use PROACTIVELY for new features, enforces write-tests-first
-- Use `/tdd` command to invoke TDD workflow
+- **tdd-workflow** skill - Use PROACTIVELY for new features, enforces write-tests-first
 
 ### Go
 - **golang-pro** - Use for Go development
