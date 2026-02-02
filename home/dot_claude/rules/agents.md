@@ -24,7 +24,6 @@ Use agents PROACTIVELY for:
 |------|-------|
 | Code review | `code-reviewer` |
 | Security review | `security-engineer` |
-| TDD workflow | `tdd-guide` |
 | Database design | `database-administrator` |
 | PostgreSQL | `postgres-pro` |
 | Backend development | `backend-developer` |
@@ -52,7 +51,7 @@ Use agents PROACTIVELY for:
 
 ### Sequential Execution
 - Dependent tasks: run in order
-- Example: `planner` → `tdd-guide` → `code-reviewer`
+- Example: `planner` → `code-reviewer`
 
 ### Complex Reviews
 Use `backend-review-orchestrator` to coordinate:

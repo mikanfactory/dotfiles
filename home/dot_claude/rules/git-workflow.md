@@ -40,7 +40,7 @@ type(scope): description
 ## Feature Implementation Phases
 
 1. **Planning** - Design and scope with `planner` agent
-2. **TDD** - Write tests first with `tdd-guide` agent
+2. **TDD** - Write tests first with `tdd-workflow` skill
 3. **Implementation** - Code changes
 4. **Review** - Code review with `code-reviewer` agent
 5. **Merge** - PR and integration
