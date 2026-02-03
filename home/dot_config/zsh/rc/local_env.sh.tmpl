@@ -18,6 +18,62 @@ eval "$(mise activate zsh)"
 # databricks configuration
 echo fpath+=$(brew --prefix)/share/zsh/site-functions >> ~/.zshrc
 echo 'autoload -Uz compinit && compinit' >> ~/.zshrc
+export DATABRICKS_CONFIG_PROFILE="DEFAULT"
+
+# Databricks CLI エイリアス
+alias dbx="databricks"
+alias dbx-lake-prd="DATABRICKS_CONFIG_PROFILE=DEFAULT databricks"
+alias dbx-lake-stg="DATABRICKS_CONFIG_PROFILE=lake-stg databricks"
+alias dbx-ext-prd="DATABRICKS_CONFIG_PROFILE=external-prd databricks"
+alias dbx-ext-stg="DATABRICKS_CONFIG_PROFILE=external-stg databricks"
+alias dbx-analysis-prd="DATABRICKS_CONFIG_PROFILE=analysis-prd databricks"
+alias dbx-analysis-stg="DATABRICKS_CONFIG_PROFILE=analysis-stg databricks"
+alias dbx-terraform="DATABRICKS_CONFIG_PROFILE=terraform databricks"
+
+# 現在のプロファイルを表示
+dbx-profile() {
+echo "Current Databricks profile: ${DATABRICKS_CONFIG_PROFILE:-DEFAULT}"
+}
+
+# プロファイルを切り替える関数
+dbx-switch() {
+  if [ -z "$1" ]; then
+    echo "Usage: dbx-switch <profile-name>"
+    echo "Available profiles:"
+    echo "  - DEFAULT (lake-prd)"
+    echo "  - lake-stg"
+    echo "  - external-prd"
+    echo "  - external-stg"
+    echo "  - analysis-prd"
+    echo "  - analysis-stg"
+    echo "  - terraform"
+    return 1
+  fi
+  export DATABRICKS_CONFIG_PROFILE=$1
+  echo "Switched to profile: $1"
+}
+
+# DABバンドルのディレクトリから適切なプロファイルを自動設定
+dbx-auto-profile() {
+  local current_dir=$(pwd)
+
+  if [[ "$current_dir" == *"/lake/ingest_stg"* ]]; then
+    export DATABRICKS_CONFIG_PROFILE="lake-stg"
+  elif [[ "$current_dir" == *"/lake/ingest"* ]]; then
+    export DATABRICKS_CONFIG_PROFILE="DEFAULT"
+  elif [[ "$current_dir" == *"/external/"*"_stg"* ]]; then
+    export DATABRICKS_CONFIG_PROFILE="external-stg"
+  elif [[ "$current_dir" == *"/external/"* ]]; then
+    export DATABRICKS_CONFIG_PROFILE="external-prd"
+  else
+    echo "Warning: Could not determine appropriate profile for current directory"
+    return 1
+  fi
+
+  echo "Auto-selected profile: $DATABRICKS_CONFIG_PROFILE"
+}
+```
+
 
 # claude mem
 alias claude-mem='/Users/shoji/.bun/bin/bun "/Users/shoji/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
