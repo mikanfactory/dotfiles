@@ -3,6 +3,7 @@ python = "latest"
 node = "lts"
 terraform = "latest"
 uv = "latest"
+bun = "latest"
 
 [settings]
 experimental = true

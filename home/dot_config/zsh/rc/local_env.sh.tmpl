@@ -15,6 +15,14 @@ fi
 # mise (manages tools, env, aliases)
 eval "$(mise activate zsh)"
 
+# databricks configuration
+echo fpath+=$(brew --prefix)/share/zsh/site-functions >> ~/.zshrc
+echo 'autoload -Uz compinit && compinit' >> ~/.zshrc
+
+# claude mem
+alias claude-mem='/Users/shoji/.bun/bin/bun "/Users/shoji/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
+
+
 {{- else if eq .machineId "macbook-air" }}
 
 # mise (manages tools, env, aliases)

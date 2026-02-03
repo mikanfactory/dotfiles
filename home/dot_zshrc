@@ -41,3 +41,4 @@ source "$ZRCDIR/local_env.sh"
 
 # starship
 eval "$(starship init zsh)"
+
