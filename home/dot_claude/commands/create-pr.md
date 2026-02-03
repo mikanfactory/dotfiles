@@ -89,6 +89,12 @@ EOF
 
 Display the PR URL and summarize what was included.
 
+### Step 8: Clear session
+
+After PR creation is complete, always run `/clear` to clear the session.
+
+This prevents unintended pushes or comments when continuing work without clearing.
+
 ## Constraints
 
 - **ALL PR content (title, description) MUST be written in Japanese**
