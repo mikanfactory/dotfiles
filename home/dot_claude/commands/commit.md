@@ -20,6 +20,12 @@ Use the `git-commit-splitter` agent to:
 2. Split changes into logical, atomic commits
 3. Create separate commits for each logical group with clear, descriptive messages
 
+### Step 2: Clear session
+
+コミット完了後、必ず `/clear` を実行してセッションをクリアする。
+
+これにより、セッション継続時に意図しないpushやコメントを防止する。
+
 ## Constraints
 
 - DO NOT add Claude co-authorship footer to commits
