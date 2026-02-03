@@ -72,7 +72,48 @@ dbx-auto-profile() {
 
   echo "Auto-selected profile: $DATABRICKS_CONFIG_PROFILE"
 }
-```
+
+# DABバンドルの一覧を表示
+dbx-list-bundles() {
+    echo "=== Lake Bundles ==="
+    ls -1d ~/Projects/ivry-data-platform-migration/dab/lake/*/ 2>/dev/null | grep -v src
+    
+    echo -e "\n=== External Bundles ==="
+    ls -1d ~/Projects/ivry-data-platform-migration/dab/external/*/ 2>/dev/null | grep -v src
+}
+
+# バンドルの状態を確認
+dbx-bundle-status() {
+    echo "Checking bundle status..."
+    databricks bundle validate --target prod
+    
+    if [ $? -eq 0 ]; then
+        echo "✅ Bundle is valid"
+        
+        # デプロイされているリソースを確認
+        echo -e "\nDeployed resources:"
+        databricks bundle summary --target prod 2>/dev/null || echo "No deployment found"
+    else
+        echo "❌ Bundle validation failed"
+    fi
+}
+
+# ジョブの実行状況を監視
+dbx-watch-job() {
+    if [ -z "$1" ]; then
+        echo "Usage: dbx-watch-job <job-name>"
+        return 1
+    fi
+    
+    watch -n 5 "databricks jobs list | grep -A 5 '$1'"
+}
+
+# 最近のジョブ実行を表示
+dbx-recent-runs() {
+    databricks runs list --limit 10 --output json | \
+    jq -r '.runs[] | "\(.run_id) | \(.run_name) | \(.state.life_cycle_state) | \(.start_time | strftime("%Y-%m-%d %H:%M"))"' | \
+    column -t -s '|'
+}
 
 
 # claude mem
