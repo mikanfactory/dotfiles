@@ -91,9 +91,9 @@ Display the PR URL and summarize what was included.
 
 ### Step 8: Clear session
 
-PR作成完了後、必ず `/clear` を実行してセッションをクリアする。
+After PR creation is complete, always run `/clear` to clear the session.
 
-これにより、セッション継続時に意図しないpushやコメントを防止する。
+This prevents unintended pushes or comments when continuing work without clearing.
 
 ## Constraints
 

@@ -22,9 +22,9 @@ Use the `git-commit-splitter` agent to:
 
 ### Step 2: Clear session
 
-コミット完了後、必ず `/clear` を実行してセッションをクリアする。
+After commit is complete, always run `/clear` to clear the session.
 
-これにより、セッション継続時に意図しないpushやコメントを防止する。
+This prevents unintended pushes or comments when continuing work without clearing.
 
 ## Constraints
 
