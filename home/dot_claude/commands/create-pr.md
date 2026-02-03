@@ -89,6 +89,12 @@ EOF
 
 Display the PR URL and summarize what was included.
 
+### Step 8: Clear session
+
+PR作成完了後、必ず `/clear` を実行してセッションをクリアする。
+
+これにより、セッション継続時に意図しないpushやコメントを防止する。
+
 ## Constraints
 
 - **ALL PR content (title, description) MUST be written in Japanese**
