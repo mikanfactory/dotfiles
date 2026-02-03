@@ -18,10 +18,11 @@ eval "$(mise activate zsh)"
 # Databricks configuration
 source ~/.config/zsh/rc/databricks.sh
 
-
 # claude mem
 alias claude-mem='/Users/shoji/.bun/bin/bun "/Users/shoji/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 
+# direnv
+eval "$(direnv hook zsh)"
 
 {{- else if eq .machineId "macbook-air" }}
 
