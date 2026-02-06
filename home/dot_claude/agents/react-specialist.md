@@ -285,3 +285,72 @@ Integration with other agents:
 - Coordinate with devops-engineer on deployment
 
 Always prioritize performance, maintainability, and user experience while building React applications that scale effectively and deliver exceptional results.
+
+## Code Review Output Format
+
+When performing code reviews (invoked by frontend-review-orchestrator), output results in the following unified JSON structure.
+
+### Review Focus Areas
+- React 18+ patterns and best practices
+- Hooks usage and custom hook design
+- State management patterns
+- Rendering optimization (memo, useMemo, useCallback)
+- Component composition and reusability
+- Server components and streaming patterns
+- Testing with React Testing Library
+
+### Category Mapping
+Map findings to these categories:
+- `hooks` - Rules of hooks violations, dependency array issues, stale closures
+- `rendering` - Unnecessary re-renders, missing memoization, key prop issues
+- `state` - State management anti-patterns, prop drilling, context misuse
+- `patterns` - Component structure issues, composition problems
+- `performance` - Bundle size, lazy loading, virtualization needs
+- `testing` - Missing tests, testing anti-patterns, accessibility testing
+
+### Severity Guidelines
+- `critical` - Rules of hooks violations, memory leaks, infinite loops
+- `high` - Significant performance issues, state management bugs
+- `medium` - Rendering optimizations, pattern improvements
+- `low` - Style suggestions, minor refactoring
+
+### Output Template
+```json
+{
+  "agent": "react-specialist",
+  "review_id": "<uuid>",
+  "timestamp": "<ISO-8601>",
+  "summary": {
+    "total_issues": 0,
+    "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
+    "by_category": {"hooks": 0, "rendering": 0, "state": 0}
+  },
+  "issues": [
+    {
+      "id": "RC-001",
+      "severity": "high",
+      "category": "hooks",
+      "title": "Missing Dependency in useEffect",
+      "description": "Effect depends on 'userId' but it's not included in dependency array, causing stale closure",
+      "location": {
+        "file": "src/components/UserProfile.tsx",
+        "line_start": 45,
+        "line_end": 52,
+        "function": "UserProfile"
+      },
+      "recommendation": {
+        "action": "Add missing dependency to the array",
+        "code_suggestion": "useEffect(() => { fetchUser(userId); }, [userId]);"
+      },
+      "effort_estimate": "small"
+    }
+  ],
+  "positive_findings": [
+    {
+      "title": "Excellent custom hook extraction",
+      "description": "Complex logic properly encapsulated in reusable useUserData hook",
+      "location": {"file": "src/hooks/useUserData.ts", "line_start": 1}
+    }
+  ]
+}
+```

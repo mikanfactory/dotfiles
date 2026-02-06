@@ -275,3 +275,72 @@ Integration with other agents:
 - Assist rust-engineer with WASM types
 
 Always prioritize type safety, developer experience, and build performance while maintaining code clarity and maintainability.
+
+## Code Review Output Format
+
+When performing code reviews (invoked by frontend-review-orchestrator), output results in the following unified JSON structure.
+
+### Review Focus Areas
+- TypeScript strict mode compliance
+- Advanced type patterns (generics, conditional types, mapped types)
+- Type inference optimization
+- No `any` or `unknown` usage without justification
+- Module and import organization
+- Build configuration and performance
+- Test type coverage
+
+### Category Mapping
+Map findings to these categories:
+- `type_safety` - Missing types, unsafe casts, any usage, assertion overuse
+- `generics` - Missing generic constraints, improper variance, type parameter issues
+- `patterns` - Anti-patterns, missed type utilities, redundant type definitions
+- `inference` - Over-annotation, missed inference opportunities
+- `modules` - Import issues, circular dependencies, export problems
+- `build` - TSConfig issues, compilation errors, bundle impact
+
+### Severity Guidelines
+- `critical` - Type unsafety in public APIs, runtime type errors
+- `high` - Strict mode violations, missing generic constraints
+- `medium` - Type improvements, pattern optimizations
+- `low` - Style suggestions, documentation types
+
+### Output Template
+```json
+{
+  "agent": "typescript-pro",
+  "review_id": "<uuid>",
+  "timestamp": "<ISO-8601>",
+  "summary": {
+    "total_issues": 0,
+    "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
+    "by_category": {"type_safety": 0, "generics": 0, "patterns": 0}
+  },
+  "issues": [
+    {
+      "id": "TS-001",
+      "severity": "high",
+      "category": "type_safety",
+      "title": "Unsafe Type Assertion",
+      "description": "Using 'as' assertion without runtime validation bypasses type safety",
+      "location": {
+        "file": "src/utils/parser.ts",
+        "line_start": 23,
+        "line_end": 23,
+        "function": "parseConfig"
+      },
+      "recommendation": {
+        "action": "Use type guard or zod schema for runtime validation",
+        "code_suggestion": "const config = configSchema.parse(rawData);"
+      },
+      "effort_estimate": "medium"
+    }
+  ],
+  "positive_findings": [
+    {
+      "title": "Excellent use of discriminated unions",
+      "description": "Clean state machine modeling with exhaustive type checking",
+      "location": {"file": "src/types/state.ts", "line_start": 15}
+    }
+  ]
+}
+```

@@ -131,3 +131,72 @@ Integration with other agents:
 - Sync with database-optimizer on data fetching
 
 Always prioritize user experience, maintain code quality, and ensure accessibility compliance in all implementations.
+
+## Code Review Output Format
+
+When performing code reviews (invoked by frontend-review-orchestrator), output results in the following unified JSON structure.
+
+### Review Focus Areas
+- Accessibility (WCAG 2.1 AA compliance)
+- Responsive design and mobile-first approach
+- Component structure and reusability
+- CSS organization and performance
+- User experience patterns
+- Progressive enhancement
+- Cross-browser compatibility
+
+### Category Mapping
+Map findings to these categories:
+- `accessibility` - ARIA issues, keyboard navigation, screen reader support
+- `responsive` - Breakpoint issues, mobile usability, touch targets
+- `components` - Structure issues, reusability problems, prop design
+- `styling` - CSS specificity, performance, maintainability
+- `ux` - User experience issues, interaction patterns
+- `performance` - Asset loading, rendering performance, Core Web Vitals
+
+### Severity Guidelines
+- `critical` - WCAG Level A violations, major UX blockers
+- `high` - WCAG Level AA violations, significant usability issues
+- `medium` - UX improvements, responsive design fixes
+- `low` - Style consistency, minor enhancements
+
+### Output Template
+```json
+{
+  "agent": "frontend-developer",
+  "review_id": "<uuid>",
+  "timestamp": "<ISO-8601>",
+  "summary": {
+    "total_issues": 0,
+    "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
+    "by_category": {"accessibility": 0, "responsive": 0, "components": 0}
+  },
+  "issues": [
+    {
+      "id": "FD-001",
+      "severity": "critical",
+      "category": "accessibility",
+      "title": "Missing Alt Text on Image",
+      "description": "Image lacks alt attribute, making it inaccessible to screen readers",
+      "location": {
+        "file": "src/components/ProductCard.tsx",
+        "line_start": 32,
+        "line_end": 32,
+        "function": "ProductCard"
+      },
+      "recommendation": {
+        "action": "Add descriptive alt text or empty alt for decorative images",
+        "code_suggestion": "<img src={product.image} alt={product.name} />"
+      },
+      "effort_estimate": "small"
+    }
+  ],
+  "positive_findings": [
+    {
+      "title": "Excellent keyboard navigation",
+      "description": "Focus management properly implemented with visible focus indicators",
+      "location": {"file": "src/components/Modal.tsx", "line_start": 15}
+    }
+  ]
+}
+```

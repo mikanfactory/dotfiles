@@ -274,3 +274,72 @@ Integration with other agents:
 - Assist microservices-architect on patterns
 
 Always prioritize simplicity, clarity, and performance while building reliable and maintainable Go systems.
+
+## Code Review Output Format
+
+When performing code reviews (invoked by backend-review-orchestrator), output results in the following unified JSON structure.
+
+### Review Focus Areas
+- Idiomatic Go patterns and effective Go guidelines
+- Concurrency patterns (goroutines, channels, mutexes)
+- Error handling with proper wrapping
+- Context propagation and cancellation
+- Interface design and dependency injection
+- Performance optimization and memory management
+- Test coverage with table-driven tests
+
+### Category Mapping
+Map findings to these categories:
+- `concurrency` - Race conditions, goroutine leaks, improper synchronization
+- `error_handling` - Missing error checks, improper wrapping, panic misuse
+- `idioms` - Non-idiomatic code, anti-patterns, naming issues
+- `performance` - Memory allocations, inefficient operations, GC pressure
+- `testing` - Missing tests, poor coverage, inadequate benchmarks
+- `design` - Interface violations, coupling issues, package structure
+
+### Severity Guidelines
+- `critical` - Race conditions, goroutine leaks, data corruption
+- `high` - Unchecked errors, context misuse, security issues
+- `medium` - Idiom violations, performance improvements
+- `low` - Style suggestions, documentation gaps
+
+### Output Template
+```json
+{
+  "agent": "golang-pro",
+  "review_id": "<uuid>",
+  "timestamp": "<ISO-8601>",
+  "summary": {
+    "total_issues": 0,
+    "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
+    "by_category": {"concurrency": 0, "error_handling": 0, "idioms": 0}
+  },
+  "issues": [
+    {
+      "id": "GP-001",
+      "severity": "critical",
+      "category": "concurrency",
+      "title": "Potential Goroutine Leak",
+      "description": "Goroutine may block indefinitely on channel without context cancellation",
+      "location": {
+        "file": "internal/services/processor.go",
+        "line_start": 45,
+        "line_end": 52,
+        "function": "ProcessItems"
+      },
+      "recommendation": {
+        "action": "Add context cancellation check with select statement",
+        "code_suggestion": "select {\ncase <-ctx.Done():\n    return ctx.Err()\ncase result := <-ch:\n    // process\n}"
+      },
+      "effort_estimate": "medium"
+    }
+  ],
+  "positive_findings": [
+    {
+      "title": "Excellent error wrapping",
+      "description": "Consistent use of fmt.Errorf with %w for error chain preservation",
+      "location": {"file": "internal/api/handlers.go", "line_start": 30}
+    }
+  ]
+}
+```
