@@ -87,7 +87,7 @@ Pass the review manifest to the `backend-review-orchestrator` agent.
 
 The orchestrator will:
 1. Dispatch files to appropriate specialized agents:
-   - **python-reviewer**: Python type safety, patterns, testing
+   - **python-pro**: Python type safety, patterns, testing
    - **backend-developer**: API design, database, microservices
    - **security-engineer**: Vulnerabilities, auth, OWASP
    - **database-administrator**: Database performance, query optimization, schema design
