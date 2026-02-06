@@ -13,19 +13,18 @@ description: LLMプロンプトをレビューして品質・効率・安全性�
 
 ## Your Task
 
-Perform a comprehensive LLM prompt review using the `prompt-engineer` agent.
+Perform a comprehensive LLM prompt review using the `prompt-engineer` agent expertise.
 
-### Step 1: Determine Review Scope
+### Step 1: Identify Prompt Files to Review
 
-Identify which prompt files to review based on the following priority:
+Determine which prompt files to review based on the following priority:
 
 **Option A: Staged/Unstaged changes (default)**
 If there are staged or uncommitted changes, filter for prompt-related files:
-- `*.prompt`, `*.prompt.md`, `*.prompt.txt`
-- `**/prompts/**/*.md`, `**/prompts/**/*.txt`
-- `CLAUDE.md`, `SKILL.md`, `*.skill.md`
-- Files containing `system_prompt`, `user_prompt` in name
-- `**/agents/**/*.md`
+```bash
+git diff --name-only --cached 2>/dev/null
+git diff --name-only 2>/dev/null
+```
 
 **Option B: Diff against main branch**
 If no staged/unstaged prompt files exist, check diff against main:
@@ -39,24 +38,120 @@ If user specified a path argument (e.g., `/review_prompt prompts/system.md`), us
 **Option D: Inline prompt provided**
 If user provided prompt text directly in quotes, review that text.
 
-### Step 2: Invoke review-prompt Skill
+**Prompt file patterns to detect:**
+- `*.prompt`, `*.prompt.md`, `*.prompt.txt`
+- `**/prompts/**/*.md`, `**/prompts/**/*.txt`
+- `CLAUDE.md`, `SKILL.md`, `*.skill.md`
+- Files containing `system_prompt`, `user_prompt` in name
+- `**/agents/**/*.md`
 
-Pass the identified prompt(s) to the `review-prompt` skill for comprehensive analysis.
+### Step 2: Analyze Prompt Structure
 
-The skill will evaluate:
-1. **Clarity (PE-1xx)**: Task definition, output expectations, scope
-2. **Efficiency (PE-2xx)**: Token usage, redundancy, compression
-3. **Safety (PE-3xx)**: Injection vulnerabilities, guardrails
-4. **Patterns (PE-4xx)**: Zero/Few-shot, CoT appropriateness
-5. **Best Practices (PE-5xx)**: Role clarity, error handling
+For each prompt file, gather metadata:
 
-### Step 3: Present Results
+```json
+{
+  "file_path": "<path>",
+  "prompt_type": "system|user|few-shot|chain-of-thought|mixed",
+  "estimated_tokens": "<count>",
+  "components": {
+    "has_system_instructions": true,
+    "has_few_shot_examples": false,
+    "has_output_format": true,
+    "has_constraints": true,
+    "has_persona": false
+  }
+}
+```
 
-Display the review report with:
-- Executive summary with quality score
-- Issues grouped by severity (critical → low)
-- Specific improvement recommendations
-- Optimized prompt suggestion (when applicable)
+### Step 3: Conduct Review
+
+Evaluate the prompt against these 5 categories:
+
+#### 3.1 Clarity and Specificity (PE-1xx)
+- **PE-101**: Clear task definition
+- **PE-102**: Unambiguous instructions
+- **PE-103**: Specific output expectations
+- **PE-104**: Well-defined scope
+
+#### 3.2 Token Efficiency (PE-2xx)
+- **PE-201**: Redundant content detection
+- **PE-202**: Compression opportunities
+- **PE-203**: Unnecessary verbosity
+- **PE-204**: Example efficiency (for few-shot)
+
+#### 3.3 Safety Considerations (PE-3xx)
+- **PE-301**: Prompt injection vulnerabilities
+- **PE-302**: Output manipulation risks
+- **PE-303**: Sensitive data handling
+- **PE-304**: Guardrail recommendations
+
+#### 3.4 Pattern Effectiveness (PE-4xx)
+- **PE-401**: Pattern selection appropriateness (Zero-shot, Few-shot, CoT, ToT, ReAct)
+- **PE-402**: Example quality and relevance (for few-shot)
+- **PE-403**: Reasoning step clarity (for CoT)
+- **PE-404**: Pattern consistency
+
+#### 3.5 Best Practices (PE-5xx)
+- **PE-501**: Role/persona clarity
+- **PE-502**: Output format specification
+- **PE-503**: Error handling instructions
+- **PE-504**: Edge case coverage
+
+### Step 4: Classify Severity
+
+- `critical` - Prompt likely to fail or produce harmful output
+- `high` - Significant effectiveness or safety issues
+- `medium` - Improvements that would notably enhance quality
+- `low` - Style suggestions and minor optimizations
+
+### Step 5: Present Review Results
+
+#### Executive Summary
+
+```markdown
+# LLM Prompt Review Report
+
+**Prompt Source:** <file path or "inline">
+**Prompt Type:** <type>
+**Estimated Tokens:** <count>
+
+## Summary
+
+| Category | Issues | Severity |
+|----------|--------|----------|
+| Clarity | X | High: Y, Medium: Z |
+| Efficiency | X | High: Y, Medium: Z |
+| Safety | X | Critical: Y, High: Z |
+| Patterns | X | Medium: Y, Low: Z |
+| Best Practices | X | Medium: Y, Low: Z |
+
+**Quality Score:** X/100
+
+### Critical Issues (Immediate Action)
+1. **PE-301** Prompt injection vulnerability...
+```
+
+#### Detailed Findings
+
+For each issue, provide:
+- Issue ID (PE-XXX)
+- Category and severity
+- Location (line number or section)
+- Description
+- Recommendation with improved text
+- Before/After comparison when applicable
+
+#### Positive Findings
+
+Highlight well-implemented patterns:
+- Effective use of techniques
+- Good safety practices
+- Clean structure
+
+#### Improved Prompt Suggestion
+
+When critical or high-severity issues exist, provide an optimized version.
 
 ## Example Usage
 
@@ -65,10 +160,10 @@ Display the review report with:
 /review_prompt
 
 # Review specific file
-/review_prompt prompts/system.md
+/review_prompt prompts/system-prompt.md
 
 # Review inline prompt
-/review_prompt "You are a coding assistant..."
+/review_prompt "You are a helpful assistant..."
 
 # Review directory
 /review_prompt prompts/
@@ -76,7 +171,16 @@ Display the review report with:
 
 ## Constraints
 
+- Maximum prompt size: 100,000 tokens
 - If no prompt files found, report clearly and exit
 - Always output results in Japanese when communicating with user
 - Provide actionable recommendations with concrete examples
-- Flag safety issues prominently
+- When safety issues found, always flag prominently
+
+## Communication Style
+
+- Use clear, actionable language
+- Provide before/after examples for improvements
+- Prioritize critical issues at the top
+- Include token count impact for efficiency suggestions
+- Respond in Japanese to the user
