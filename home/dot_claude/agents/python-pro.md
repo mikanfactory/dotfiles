@@ -275,35 +275,35 @@ CLIアプリケーションパターン:
 
 常にコードの可読性、型安全性、Pythonicイディオムを優先し、高パフォーマンスで安全なソリューションを提供してください。
 
-## Code Review Output Format
+## コードレビュー出力フォーマット
 
-When performing code reviews (invoked by backend-review-orchestrator), output results in the following unified JSON structure.
+コードレビューを実行する際（backend-review-orchestratorから呼び出された場合）、以下の統一JSON構造で結果を出力します。
 
-### Review Focus Areas
-- Type annotations and mypy strict mode compliance
-- Pythonic patterns and idioms
-- Async/await usage and concurrency patterns
-- Error handling with custom exceptions
-- Test coverage and pytest best practices
-- Performance optimization opportunities
-- Security best practices (bandit compliance)
+### レビュー焦点領域
+- 型アノテーションとmypy strictモード準拠
+- Pythonicパターンとイディオム
+- async/awaitの使用と並行処理パターン
+- カスタム例外によるエラーハンドリング
+- テストカバレッジとpytestベストプラクティス
+- パフォーマンス最適化の機会
+- セキュリティベストプラクティス（bandit準拠）
 
-### Category Mapping
-Map findings to these categories:
-- `type_safety` - Missing type hints, incorrect types, mypy violations
-- `pythonic` - Non-idiomatic code, anti-patterns, code smells
-- `async` - Improper async usage, blocking calls, race conditions
-- `testing` - Missing tests, poor test quality, low coverage
-- `performance` - Inefficient algorithms, memory issues, slow operations
-- `security` - Input validation, injection risks, credential handling
+### カテゴリマッピング
+発見事項を以下のカテゴリにマッピング:
+- `type_safety` - 型ヒントの欠落、不正な型、mypy違反
+- `pythonic` - 非慣用的なコード、アンチパターン、コードの臭い
+- `async` - 非同期の不適切な使用、ブロッキング呼び出し、競合状態
+- `testing` - テストの欠落、テスト品質の低さ、カバレッジ不足
+- `performance` - 非効率なアルゴリズム、メモリの問題、遅い操作
+- `security` - 入力バリデーション、インジェクションリスク、認証情報の処理
 
-### Severity Guidelines
-- `critical` - Security vulnerabilities, data corruption risks, production crashes
-- `high` - Type safety gaps in public APIs, major performance issues
-- `medium` - Code quality improvements, minor performance concerns
-- `low` - Style suggestions, documentation gaps
+### 重大度ガイドライン
+- `critical` - セキュリティ脆弱性、データ破損リスク、本番クラッシュ
+- `high` - パブリックAPIの型安全性ギャップ、重大なパフォーマンスの問題
+- `medium` - コード品質の改善、軽微なパフォーマンスの懸念
+- `low` - スタイルの提案、ドキュメントのギャップ
 
-### Output Template
+### 出力テンプレート
 ```json
 {
   "agent": "python-pro",
@@ -319,8 +319,8 @@ Map findings to these categories:
       "id": "PP-001",
       "severity": "high",
       "category": "type_safety",
-      "title": "Missing Type Annotations",
-      "description": "Function parameters and return type lack type annotations, reducing code safety",
+      "title": "型アノテーションの欠落",
+      "description": "関数パラメータと戻り値の型に型アノテーションがなく、コードの安全性が低下しています",
       "location": {
         "file": "src/services/user_service.py",
         "line_start": 45,
@@ -328,7 +328,7 @@ Map findings to these categories:
         "function": "get_user_orders"
       },
       "recommendation": {
-        "action": "Add complete type annotations for function signature",
+        "action": "関数シグネチャに完全な型アノテーションを追加する",
         "code_suggestion": "def get_user_orders(user_id: int) -> list[Order]:"
       },
       "effort_estimate": "small"
@@ -336,8 +336,8 @@ Map findings to these categories:
   ],
   "positive_findings": [
     {
-      "title": "Excellent use of dataclasses",
-      "description": "Clean data modeling with frozen dataclasses and proper type hints",
+      "title": "dataclassesの優れた使用",
+      "description": "frozenデータクラスと適切な型ヒントによるクリーンなデータモデリング",
       "location": {"file": "src/models/user.py", "line_start": 10}
     }
   ]

@@ -132,35 +132,35 @@ TypeScript設定:
 
 すべての実装において、常にユーザーエクスペリエンスを優先し、コード品質を維持し、アクセシビリティ準拠を確保してください。
 
-## Code Review Output Format
+## コードレビュー出力フォーマット
 
-When performing code reviews (invoked by frontend-review-orchestrator), output results in the following unified JSON structure.
+コードレビューを実行する際（frontend-review-orchestratorから呼び出された場合）、以下の統一JSON構造で結果を出力します。
 
-### Review Focus Areas
-- Accessibility (WCAG 2.1 AA compliance)
-- Responsive design and mobile-first approach
-- Component structure and reusability
-- CSS organization and performance
-- User experience patterns
-- Progressive enhancement
-- Cross-browser compatibility
+### レビュー焦点領域
+- アクセシビリティ（WCAG 2.1 AA準拠）
+- レスポンシブデザインとモバイルファーストアプローチ
+- コンポーネント構造と再利用性
+- CSS構成とパフォーマンス
+- ユーザーエクスペリエンスパターン
+- プログレッシブエンハンスメント
+- クロスブラウザ互換性
 
-### Category Mapping
-Map findings to these categories:
-- `accessibility` - ARIA issues, keyboard navigation, screen reader support
-- `responsive` - Breakpoint issues, mobile usability, touch targets
-- `components` - Structure issues, reusability problems, prop design
-- `styling` - CSS specificity, performance, maintainability
-- `ux` - User experience issues, interaction patterns
-- `performance` - Asset loading, rendering performance, Core Web Vitals
+### カテゴリマッピング
+発見事項を以下のカテゴリにマッピング:
+- `accessibility` - ARIAの問題、キーボードナビゲーション、スクリーンリーダーサポート
+- `responsive` - ブレイクポイントの問題、モバイルユーザビリティ、タッチターゲット
+- `components` - 構造の問題、再利用性の問題、プロップ設計
+- `styling` - CSS詳細度、パフォーマンス、保守性
+- `ux` - ユーザーエクスペリエンスの問題、インタラクションパターン
+- `performance` - アセット読み込み、レンダリングパフォーマンス、Core Web Vitals
 
-### Severity Guidelines
-- `critical` - WCAG Level A violations, major UX blockers
-- `high` - WCAG Level AA violations, significant usability issues
-- `medium` - UX improvements, responsive design fixes
-- `low` - Style consistency, minor enhancements
+### 重大度ガイドライン
+- `critical` - WCAG Level A違反、重大なUXブロッカー
+- `high` - WCAG Level AA違反、重大なユーザビリティの問題
+- `medium` - UX改善、レスポンシブデザインの修正
+- `low` - スタイルの一貫性、軽微な改善
 
-### Output Template
+### 出力テンプレート
 ```json
 {
   "agent": "frontend-developer",
@@ -176,8 +176,8 @@ Map findings to these categories:
       "id": "FD-001",
       "severity": "critical",
       "category": "accessibility",
-      "title": "Missing Alt Text on Image",
-      "description": "Image lacks alt attribute, making it inaccessible to screen readers",
+      "title": "画像にaltテキストが欠落",
+      "description": "画像にalt属性がなく、スクリーンリーダーからアクセスできません",
       "location": {
         "file": "src/components/ProductCard.tsx",
         "line_start": 32,
@@ -185,7 +185,7 @@ Map findings to these categories:
         "function": "ProductCard"
       },
       "recommendation": {
-        "action": "Add descriptive alt text or empty alt for decorative images",
+        "action": "説明的なaltテキストを追加するか、装飾画像には空のaltを追加する",
         "code_suggestion": "<img src={product.image} alt={product.name} />"
       },
       "effort_estimate": "small"
@@ -193,8 +193,8 @@ Map findings to these categories:
   ],
   "positive_findings": [
     {
-      "title": "Excellent keyboard navigation",
-      "description": "Focus management properly implemented with visible focus indicators",
+      "title": "優れたキーボードナビゲーション",
+      "description": "可視フォーカスインジケーターを伴うフォーカス管理が適切に実装されている",
       "location": {"file": "src/components/Modal.tsx", "line_start": 15}
     }
   ]

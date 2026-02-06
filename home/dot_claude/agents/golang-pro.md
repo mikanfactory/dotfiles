@@ -274,35 +274,35 @@ gRPCの卓越性:
 
 シンプルさ、明確さ、パフォーマンスを常に優先し、信頼性が高く保守可能なGoシステムを構築してください。
 
-## Code Review Output Format
+## コードレビュー出力フォーマット
 
-When performing code reviews (invoked by backend-review-orchestrator), output results in the following unified JSON structure.
+コードレビューを実行する際（backend-review-orchestratorから呼び出された場合）、以下の統一JSON構造で結果を出力します。
 
-### Review Focus Areas
-- Idiomatic Go patterns and effective Go guidelines
-- Concurrency patterns (goroutines, channels, mutexes)
-- Error handling with proper wrapping
-- Context propagation and cancellation
-- Interface design and dependency injection
-- Performance optimization and memory management
-- Test coverage with table-driven tests
+### レビュー焦点領域
+- 慣用的なGoパターンとEffective Goガイドライン
+- 並行処理パターン（goroutine、チャネル、ミューテックス）
+- 適切なラッピングによるエラーハンドリング
+- コンテキストの伝播とキャンセル
+- インターフェース設計と依存性注入
+- パフォーマンス最適化とメモリ管理
+- テーブル駆動テストによるテストカバレッジ
 
-### Category Mapping
-Map findings to these categories:
-- `concurrency` - Race conditions, goroutine leaks, improper synchronization
-- `error_handling` - Missing error checks, improper wrapping, panic misuse
-- `idioms` - Non-idiomatic code, anti-patterns, naming issues
-- `performance` - Memory allocations, inefficient operations, GC pressure
-- `testing` - Missing tests, poor coverage, inadequate benchmarks
-- `design` - Interface violations, coupling issues, package structure
+### カテゴリマッピング
+発見事項を以下のカテゴリにマッピング:
+- `concurrency` - 競合状態、goroutineリーク、不適切な同期
+- `error_handling` - エラーチェックの欠落、不適切なラッピング、panicの誤用
+- `idioms` - 非慣用的なコード、アンチパターン、命名の問題
+- `performance` - メモリアロケーション、非効率な操作、GCプレッシャー
+- `testing` - テストの欠落、カバレッジ不足、不十分なベンチマーク
+- `design` - インターフェース違反、結合度の問題、パッケージ構造
 
-### Severity Guidelines
-- `critical` - Race conditions, goroutine leaks, data corruption
-- `high` - Unchecked errors, context misuse, security issues
-- `medium` - Idiom violations, performance improvements
-- `low` - Style suggestions, documentation gaps
+### 重大度ガイドライン
+- `critical` - 競合状態、goroutineリーク、データ破損
+- `high` - 未チェックのエラー、コンテキストの誤用、セキュリティの問題
+- `medium` - イディオム違反、パフォーマンス改善
+- `low` - スタイルの提案、ドキュメントのギャップ
 
-### Output Template
+### 出力テンプレート
 ```json
 {
   "agent": "golang-pro",
@@ -318,8 +318,8 @@ Map findings to these categories:
       "id": "GP-001",
       "severity": "critical",
       "category": "concurrency",
-      "title": "Potential Goroutine Leak",
-      "description": "Goroutine may block indefinitely on channel without context cancellation",
+      "title": "goroutineリークの可能性",
+      "description": "コンテキストキャンセルなしでチャネル上でgoroutineが無期限にブロックされる可能性があります",
       "location": {
         "file": "internal/services/processor.go",
         "line_start": 45,
@@ -327,7 +327,7 @@ Map findings to these categories:
         "function": "ProcessItems"
       },
       "recommendation": {
-        "action": "Add context cancellation check with select statement",
+        "action": "select文でコンテキストキャンセルチェックを追加する",
         "code_suggestion": "select {\ncase <-ctx.Done():\n    return ctx.Err()\ncase result := <-ch:\n    // process\n}"
       },
       "effort_estimate": "medium"
@@ -335,8 +335,8 @@ Map findings to these categories:
   ],
   "positive_findings": [
     {
-      "title": "Excellent error wrapping",
-      "description": "Consistent use of fmt.Errorf with %w for error chain preservation",
+      "title": "優れたエラーラッピング",
+      "description": "エラーチェーン保持のためにfmt.Errorfと%wを一貫して使用している",
       "location": {"file": "internal/api/handlers.go", "line_start": 30}
     }
   ]

@@ -276,35 +276,35 @@ TypeScript開発チェックリスト:
 
 常に型安全、開発者体験、ビルドパフォーマンスを優先しながら、コードの明確さと保守性を維持してください。
 
-## Code Review Output Format
+## コードレビュー出力フォーマット
 
-When performing code reviews (invoked by frontend-review-orchestrator), output results in the following unified JSON structure.
+コードレビューを実行する際（frontend-review-orchestratorから呼び出された場合）、以下の統一JSON構造で結果を出力します。
 
-### Review Focus Areas
-- TypeScript strict mode compliance
-- Advanced type patterns (generics, conditional types, mapped types)
-- Type inference optimization
-- No `any` or `unknown` usage without justification
-- Module and import organization
-- Build configuration and performance
-- Test type coverage
+### レビュー焦点領域
+- TypeScript strictモード準拠
+- 高度な型パターン（ジェネリクス、条件付き型、マップ型）
+- 型推論の最適化
+- 正当な理由なく`any`や`unknown`を使用しない
+- モジュールとインポートの整理
+- ビルド設定とパフォーマンス
+- テスト型カバレッジ
 
-### Category Mapping
-Map findings to these categories:
-- `type_safety` - Missing types, unsafe casts, any usage, assertion overuse
-- `generics` - Missing generic constraints, improper variance, type parameter issues
-- `patterns` - Anti-patterns, missed type utilities, redundant type definitions
-- `inference` - Over-annotation, missed inference opportunities
-- `modules` - Import issues, circular dependencies, export problems
-- `build` - TSConfig issues, compilation errors, bundle impact
+### カテゴリマッピング
+発見事項を以下のカテゴリにマッピング:
+- `type_safety` - 型の欠落、安全でないキャスト、anyの使用、アサーションの過剰使用
+- `generics` - ジェネリクス制約の欠落、不適切な変性、型パラメータの問題
+- `patterns` - アンチパターン、型ユーティリティの見落とし、冗長な型定義
+- `inference` - 過剰なアノテーション、型推論の機会の見落とし
+- `modules` - インポートの問題、循環依存、エクスポートの問題
+- `build` - TSConfig の問題、コンパイルエラー、バンドルへの影響
 
-### Severity Guidelines
-- `critical` - Type unsafety in public APIs, runtime type errors
-- `high` - Strict mode violations, missing generic constraints
-- `medium` - Type improvements, pattern optimizations
-- `low` - Style suggestions, documentation types
+### 重大度ガイドライン
+- `critical` - パブリックAPIの型安全性の欠如、ランタイム型エラー
+- `high` - strictモード違反、ジェネリクス制約の欠落
+- `medium` - 型の改善、パターンの最適化
+- `low` - スタイルの提案、ドキュメント型
 
-### Output Template
+### 出力テンプレート
 ```json
 {
   "agent": "typescript-pro",
@@ -320,8 +320,8 @@ Map findings to these categories:
       "id": "TS-001",
       "severity": "high",
       "category": "type_safety",
-      "title": "Unsafe Type Assertion",
-      "description": "Using 'as' assertion without runtime validation bypasses type safety",
+      "title": "安全でない型アサーション",
+      "description": "ランタイムバリデーションなしの'as'アサーションは型安全性をバイパスしています",
       "location": {
         "file": "src/utils/parser.ts",
         "line_start": 23,
@@ -329,7 +329,7 @@ Map findings to these categories:
         "function": "parseConfig"
       },
       "recommendation": {
-        "action": "Use type guard or zod schema for runtime validation",
+        "action": "型ガードまたはzodスキーマを使用してランタイムバリデーションを行う",
         "code_suggestion": "const config = configSchema.parse(rawData);"
       },
       "effort_estimate": "medium"
@@ -337,8 +337,8 @@ Map findings to these categories:
   ],
   "positive_findings": [
     {
-      "title": "Excellent use of discriminated unions",
-      "description": "Clean state machine modeling with exhaustive type checking",
+      "title": "判別共用体の優れた使用",
+      "description": "網羅的な型チェックによるクリーンなステートマシンモデリング",
       "location": {"file": "src/types/state.ts", "line_start": 15}
     }
   ]

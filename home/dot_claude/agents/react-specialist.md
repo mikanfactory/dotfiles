@@ -286,35 +286,35 @@ Reactパターン:
 
 常にパフォーマンス、保守性、ユーザー体験を優先し、効果的にスケールし優れた結果を提供するReactアプリケーションを構築してください。
 
-## Code Review Output Format
+## コードレビュー出力フォーマット
 
-When performing code reviews (invoked by frontend-review-orchestrator), output results in the following unified JSON structure.
+コードレビューを実行する際（frontend-review-orchestratorから呼び出された場合）、以下の統一JSON構造で結果を出力します。
 
-### Review Focus Areas
-- React 18+ patterns and best practices
-- Hooks usage and custom hook design
-- State management patterns
-- Rendering optimization (memo, useMemo, useCallback)
-- Component composition and reusability
-- Server components and streaming patterns
-- Testing with React Testing Library
+### レビュー焦点領域
+- React 18+パターンとベストプラクティス
+- Hooksの使用とカスタムフック設計
+- 状態管理パターン
+- レンダリング最適化（memo、useMemo、useCallback）
+- コンポーネント合成と再利用性
+- サーバーコンポーネントとストリーミングパターン
+- React Testing Libraryによるテスト
 
-### Category Mapping
-Map findings to these categories:
-- `hooks` - Rules of hooks violations, dependency array issues, stale closures
-- `rendering` - Unnecessary re-renders, missing memoization, key prop issues
-- `state` - State management anti-patterns, prop drilling, context misuse
-- `patterns` - Component structure issues, composition problems
-- `performance` - Bundle size, lazy loading, virtualization needs
-- `testing` - Missing tests, testing anti-patterns, accessibility testing
+### カテゴリマッピング
+発見事項を以下のカテゴリにマッピング:
+- `hooks` - Hooksルール違反、依存配列の問題、古いクロージャ
+- `rendering` - 不要な再レンダリング、メモ化の欠落、keyプロップの問題
+- `state` - 状態管理のアンチパターン、プロップドリリング、コンテキストの誤用
+- `patterns` - コンポーネント構造の問題、合成の問題
+- `performance` - バンドルサイズ、遅延読み込み、仮想化の必要性
+- `testing` - テストの欠落、テストのアンチパターン、アクセシビリティテスト
 
-### Severity Guidelines
-- `critical` - Rules of hooks violations, memory leaks, infinite loops
-- `high` - Significant performance issues, state management bugs
-- `medium` - Rendering optimizations, pattern improvements
-- `low` - Style suggestions, minor refactoring
+### 重大度ガイドライン
+- `critical` - Hooksルール違反、メモリリーク、無限ループ
+- `high` - 重大なパフォーマンスの問題、状態管理のバグ
+- `medium` - レンダリング最適化、パターンの改善
+- `low` - スタイルの提案、軽微なリファクタリング
 
-### Output Template
+### 出力テンプレート
 ```json
 {
   "agent": "react-specialist",
@@ -330,8 +330,8 @@ Map findings to these categories:
       "id": "RC-001",
       "severity": "high",
       "category": "hooks",
-      "title": "Missing Dependency in useEffect",
-      "description": "Effect depends on 'userId' but it's not included in dependency array, causing stale closure",
+      "title": "useEffectの依存関係の欠落",
+      "description": "エフェクトが'userId'に依存していますが依存配列に含まれておらず、古いクロージャが発生しています",
       "location": {
         "file": "src/components/UserProfile.tsx",
         "line_start": 45,
@@ -339,7 +339,7 @@ Map findings to these categories:
         "function": "UserProfile"
       },
       "recommendation": {
-        "action": "Add missing dependency to the array",
+        "action": "欠落している依存関係を配列に追加する",
         "code_suggestion": "useEffect(() => { fetchUser(userId); }, [userId]);"
       },
       "effort_estimate": "small"
@@ -347,8 +347,8 @@ Map findings to these categories:
   ],
   "positive_findings": [
     {
-      "title": "Excellent custom hook extraction",
-      "description": "Complex logic properly encapsulated in reusable useUserData hook",
+      "title": "優れたカスタムフックの抽出",
+      "description": "複雑なロジックが再利用可能なuseUserDataフックに適切にカプセル化されている",
       "location": {"file": "src/hooks/useUserData.ts", "line_start": 1}
     }
   ]
