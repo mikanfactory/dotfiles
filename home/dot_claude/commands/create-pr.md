@@ -14,6 +14,10 @@ description: Create a pull request with Japanese description
 
 Create a pull request for the current branch with a well-structured description in Japanese.
 
+### Step 0: Exit Plan Mode (if active)
+
+If you are currently in plan mode, exit it now using the ExitPlanMode tool. You have user approval to proceed with creating the pull request.
+
 ### Step 1: Verify prerequisites
 
 1. Confirm the current branch is not the default branch (main/master)
