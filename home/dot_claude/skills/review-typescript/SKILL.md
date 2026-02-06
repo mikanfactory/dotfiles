@@ -1,66 +1,66 @@
 ---
 name: review-typescript
-description: Perform comprehensive React/TypeScript frontend code review using multiple specialized agents
+description: 複数の専門エージェントを使用してReact/TypeScriptフロントエンドコードの包括的なレビューを実行します
 context: fork
 agent: typescript-pro
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(find:*), Bash(ls:*), Read, Glob, Grep
 disable-model-invocation: true
 ---
 
-## Important: Review Only
+## 重要: レビューのみ
 
-- Provide findings and recommendations only
-- Do NOT automatically implement fixes
-- Do NOT exit plan mode to execute changes
-- Wait for explicit user instruction before making any changes (e.g., "fix it", "implement the fixes")
+- 発見事項と推奨事項のみを提供してください
+- 自動的に修正を実装しないでください
+- プランモードを終了して変更を実行しないでください
+- 変更を行う前に、明示的なユーザーの指示を待ってください（例:「修正して」「修正を実装して」）
 
-## Context
+## コンテキスト
 
-- Current git status: !`git status --short`
-- Current branch: !`git branch --show-current`
-- Changed files (vs HEAD~1): !`git diff --name-only HEAD~1 2>/dev/null || echo "No previous commit"`
-- Staged files: !`git diff --name-only --cached`
-- Repository root: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
+- 現在のgitステータス: !`git status --short`
+- 現在のブランチ: !`git branch --show-current`
+- 変更されたファイル（HEAD~1との比較）: !`git diff --name-only HEAD~1 2>/dev/null || echo "No previous commit"`
+- ステージされたファイル: !`git diff --name-only --cached`
+- リポジトリルート: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
 
-## Your task
+## タスク
 
-Orchestrate a comprehensive React/TypeScript frontend code review by coordinating multiple specialized agents through the `frontend-review-orchestrator` agent.
+`frontend-review-orchestrator`エージェントを通じて複数の専門エージェントを調整し、包括的なReact/TypeScriptフロントエンドコードレビューをオーケストレーションします。
 
-### Step 1: Determine review scope
+### ステップ1: レビュー範囲の決定
 
-Identify which TypeScript/React files to review based on the following priority:
+以下の優先順位に基づいて、レビューするTypeScript/Reactファイルを特定します:
 
-**Option A: Review changed/staged files (default)**
-If there are staged or uncommitted changes, review those files:
+**オプションA: 変更/ステージされたファイルのレビュー（デフォルト）**
+ステージされた変更またはコミットされていない変更がある場合、それらのファイルをレビューします:
 ```bash
 git diff --name-only --cached HEAD
 git diff --name-only HEAD
 ```
 
-**Option B: Review specific path**
-If user specified a path argument (e.g., `/review-typescript src/components/`), use that path as the review target.
+**オプションB: 特定のパスのレビュー**
+ユーザーがパス引数を指定した場合（例: `/review-typescript src/components/`）、そのパスをレビュー対象として使用します。
 
-**Option C: Review all frontend files**
-If user requests full review or no changes exist, scan for all frontend files:
+**オプションC: すべてのフロントエンドファイルのレビュー**
+ユーザーがフルレビューを要求した場合、または変更がない場合、すべてのフロントエンドファイルをスキャンします:
 ```bash
 find . -type f \( -name "*.tsx" -o -name "*.ts" \) \
   ! -path "*/node_modules/*" ! -path "*/dist/*" ! -path "*/build/*" ! -path "*/.next/*" ! -path "*/.git/*" ! -path "*/coverage/*" ! -name "*.d.ts"
 ```
 
-**File filtering:**
-- Include: `*.tsx`, `*.ts` in frontend-relevant paths (`src/`, `components/`, `hooks/`, `pages/`, `app/`, `utils/`, `lib/`)
-- Exclude: `node_modules/`, `dist/`, `build/`, `.next/`, `.git/`, `coverage/`, `*.d.ts`
-- Maximum: 50 files per review session
+**ファイルフィルタリング:**
+- 含める: フロントエンド関連パスの`*.tsx`、`*.ts`（`src/`、`components/`、`hooks/`、`pages/`、`app/`、`utils/`、`lib/`）
+- 除外: `node_modules/`、`dist/`、`build/`、`.next/`、`.git/`、`coverage/`、`*.d.ts`
+- 最大: レビューセッションあたり50ファイル
 
-### Step 2: Analyze file context
+### ステップ2: ファイルコンテキストの分析
 
-For each file to review, gather:
-1. File path and size
-2. File type (component, hook, page, utility, test, style)
-3. Functional area hints (from path: components/, hooks/, pages/, api/, store/, utils/)
-4. Framework detection (React, Next.js, Vite, etc.)
+レビューする各ファイルについて、以下を収集します:
+1. ファイルパスとサイズ
+2. ファイルタイプ（コンポーネント、フック、ページ、ユーティリティ、テスト、スタイル）
+3. 機能領域のヒント（パスから: components/、hooks/、pages/、api/、store/、utils/）
+4. フレームワーク検出（React、Next.js、Viteなど）
 
-Create a review manifest:
+レビューマニフェストを作成します:
 ```json
 {
   "scope": "changed|path|all",
@@ -87,99 +87,99 @@ Create a review manifest:
 }
 ```
 
-### Step 3: Invoke frontend-review-orchestrator
+### ステップ3: frontend-review-orchestratorの呼び出し
 
-Pass the review manifest to the `frontend-review-orchestrator` agent.
+レビューマニフェストを`frontend-review-orchestrator`エージェントに渡します。
 
-The orchestrator will:
-1. Dispatch files to appropriate specialized agents:
-   - **typescript-pro**: Type safety, generics, strict mode, type inference
-   - **react-specialist**: Hooks patterns, state management, rendering optimization
-   - **frontend-developer**: Accessibility (WCAG), component design, UX patterns
-   - **security-engineer**: XSS prevention, input sanitization, CSP compliance
-2. Collect JSON-formatted review outputs
-3. Aggregate and deduplicate findings
-4. Generate unified report
+オーケストレーターは以下を行います:
+1. 適切な専門エージェントにファイルをディスパッチ:
+   - **typescript-pro**: 型安全性、ジェネリクス、strictモード、型推論
+   - **react-specialist**: Hooksパターン、状態管理、レンダリング最適化
+   - **frontend-developer**: アクセシビリティ（WCAG）、コンポーネント設計、UXパターン
+   - **security-engineer**: XSS防止、入力サニタイズ、CSPコンプライアンス
+2. JSON形式のレビュー出力を収集
+3. 発見事項を集約して重複を排除
+4. 統一レポートを生成
 
-**Review focus areas:**
-- **Type Safety**: Type definitions, generics, type guards, strict mode compliance
-- **React Patterns**: Hooks correctness, state management, component composition
-- **Rendering Performance**: Re-render optimization, memoization, code splitting
-- **Accessibility**: WCAG compliance, semantic HTML, ARIA attributes, keyboard navigation
-- **Security**: XSS prevention, dangerouslySetInnerHTML usage, input validation
-- **Testing**: Component testing coverage, hook testing, integration tests
+**レビュー重点領域:**
+- **型安全性**: 型定義、ジェネリクス、型ガード、strictモードコンプライアンス
+- **Reactパターン**: Hooksの正確性、状態管理、コンポーネント合成
+- **レンダリングパフォーマンス**: 再レンダリング最適化、メモ化、コード分割
+- **アクセシビリティ**: WCAGコンプライアンス、セマンティックHTML、ARIA属性、キーボードナビゲーション
+- **セキュリティ**: XSS防止、dangerouslySetInnerHTMLの使用、入力バリデーション
+- **テスト**: コンポーネントテストカバレッジ、フックテスト、インテグレーションテスト
 
-### Step 4: Present review results
+### ステップ4: レビュー結果の提示
 
-Display the aggregated report from the orchestrator:
+オーケストレーターからの集約レポートを表示します:
 
-**1. Executive Summary**
+**1. エグゼクティブサマリー**
 ```markdown
-# Frontend Code Review Report
+# フロントエンドコードレビューレポート
 
-**Files Reviewed:** X
-**Total Issues:** Y
+**レビューしたファイル数:** X
+**総問題数:** Y
 
-| Severity | Count |
-|----------|-------|
+| 重大度 | 件数 |
+|--------|------|
 | Critical | X |
 | High | X |
 | Medium | X |
 | Low | X |
 
-## Top Critical Issues (if any)
-1. **TS-001** Missing type guard in `src/utils/api.ts:67`
+## 重大な問題（ある場合）
+1. **TS-001** `src/utils/api.ts:67`での型ガードの欠落
 ```
 
-**2. Detailed Findings by Severity**
-List all issues from Critical to Low with:
-- Issue ID and title
-- File location with line numbers
-- Category and contributing agents
-- Description and recommendation
-- Code suggestion (if available)
+**2. 重大度別の詳細な発見事項**
+CriticalからLowまでのすべての問題を以下の情報とともにリスト:
+- 問題IDとタイトル
+- 行番号付きのファイル位置
+- カテゴリと担当エージェント
+- 説明と推奨事項
+- コード提案（利用可能な場合）
 
-**3. Category Summary**
-Group issues by category (Type Safety, React Patterns, Accessibility, Performance, Security, Testing)
+**3. カテゴリサマリー**
+カテゴリ別に問題をグループ化（型安全性、Reactパターン、アクセシビリティ、パフォーマンス、セキュリティ、テスト）
 
-**4. Positive Findings**
-Highlight well-implemented patterns found during review
+**4. ポジティブな発見事項**
+レビュー中に見つかった適切に実装されたパターンをハイライト
 
-**5. Action Items**
-Prioritized recommendations:
-- Immediate (must fix before merge)
-- Short-term (address this sprint)
-- Long-term (tech debt)
+**5. アクションアイテム**
+優先順位付きの推奨事項:
+- 即時（マージ前に修正必須）
+- 短期（今スプリント中に対応）
+- 長期（技術的負債）
 
-## Example Usage
+## 使用例
 
 ```bash
-# Review changed files (default)
+# 変更されたファイルをレビュー（デフォルト）
 /review-typescript
 
-# Review specific directory
+# 特定のディレクトリをレビュー
 /review-typescript src/components/
 
-# Review specific file
+# 特定のファイルをレビュー
 /review-typescript src/hooks/useAuth.ts
 
-# Review all frontend files
+# すべてのフロントエンドファイルをレビュー
 /review-typescript --all
 ```
 
-## Constraints
+## 制約
 
-- Only review TypeScript/React files (exclude backend, configs, type definitions)
-- Exclude test files from security review unless specifically requested
-- Maximum 50 files per review to ensure thorough analysis
-- Total timeout: 10 minutes
-- If no TypeScript files found, report clearly and exit
-- Always output results in Japanese when communicating with user
+- TypeScript/Reactファイルのみをレビュー（バックエンド、設定、型定義は除外）
+- 特に要求されない限り、テストファイルはセキュリティレビューから除外
+- 徹底した分析を確保するため、レビューあたり最大50ファイル
+- 合計タイムアウト: 10分
+- TypeScriptファイルが見つからない場合は、明確に報告して終了
+- ユーザーとのコミュニケーションでは常に日本語で結果を出力
 
-## Communication Style
+## コミュニケーションスタイル
 
-- Present findings clearly with actionable recommendations
-- Use severity levels consistently across all reports
-- Include specific file:line references for all issues
-- Provide code examples for fixes when possible
-- Respond in Japanese to the user
+- 実行可能な推奨事項とともに発見事項を明確に提示
+- すべてのレポートで重大度レベルを一貫して使用
+- すべての問題に具体的なファイル:行の参照を含める
+- 可能な場合は修正のコード例を提供
+- ユーザーには日本語で回答

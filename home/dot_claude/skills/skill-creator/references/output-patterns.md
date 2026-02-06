@@ -1,82 +1,82 @@
-# Output Patterns
+# 出力パターン
 
-Use these patterns when skills need to produce consistent, high-quality output.
+スキルが一貫した高品質の出力を生成する必要がある場合は、これらのパターンを使用してください。
 
-## Template Pattern
+## テンプレートパターン
 
-Provide templates for output format. Match the level of strictness to your needs.
+出力形式のテンプレートを提供します。厳格さのレベルはニーズに合わせて調整してください。
 
-**For strict requirements (like API responses or data formats):**
-
-```markdown
-## Report structure
-
-ALWAYS use this exact template structure:
-
-# [Analysis Title]
-
-## Executive summary
-[One-paragraph overview of key findings]
-
-## Key findings
-- Finding 1 with supporting data
-- Finding 2 with supporting data
-- Finding 3 with supporting data
-
-## Recommendations
-1. Specific actionable recommendation
-2. Specific actionable recommendation
-```
-
-**For flexible guidance (when adaptation is useful):**
+**厳格な要件の場合（APIレスポンスやデータ形式など）：**
 
 ```markdown
-## Report structure
+## レポート構造
 
-Here is a sensible default format, but use your best judgment:
+常にこの正確なテンプレート構造を使用してください：
 
-# [Analysis Title]
+# [分析タイトル]
 
-## Executive summary
-[Overview]
+## エグゼクティブサマリー
+[主要な発見の1段落の概要]
 
-## Key findings
-[Adapt sections based on what you discover]
+## 主要な発見
+- データを伴う発見1
+- データを伴う発見2
+- データを伴う発見3
 
-## Recommendations
-[Tailor to the specific context]
-
-Adjust sections as needed for the specific analysis type.
+## 推奨事項
+1. 具体的な実行可能な推奨事項
+2. 具体的な実行可能な推奨事項
 ```
 
-## Examples Pattern
-
-For skills where output quality depends on seeing examples, provide input/output pairs:
+**柔軟なガイダンスの場合（適応が有用な場合）：**
 
 ```markdown
-## Commit message format
+## レポート構造
 
-Generate commit messages following these examples:
+以下は妥当なデフォルト形式ですが、最善の判断を使用してください：
 
-**Example 1:**
-Input: Added user authentication with JWT tokens
-Output:
-```
-feat(auth): implement JWT-based authentication
+# [分析タイトル]
 
-Add login endpoint and token validation middleware
-```
+## エグゼクティブサマリー
+[概要]
 
-**Example 2:**
-Input: Fixed bug where dates displayed incorrectly in reports
-Output:
-```
-fix(reports): correct date formatting in timezone conversion
+## 主要な発見
+[発見した内容に基づいてセクションを適応]
 
-Use UTC timestamps consistently across report generation
+## 推奨事項
+[特定のコンテキストに合わせて調整]
+
+特定の分析タイプに応じてセクションを調整してください。
 ```
 
-Follow this style: type(scope): brief description, then detailed explanation.
+## 例パターン
+
+出力品質が例を見ることに依存するスキルの場合、入力/出力ペアを提供します：
+
+```markdown
+## コミットメッセージ形式
+
+以下の例に従ってコミットメッセージを生成してください：
+
+**例1：**
+入力：JWTトークンによるユーザー認証を追加
+出力：
+```
+feat(auth): JWT認証を実装
+
+ログインエンドポイントとトークン検証ミドルウェアを追加
 ```
 
-Examples help Claude understand the desired style and level of detail more clearly than descriptions alone.
+**例2：**
+入力：レポートで日付が誤って表示されるバグを修正
+出力：
+```
+fix(reports): タイムゾーン変換での日付フォーマットを修正
+
+レポート生成全体でUTCタイムスタンプを一貫して使用
+```
+
+このスタイルに従ってください：type(scope): 簡潔な説明、その後に詳細な説明。
+```
+
+例は、説明だけよりも、Claudeが望ましいスタイルと詳細レベルを理解するのに役立ちます。
