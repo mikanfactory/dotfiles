@@ -1,21 +1,33 @@
-Add under a ## Refactoring or ## Testing section
-When refactoring code that changes error types or exception classes, always update related tests to expect the new exceptions before running the test suite.
+# Guidelines
 
-Add under a ## Code Review section or ## Workflow Preferences
-When user requests a code review, provide the review findings only - do not automatically proceed to implement fixes unless explicitly asked.
+This document defines the project's rules, objectives, and progress management methods. Please proceed with the project according to the following content.
 
-Add under a ## Planning section or ## General Preferences
-Before exiting plan mode to execute changes, pause and confirm with the user that they're ready to proceed with implementation.
+## Top-Level Rules
 
-Add under a ## Code Conventions or ## Error Handling section
-This project uses domain exceptions (NotFoundError, DomainValidationError) instead of HTTPException for business logic errors. Always use domain exceptions in service layer code.
+- To maximize efficiency, **if you need to execute multiple independent processes, invoke those tools concurrently, not sequentially**.
+- **You must think exclusively in English**. However, you are required to **respond in Japanese**.
+- To understand how to use a library, **always use the Contex7 MCP** to retrieve the latest information.
 
-Do a thorough code review of [file]. Provide findings only - do not make any changes or exit plan mode until I explicitly ask you to implement fixes.
-Refactor [component] to use domain exceptions instead of HTTPException. This includes: 1) Update the implementation, 2) Update all related tests to expect the new exception types, 3) Run the full test suite to verify.
-Split my staged changes into logical commits. Group by: 1) Feature additions (feat:), 2) Refactoring (refactor:), 3) Test changes (test:). Use conventional commit format.
+## Programming Rules
 
-Refactor [file] to extract [concern] into a new module. Work autonomously using TDD: after each edit, run the full test suite. If tests fail, analyze the failure and fix it before proceeding. Only stop to ask me questions if you encounter an architectural decision that could go multiple valid directions. Track your progress with todos and commit after each logical unit of work passes tests.
+- Avoid hard-coding values unless absolutely necessary.
+- Do not use `any` or `unknown` types in TypeScript.
+- You must not use a TypeScript `class` unless it is absolutely necessary (e.g., extending the `Error` class for custom error handling that requires `instanceof` checks).
 
-Review this PR with three parallel perspectives: (1) error handling consistency with our domain exception pattern, (2) type safety and TypedDict usage, (3) test coverage for edge cases. For each finding, assess severity and whether it can be auto-fixed. Then execute all safe fixes autonomously, running tests after each change. Present me with a summary of changes made and any decisions that need my input.
+## Workflow Preferences
 
-I'm adding a new enum value '[value]' to the [EntityName] schema. Autonomously: (1) Update the OpenAPI spec with proper documentation, (2) Regenerate any codegen'd types, (3) Update all backend handlers and services that reference this enum, (4) Update frontend TypeScript types and any UI components, (5) Fix all test failures in both backend and frontend. Run the full test suite after each layer and fix issues before proceeding. Commit each layer separately with conventional commit messages.
+### Code Review
+
+- When user requests a code review, provide the review findings only
+- Do not automatically proceed to implement fixes unless explicitly asked
+- Wait for explicit instruction like "fix it" or "implement the changes"
+
+### Plan Mode
+
+- Before exiting plan mode to execute changes, pause and confirm with the user
+- User often wants to review the plan before implementation starts
+
+### Refactoring
+
+- When refactoring code that changes error types or exception classes, always update related tests to expect the new exceptions before running the test suite
+- Identify all test assertions for the old pattern before starting the refactor
