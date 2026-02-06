@@ -1,57 +1,57 @@
 ---
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
-description: Exit plan mode and proceed with TDD workflow
+description: プランモードを終了してTDDワークフローで実装を進める
 ---
 
-## Context
+## コンテキスト
 
-- Current git status: !`git status`
-- Current branch: !`git branch --show-current`
-- Test files: !`find . -name "test_*.py" -o -name "*_test.py" -o -name "tests.py" 2>/dev/null | head -20`
+- 現在のgitステータス: !`git status`
+- 現在のブランチ: !`git branch --show-current`
+- テストファイル: !`find . -name "test_*.py" -o -name "*_test.py" -o -name "tests.py" 2>/dev/null | head -20`
 
-## Your Task
+## タスク
 
-You are now exiting plan mode to implement using Test-Driven Development.
+プランモードを終了して、テスト駆動開発（TDD）を使用して実装を進めます。
 
-### Step 1: Exit Plan Mode
+### ステップ1: プランモードの終了
 
-If you are currently in plan mode, exit it now using the ExitPlanMode tool. You have user approval to proceed with implementation.
+現在プランモードにいる場合は、ExitPlanModeツールを使用して今すぐ終了してください。実装の続行についてユーザーの承認を得ています。
 
-### Step 2: Follow TDD Workflow
+### ステップ2: TDDワークフローに従う
 
-Apply the `/tdd-workflow` skill principles:
+`/tdd-workflow`スキルの原則を適用:
 
-1. **RED** - Write failing tests first
-2. **GREEN** - Write minimal code to pass tests
-3. **REFACTOR** - Improve code while keeping tests green
+1. **RED** - まず失敗するテストを書く
+2. **GREEN** - テストを通過する最小限のコードを書く
+3. **REFACTOR** - テストを通過させたままコードを改善
 
-### Step 3: Coverage Check
+### ステップ3: カバレッジの確認
 
-After implementation, verify 80%+ test coverage:
+実装後、80%以上のテストカバレッジを確認:
 
 ```bash
 uv run pytest --cov=src --cov-report=term-missing
 ```
 
-## TDD Cycle Reminder
+## TDDサイクルのリマインダー
 
 ```
 ┌─────────────────────────────────────────────┐
-│  RED → GREEN → REFACTOR → repeat            │
+│  RED → GREEN → REFACTOR → 繰り返し           │
 │                                             │
-│  1. Write test (expect failure)             │
-│  2. Run test (confirm failure)              │
-│  3. Write minimal code                      │
-│  4. Run test (confirm pass)                 │
-│  5. Refactor if needed                      │
-│  6. Verify coverage ≥ 80%                   │
+│  1. テストを書く（失敗を期待）               │
+│  2. テストを実行（失敗を確認）               │
+│  3. 最小限のコードを書く                     │
+│  4. テストを実行（通過を確認）               │
+│  5. 必要に応じてリファクタリング             │
+│  6. カバレッジ ≥ 80% を確認                  │
 └─────────────────────────────────────────────┘
 ```
 
-## Constraints
+## 制約
 
-- Write tests BEFORE implementation code
-- Each test should focus on one behavior
-- Use descriptive test names that explain what's tested
-- Mock external dependencies
-- Test edge cases and error paths
+- 実装コードの前にテストを書くこと
+- 各テストは1つの振る舞いに焦点を当てること
+- テストされている内容を説明する説明的なテスト名を使用すること
+- 外部依存関係はモックすること
+- エッジケースとエラーパスをテストすること

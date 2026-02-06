@@ -1,66 +1,66 @@
 ---
 name: review-go
-description: Perform comprehensive Go backend code review using multiple specialized agents
+description: 複数の専門エージェントを使用してGoバックエンドコードの包括的なレビューを実行します
 context: fork
 agent: golang-pro
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(find:*), Bash(ls:*), Read, Glob, Grep
 disable-model-invocation: true
 ---
 
-## Important: Review Only
+## 重要: レビューのみ
 
-- Provide findings and recommendations only
-- Do NOT automatically implement fixes
-- Do NOT exit plan mode to execute changes
-- Wait for explicit user instruction before making any changes (e.g., "fix it", "implement the fixes")
+- 発見事項と推奨事項のみを提供してください
+- 自動的に修正を実装しないでください
+- プランモードを終了して変更を実行しないでください
+- 変更を行う前に、明示的なユーザーの指示を待ってください（例:「修正して」「修正を実装して」）
 
-## Context
+## コンテキスト
 
-- Current git status: !`git status --short`
-- Current branch: !`git branch --show-current`
-- Changed files (vs HEAD~1): !`git diff --name-only HEAD~1 2>/dev/null || echo "No previous commit"`
-- Staged files: !`git diff --name-only --cached`
-- Repository root: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
+- 現在のgitステータス: !`git status --short`
+- 現在のブランチ: !`git branch --show-current`
+- 変更されたファイル（HEAD~1との比較）: !`git diff --name-only HEAD~1 2>/dev/null || echo "No previous commit"`
+- ステージされたファイル: !`git diff --name-only --cached`
+- リポジトリルート: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
 
-## Your task
+## タスク
 
-Orchestrate a comprehensive Go backend code review by coordinating multiple specialized agents through the `backend-review-orchestrator` agent.
+`backend-review-orchestrator`エージェントを通じて複数の専門エージェントを調整し、包括的なGoバックエンドコードレビューをオーケストレーションします。
 
-### Step 1: Determine review scope
+### ステップ1: レビュー範囲の決定
 
-Identify which Go files to review based on the following priority:
+以下の優先順位に基づいて、レビューするGoファイルを特定します:
 
-**Option A: Review changed/staged files (default)**
-If there are staged or uncommitted changes, review those files:
+**オプションA: 変更/ステージされたファイルのレビュー（デフォルト）**
+ステージされた変更またはコミットされていない変更がある場合、それらのファイルをレビューします:
 ```bash
 git diff --name-only --cached HEAD
 git diff --name-only HEAD
 ```
 
-**Option B: Review specific path**
-If user specified a path argument (e.g., `/review-go cmd/api/`), use that path as the review target.
+**オプションB: 特定のパスのレビュー**
+ユーザーがパス引数を指定した場合（例: `/review-go cmd/api/`）、そのパスをレビュー対象として使用します。
 
-**Option C: Review all Go backend files**
-If user requests full review or no changes exist, scan for all Go backend files:
+**オプションC: すべてのGoバックエンドファイルのレビュー**
+ユーザーがフルレビューを要求した場合、または変更がない場合、すべてのGoバックエンドファイルをスキャンします:
 ```bash
 find . -type f -name "*.go" \
   ! -path "*/vendor/*" ! -path "*/.git/*"
 ```
 
-**File filtering:**
-- Include: `*.go` in backend-relevant paths
-- Exclude: `vendor/`, `.git/`
-- Maximum: 50 files per review session
+**ファイルフィルタリング:**
+- 含める: バックエンド関連パスの`*.go`
+- 除外: `vendor/`、`.git/`
+- 最大: レビューセッションあたり50ファイル
 
-### Step 2: Analyze file context
+### ステップ2: ファイルコンテキストの分析
 
-For each file to review, gather:
-1. File path and size
-2. Primary language (Go)
-3. Functional area hints (from path: cmd/, internal/, pkg/, api/, services/, models/, auth/, db/)
-4. Framework detection (Gin, Echo, Chi, etc.)
+レビューする各ファイルについて、以下を収集します:
+1. ファイルパスとサイズ
+2. 主要言語（Go）
+3. 機能領域のヒント（パスから: cmd/、internal/、pkg/、api/、services/、models/、auth/、db/）
+4. フレームワーク検出（Gin、Echo、Chiなど）
 
-Create a review manifest:
+レビューマニフェストを作成します:
 ```json
 {
   "scope": "changed|path|all",
@@ -81,101 +81,101 @@ Create a review manifest:
 }
 ```
 
-### Step 3: Invoke backend-review-orchestrator
+### ステップ3: backend-review-orchestratorの呼び出し
 
-Pass the review manifest to the `backend-review-orchestrator` agent.
+レビューマニフェストを`backend-review-orchestrator`エージェントに渡します。
 
-The orchestrator will:
-1. Dispatch files to appropriate specialized agents:
-   - **golang-pro**: Go best practices, idioms, concurrency patterns
-   - **backend-developer**: API design, database, microservices
-   - **security-engineer**: Vulnerabilities, auth, OWASP
-   - **database-administrator**: Database performance, query optimization, schema design
-2. Collect JSON-formatted review outputs
-3. Aggregate and deduplicate findings
-4. Generate unified report
+オーケストレーターは以下を行います:
+1. 適切な専門エージェントにファイルをディスパッチ:
+   - **golang-pro**: Goのベストプラクティス、イディオム、並行処理パターン
+   - **backend-developer**: API設計、データベース、マイクロサービス
+   - **security-engineer**: 脆弱性、認証、OWASP
+   - **database-administrator**: データベースパフォーマンス、クエリ最適化、スキーマ設計
+2. JSON形式のレビュー出力を収集
+3. 発見事項を集約して重複を排除
+4. 統一レポートを生成
 
-**Go-specific review focus areas:**
-- **Goroutine management**: Proper goroutine lifecycle, leak detection
-- **Race conditions**: Concurrent access to shared resources
-- **Error handling**: Proper error wrapping and handling patterns
-- **Context usage**: Proper context propagation for cancellation and timeouts
-- **Defer usage**: Appropriate use of defer for resource cleanup
-- **Interface design**: Proper abstraction and dependency injection
-- **Memory management**: Efficient allocation and garbage collection impact
+**Go固有のレビュー重点領域:**
+- **Goroutine管理**: 適切なgoroutineライフサイクル、リーク検出
+- **競合状態**: 共有リソースへの並行アクセス
+- **エラーハンドリング**: 適切なエラーラッピングとハンドリングパターン
+- **Contextの使用**: キャンセルとタイムアウトのための適切なcontext伝播
+- **Deferの使用**: リソースクリーンアップのための適切なdeferの使用
+- **インターフェース設計**: 適切な抽象化と依存性注入
+- **メモリ管理**: 効率的な割り当てとガベージコレクションへの影響
 
-### Step 4: Present review results
+### ステップ4: レビュー結果の提示
 
-Display the aggregated report from the orchestrator:
+オーケストレーターからの集約レポートを表示します:
 
-**1. Executive Summary**
+**1. エグゼクティブサマリー**
 ```markdown
-# Go Backend Code Review Report
+# Goバックエンドコードレビューレポート
 
-**Files Reviewed:** X
-**Total Issues:** Y
+**レビューしたファイル数:** X
+**総問題数:** Y
 
-| Severity | Count |
-|----------|-------|
+| 重大度 | 件数 |
+|--------|------|
 | Critical | X |
 | High | X |
 | Medium | X |
 | Low | X |
 
-## Top Critical Issues (if any)
-1. **GP-001** Goroutine leak in `internal/services/processor.go:45`
-2. **SE-001** SQL Injection in `internal/db/queries.go:67`
+## 重大な問題（ある場合）
+1. **GP-001** `internal/services/processor.go:45`でのGoroutineリーク
+2. **SE-001** `internal/db/queries.go:67`でのSQLインジェクション
 ```
 
-**2. Detailed Findings by Severity**
-List all issues from Critical to Low with:
-- Issue ID and title
-- File location with line numbers
-- Category and contributing agents
-- Description and recommendation
-- Code suggestion (if available)
+**2. 重大度別の詳細な発見事項**
+CriticalからLowまでのすべての問題を以下の情報とともにリスト:
+- 問題IDとタイトル
+- 行番号付きのファイル位置
+- カテゴリと担当エージェント
+- 説明と推奨事項
+- コード提案（利用可能な場合）
 
-**3. Category Summary**
-Group issues by category (Security, Performance, Concurrency, Error Handling, Database, etc.)
+**3. カテゴリサマリー**
+カテゴリ別に問題をグループ化（セキュリティ、パフォーマンス、並行処理、エラーハンドリング、データベースなど）
 
-**4. Positive Findings**
-Highlight well-implemented patterns found during review
+**4. ポジティブな発見事項**
+レビュー中に見つかった適切に実装されたパターンをハイライト
 
-**5. Action Items**
-Prioritized recommendations:
-- Immediate (must fix before merge)
-- Short-term (address this sprint)
-- Long-term (tech debt)
+**5. アクションアイテム**
+優先順位付きの推奨事項:
+- 即時（マージ前に修正必須）
+- 短期（今スプリント中に対応）
+- 長期（技術的負債）
 
-## Example Usage
+## 使用例
 
 ```bash
-# Review changed files (default)
+# 変更されたファイルをレビュー（デフォルト）
 /review-go
 
-# Review specific directory
+# 特定のディレクトリをレビュー
 /review-go internal/api/
 
-# Review specific file
+# 特定のファイルをレビュー
 /review-go internal/services/user_service.go
 
-# Review all Go backend files
+# すべてのGoバックエンドファイルをレビュー
 /review-go --all
 ```
 
-## Constraints
+## 制約
 
-- Only review Go files (exclude frontend, static assets, configs)
-- Exclude test files from security review unless specifically requested
-- Maximum 50 files per review to ensure thorough analysis
-- Total timeout: 10 minutes
-- If no Go files found, report clearly and exit
-- Always output results in Japanese when communicating with user
+- Goファイルのみをレビュー（フロントエンド、静的アセット、設定は除外）
+- 特に要求されない限り、テストファイルはセキュリティレビューから除外
+- 徹底した分析を確保するため、レビューあたり最大50ファイル
+- 合計タイムアウト: 10分
+- Goファイルが見つからない場合は、明確に報告して終了
+- ユーザーとのコミュニケーションでは常に日本語で結果を出力
 
-## Communication Style
+## コミュニケーションスタイル
 
-- Present findings clearly with actionable recommendations
-- Use severity levels consistently across all reports
-- Include specific file:line references for all issues
-- Provide code examples for fixes when possible
-- Respond in Japanese to the user
+- 実行可能な推奨事項とともに発見事項を明確に提示
+- すべてのレポートで重大度レベルを一貫して使用
+- すべての問題に具体的なファイル:行の参照を含める
+- 可能な場合は修正のコード例を提供
+- ユーザーには日本語で回答

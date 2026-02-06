@@ -1,32 +1,32 @@
 ---
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(git push:*), Bash(git remote:*), Bash(gh pr:*), Bash(ls:*), Read, Glob
-description: Create a pull request with Japanese description
+description: 日本語の説明文でプルリクエストを作成する
 ---
 
-## Context
+## コンテキスト
 
-- Current branch: !`git branch --show-current`
-- Default branch: !`git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}' || echo "main"`
-- Recent commits on this branch: !`git log --oneline -10`
-- Repository root: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
+- 現在のブランチ: !`git branch --show-current`
+- デフォルトブランチ: !`git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}' || echo "main"`
+- このブランチの最近のコミット: !`git log --oneline -10`
+- リポジトリルート: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
 
-## Your task
+## タスク
 
-Create a pull request for the current branch with a well-structured description in Japanese.
+現在のブランチに対して、日本語で整理された説明文を持つプルリクエストを作成します。
 
-### Step 0: Exit Plan Mode (if active)
+### ステップ0: プランモードの終了（アクティブな場合）
 
-If you are currently in plan mode, exit it now using the ExitPlanMode tool. You have user approval to proceed with creating the pull request.
+現在プランモードにいる場合は、ExitPlanModeツールを使用して今すぐ終了してください。プルリクエスト作成の続行についてユーザーの承認を得ています。
 
-### Step 1: Verify prerequisites
+### ステップ1: 前提条件の確認
 
-1. Confirm the current branch is not the default branch (main/master)
-2. Check if there are commits to create a PR for
-3. If no commits exist, inform the user and exit
+1. 現在のブランチがデフォルトブランチ（main/master）でないことを確認
+2. PRを作成するコミットが存在するか確認
+3. コミットが存在しない場合は、ユーザーに通知して終了
 
-### Step 2: Check for PR template
+### ステップ2: PRテンプレートの確認
 
-Search for PR templates in the following order:
+以下の順序でPRテンプレートを検索します:
 
 1. `.github/PULL_REQUEST_TEMPLATE.md`
 2. `.github/pull_request_template.md`
@@ -34,24 +34,24 @@ Search for PR templates in the following order:
 4. `docs/PULL_REQUEST_TEMPLATE.md`
 5. `PULL_REQUEST_TEMPLATE.md`
 
-Use the `Read` tool to check if any of these files exist and read the content if found.
+`Read`ツールを使用して、これらのファイルが存在するか確認し、見つかった場合は内容を読み取ります。
 
-### Step 3: Analyze changes for PR description
+### ステップ3: PR説明文のための変更分析
 
-Gather comprehensive information about the changes:
+変更に関する包括的な情報を収集します:
 
-1. Get the diff summary against the base branch
-2. Get all commit messages on this branch
-3. Identify the types of changes (features, fixes, refactoring, etc.)
+1. ベースブランチに対するdiffサマリーを取得
+2. このブランチのすべてのコミットメッセージを取得
+3. 変更の種類を特定（機能追加、バグ修正、リファクタリングなど）
 
-### Step 4: Generate PR title and description
+### ステップ4: PRタイトルと説明文の生成
 
-#### If PR template exists:
-- Fill in each section of the template based on the analyzed changes
-- **Write all content in Japanese**
+#### PRテンプレートが存在する場合:
+- 分析した変更に基づいてテンプレートの各セクションを埋める
+- **すべての内容を日本語で記述する**
 
-#### If no PR template exists:
-Generate a PR description with the following structure (all in Japanese):
+#### PRテンプレートが存在しない場合:
+以下の構造でPR説明文を生成します（すべて日本語）:
 
 ```markdown
 ## 背景
@@ -71,16 +71,16 @@ Generate a PR description with the following structure (all in Japanese):
 [レビュアーに伝えたい追加情報、テスト方法、注意点など]
 ```
 
-### Step 5: Generate PR title
+### ステップ5: PRタイトルの生成
 
-Create a concise, descriptive PR title in Japanese:
-- Summarizes the main change
-- Under 70 characters
-- Uses appropriate prefix if the project follows conventions
+簡潔で説明的なPRタイトルを日本語で作成します:
+- 主な変更を要約
+- 70文字以内
+- プロジェクトの慣例に従って適切なプレフィックスを使用
 
-### Step 6: Create the PR
+### ステップ6: PRの作成
 
-Use `gh pr create` with HEREDOC for multiline body:
+複数行のbodyにはHEREDOCを使用して`gh pr create`を実行します:
 
 ```bash
 gh pr create --title "<title>" --body "$(cat <<'EOF'
@@ -89,36 +89,36 @@ EOF
 )"
 ```
 
-### Step 7: Report result
+### ステップ7: 結果の報告
 
-Display the PR URL and summarize what was included.
+PR URLを表示し、含まれた内容を要約します。
 
-### Step 8: Clear session
+### ステップ8: セッションのクリア
 
-After PR creation is complete, always run `/clear` to clear the session.
+PR作成完了後、常に`/clear`を実行してセッションをクリアしてください。
 
-This prevents unintended pushes or comments when continuing work without clearing.
+これにより、クリアせずに作業を続行した際の意図しないプッシュやコメントを防ぎます。
 
-## Constraints
+## 制約
 
-- **ALL PR content (title, description) MUST be written in Japanese**
-- Do not push changes automatically; rely on `gh pr create`
-- If PR creation fails, show error and suggest solutions
-- Ask user before creating if there's any ambiguity
+- **すべてのPRコンテンツ（タイトル、説明文）は日本語で記述すること**
+- 変更を自動的にプッシュしない; `gh pr create`に任せる
+- PR作成が失敗した場合、エラーを表示して解決策を提案
+- 曖昧な点がある場合は作成前にユーザーに確認
 
-## Edge Cases
+## エッジケース
 
-### No remote tracking branch
-Push with: `git push -u origin $(git branch --show-current)`
+### リモートトラッキングブランチがない場合
+以下でプッシュ: `git push -u origin $(git branch --show-current)`
 
-### PR already exists
-Check with: `gh pr view --json url -q '.url' 2>/dev/null`
+### PRがすでに存在する場合
+以下で確認: `gh pr view --json url -q '.url' 2>/dev/null`
 
-### Multiple PR templates
-List them and ask the user which one to use.
+### 複数のPRテンプレートがある場合
+一覧を表示し、どれを使用するかユーザーに確認する。
 
-## Communication Style
+## コミュニケーションスタイル
 
-- Always respond in Japanese
-- Be proactive in explaining the PR content
-- Ask for confirmation before creating the PR
+- 常に日本語で回答する
+- PRの内容を積極的に説明する
+- PRを作成する前に確認を求める

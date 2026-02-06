@@ -1,37 +1,37 @@
 ---
 allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git diff:*), Skill
-description: Create a git commit
+description: gitコミットを作成する
 ---
 
-## Context
+## コンテキスト
 
-- Current git status: !`git status`
-- Current git diff (staged and unstaged changes): !`git diff HEAD`
-- Current branch: !`git branch --show-current`
-- Recent commits: !`git log --oneline -10`
+- 現在のgitステータス: !`git status`
+- 現在のgit diff（ステージ済みおよび未ステージの変更）: !`git diff HEAD`
+- 現在のブランチ: !`git branch --show-current`
+- 最近のコミット: !`git log --oneline -10`
 
-## Your task
+## タスク
 
-### Step 0: Exit Plan Mode (if active)
+### ステップ0: プランモードの終了（アクティブな場合）
 
-If you are currently in plan mode, exit it now using the ExitPlanMode tool. You have user approval to proceed with creating commits.
+現在プランモードにいる場合は、ExitPlanModeツールを使用して今すぐ終了してください。コミット作成の続行についてユーザーの承認を得ています。
 
-### Step 1: Split and create commits
+### ステップ1: 変更を分割してコミットを作成
 
-Use the `git-commit-splitter` agent to:
+`git-commit-splitter`エージェントを使用して以下を実行します:
 
-1. Analyze all changes (including formatter modifications)
-2. Split changes into logical, atomic commits
-3. Create separate commits for each logical group with clear, descriptive messages
+1. すべての変更を分析する（フォーマッタの変更を含む）
+2. 変更を論理的でアトミックなコミットに分割する
+3. 各論理グループに対して、明確で説明的なメッセージを持つ別々のコミットを作成する
 
-### Step 2: Clear session
+### ステップ2: セッションのクリア
 
-After commit is complete, always run `/clear` to clear the session.
+コミット完了後、常に`/clear`を実行してセッションをクリアしてください。
 
-This prevents unintended pushes or comments when continuing work without clearing.
+これにより、クリアせずに作業を続行した際の意図しないプッシュやコメントを防ぎます。
 
-## Constraints
+## 制約
 
-- DO NOT add Claude co-authorship footer to commits
-- Each commit should be atomic and could be reverted independently
-- **ALL commit messages MUST be written in English**
+- コミットにClaudeの共著フッターを追加しないこと
+- 各コミットはアトミックであり、独立してリバートできるものであること
+- **すべてのコミットメッセージは英語で書くこと**

@@ -1,356 +1,353 @@
 ---
 name: skill-creator
-description: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
+description: 効果的なスキルを作成するためのガイド。このスキルは、ユーザーがClaudeの機能を専門知識、ワークフロー、ツール連携で拡張する新しいスキルを作成（または既存のスキルを更新）したい場合に使用します。
 license: Complete terms in LICENSE.txt
 ---
 
-# Skill Creator
+# スキルクリエイター
 
-This skill provides guidance for creating effective skills.
+このスキルは、効果的なスキルを作成するためのガイダンスを提供します。
 
-## About Skills
+## スキルについて
 
-Skills are modular, self-contained packages that extend Claude's capabilities by providing
-specialized knowledge, workflows, and tools. Think of them as "onboarding guides" for specific
-domains or tasks—they transform Claude from a general-purpose agent into a specialized agent
-equipped with procedural knowledge that no model can fully possess.
+スキルは、専門知識、ワークフロー、ツールを提供することでClaudeの機能を拡張する、モジュール化された自己完結型のパッケージです。特定のドメインやタスクのための「オンボーディングガイド」と考えてください。スキルは、汎用エージェントとしてのClaudeを、どのモデルも完全には持ち得ない手続き的知識を備えた専門エージェントへと変換します。
 
-### What Skills Provide
+### スキルが提供するもの
 
-1. Specialized workflows - Multi-step procedures for specific domains
-2. Tool integrations - Instructions for working with specific file formats or APIs
-3. Domain expertise - Company-specific knowledge, schemas, business logic
-4. Bundled resources - Scripts, references, and assets for complex and repetitive tasks
+1. 専門ワークフロー - 特定ドメイン向けの複数ステップの手順
+2. ツール連携 - 特定のファイル形式やAPIを扱うための指示
+3. ドメイン専門知識 - 企業固有の知識、スキーマ、ビジネスロジック
+4. バンドルリソース - 複雑で反復的なタスク用のスクリプト、リファレンス、アセット
 
-## Core Principles
+## 基本原則
 
-### Concise is Key
+### 簡潔さが鍵
 
-The context window is a public good. Skills share the context window with everything else Claude needs: system prompt, conversation history, other Skills' metadata, and the actual user request.
+コンテキストウィンドウは共有リソースです。スキルは、Claudeが必要とする他のすべてのもの（システムプロンプト、会話履歴、他のスキルのメタデータ、実際のユーザーリクエスト）とコンテキストウィンドウを共有します。
 
-**Default assumption: Claude is already very smart.** Only add context Claude doesn't already have. Challenge each piece of information: "Does Claude really need this explanation?" and "Does this paragraph justify its token cost?"
+**デフォルトの前提：Claudeはすでに非常に賢い。** Claudeがまだ持っていないコンテキストのみを追加してください。各情報を精査してください：「Claudeは本当にこの説明を必要としているか？」「この段落はトークンコストに見合う価値があるか？」
 
-Prefer concise examples over verbose explanations.
+冗長な説明よりも簡潔な例を優先してください。
 
-### Set Appropriate Degrees of Freedom
+### 適切な自由度の設定
 
-Match the level of specificity to the task's fragility and variability:
+タスクの脆弱性と変動性に応じて具体性のレベルを調整してください：
 
-**High freedom (text-based instructions)**: Use when multiple approaches are valid, decisions depend on context, or heuristics guide the approach.
+**高い自由度（テキストベースの指示）**：複数のアプローチが有効な場合、判断がコンテキストに依存する場合、またはヒューリスティクスがアプローチを導く場合に使用します。
 
-**Medium freedom (pseudocode or scripts with parameters)**: Use when a preferred pattern exists, some variation is acceptable, or configuration affects behavior.
+**中程度の自由度（疑似コードまたはパラメータ付きスクリプト）**：優先パターンが存在する場合、ある程度の変動が許容される場合、または設定が動作に影響する場合に使用します。
 
-**Low freedom (specific scripts, few parameters)**: Use when operations are fragile and error-prone, consistency is critical, or a specific sequence must be followed.
+**低い自由度（特定のスクリプト、少数のパラメータ）**：操作が脆弱でエラーが発生しやすい場合、一貫性が重要な場合、または特定の順序に従う必要がある場合に使用します。
 
-Think of Claude as exploring a path: a narrow bridge with cliffs needs specific guardrails (low freedom), while an open field allows many routes (high freedom).
+Claudeが道を探索していると考えてください：崖のある狭い橋には特定のガードレール（低い自由度）が必要ですが、開けた野原では多くのルートが可能です（高い自由度）。
 
-### Anatomy of a Skill
+### スキルの構造
 
-Every skill consists of a required SKILL.md file and optional bundled resources:
+すべてのスキルは、必須のSKILL.mdファイルとオプションのバンドルリソースで構成されます：
 
 ```
 skill-name/
-├── SKILL.md (required)
-│   ├── YAML frontmatter metadata (required)
-│   │   ├── name: (required)
-│   │   └── description: (required)
-│   └── Markdown instructions (required)
-└── Bundled Resources (optional)
-    ├── scripts/          - Executable code (Python/Bash/etc.)
-    ├── references/       - Documentation intended to be loaded into context as needed
-    └── assets/           - Files used in output (templates, icons, fonts, etc.)
+├── SKILL.md (必須)
+│   ├── YAMLフロントマターメタデータ (必須)
+│   │   ├── name: (必須)
+│   │   └── description: (必須)
+│   └── Markdown指示 (必須)
+└── バンドルリソース (オプション)
+    ├── scripts/          - 実行可能コード (Python/Bash/など)
+    ├── references/       - 必要に応じてコンテキストに読み込まれることを意図したドキュメント
+    └── assets/           - 出力で使用されるファイル (テンプレート、アイコン、フォントなど)
 ```
 
-#### SKILL.md (required)
+#### SKILL.md (必須)
 
-Every SKILL.md consists of:
+すべてのSKILL.mdは以下で構成されます：
 
-- **Frontmatter** (YAML): Contains `name` and `description` fields. These are the only fields that Claude reads to determine when the skill gets used, thus it is very important to be clear and comprehensive in describing what the skill is, and when it should be used.
-- **Body** (Markdown): Instructions and guidance for using the skill. Only loaded AFTER the skill triggers (if at all).
+- **フロントマター** (YAML)：`name`と`description`フィールドを含みます。これらはClaudeがスキルをいつ使用するかを判断するために読む唯一のフィールドであるため、スキルが何であるか、いつ使用すべきかを明確かつ包括的に説明することが非常に重要です。
+- **本文** (Markdown)：スキルを使用するための指示とガイダンス。スキルがトリガーされた後にのみ読み込まれます（トリガーされた場合）。
 
-#### Bundled Resources (optional)
+#### バンドルリソース (オプション)
 
-##### Scripts (`scripts/`)
+##### スクリプト (`scripts/`)
 
-Executable code (Python/Bash/etc.) for tasks that require deterministic reliability or are repeatedly rewritten.
+決定論的な信頼性が必要な場合や繰り返し書き直されるタスク用の実行可能コード（Python/Bash/など）。
 
-- **When to include**: When the same code is being rewritten repeatedly or deterministic reliability is needed
-- **Example**: `scripts/rotate_pdf.py` for PDF rotation tasks
-- **Benefits**: Token efficient, deterministic, may be executed without loading into context
-- **Note**: Scripts may still need to be read by Claude for patching or environment-specific adjustments
+- **含める場合**：同じコードを繰り返し書き直す場合、または決定論的な信頼性が必要な場合
+- **例**：PDF回転タスク用の`scripts/rotate_pdf.py`
+- **利点**：トークン効率が良く、決定論的で、コンテキストに読み込まずに実行可能
+- **注意**：パッチや環境固有の調整のために、スクリプトをClaudeが読む必要がある場合もあります
 
-##### References (`references/`)
+##### リファレンス (`references/`)
 
-Documentation and reference material intended to be loaded as needed into context to inform Claude's process and thinking.
+Claudeのプロセスと思考に情報を提供するために、必要に応じてコンテキストに読み込まれることを意図したドキュメントとリファレンス資料。
 
-- **When to include**: For documentation that Claude should reference while working
-- **Examples**: `references/finance.md` for financial schemas, `references/mnda.md` for company NDA template, `references/policies.md` for company policies, `references/api_docs.md` for API specifications
-- **Use cases**: Database schemas, API documentation, domain knowledge, company policies, detailed workflow guides
-- **Benefits**: Keeps SKILL.md lean, loaded only when Claude determines it's needed
-- **Best practice**: If files are large (>10k words), include grep search patterns in SKILL.md
-- **Avoid duplication**: Information should live in either SKILL.md or references files, not both. Prefer references files for detailed information unless it's truly core to the skill—this keeps SKILL.md lean while making information discoverable without hogging the context window. Keep only essential procedural instructions and workflow guidance in SKILL.md; move detailed reference material, schemas, and examples to references files.
+- **含める場合**：Claudeが作業中に参照すべきドキュメント用
+- **例**：金融スキーマ用の`references/finance.md`、企業NDAテンプレート用の`references/mnda.md`、企業ポリシー用の`references/policies.md`、API仕様用の`references/api_docs.md`
+- **ユースケース**：データベーススキーマ、APIドキュメント、ドメイン知識、企業ポリシー、詳細なワークフローガイド
+- **利点**：SKILL.mdを軽量に保ち、Claudeが必要と判断した場合にのみ読み込まれる
+- **ベストプラクティス**：ファイルが大きい場合（>10k語）、SKILL.mdにgrep検索パターンを含める
+- **重複を避ける**：情報はSKILL.mdまたはリファレンスファイルのいずれかに存在すべきで、両方には存在すべきではありません。スキルの核心に本当に関わるものでない限り、詳細情報にはリファレンスファイルを優先してください。これにより、SKILL.mdを軽量に保ちながら、コンテキストウィンドウを占有することなく情報を発見可能にします。SKILL.mdには本質的な手続き指示とワークフローガイダンスのみを保持し、詳細なリファレンス資料、スキーマ、例はリファレンスファイルに移動してください。
 
-##### Assets (`assets/`)
+##### アセット (`assets/`)
 
-Files not intended to be loaded into context, but rather used within the output Claude produces.
+コンテキストに読み込まれることを意図していないが、Claudeが生成する出力内で使用されるファイル。
 
-- **When to include**: When the skill needs files that will be used in the final output
-- **Examples**: `assets/logo.png` for brand assets, `assets/slides.pptx` for PowerPoint templates, `assets/frontend-template/` for HTML/React boilerplate, `assets/font.ttf` for typography
-- **Use cases**: Templates, images, icons, boilerplate code, fonts, sample documents that get copied or modified
-- **Benefits**: Separates output resources from documentation, enables Claude to use files without loading them into context
+- **含める場合**：スキルが最終出力で使用されるファイルを必要とする場合
+- **例**：ブランドアセット用の`assets/logo.png`、PowerPointテンプレート用の`assets/slides.pptx`、HTML/Reactボイラープレート用の`assets/frontend-template/`、タイポグラフィ用の`assets/font.ttf`
+- **ユースケース**：テンプレート、画像、アイコン、ボイラープレートコード、フォント、コピーまたは変更されるサンプルドキュメント
+- **利点**：出力リソースをドキュメントから分離し、Claudeがコンテキストに読み込まずにファイルを使用可能にする
 
-#### What to Not Include in a Skill
+#### スキルに含めるべきでないもの
 
-A skill should only contain essential files that directly support its functionality. Do NOT create extraneous documentation or auxiliary files, including:
+スキルには、その機能を直接サポートする本質的なファイルのみを含めるべきです。以下のような余分なドキュメントや補助ファイルを作成しないでください：
 
 - README.md
 - INSTALLATION_GUIDE.md
 - QUICK_REFERENCE.md
 - CHANGELOG.md
-- etc.
+- など
 
-The skill should only contain the information needed for an AI agent to do the job at hand. It should not contain auxilary context about the process that went into creating it, setup and testing procedures, user-facing documentation, etc. Creating additional documentation files just adds clutter and confusion.
+スキルには、AIエージェントが目の前の仕事を行うために必要な情報のみを含めるべきです。作成過程に関する補助的なコンテキスト、セットアップとテスト手順、ユーザー向けドキュメントなどを含めるべきではありません。追加のドキュメントファイルを作成すると、混乱を招くだけです。
 
-### Progressive Disclosure Design Principle
+### 段階的開示の設計原則
 
-Skills use a three-level loading system to manage context efficiently:
+スキルは、コンテキストを効率的に管理するために3レベルの読み込みシステムを使用します：
 
-1. **Metadata (name + description)** - Always in context (~100 words)
-2. **SKILL.md body** - When skill triggers (<5k words)
-3. **Bundled resources** - As needed by Claude (Unlimited because scripts can be executed without reading into context window)
+1. **メタデータ (名前 + 説明)** - 常にコンテキスト内 (~100語)
+2. **SKILL.md本文** - スキルがトリガーされた時 (<5k語)
+3. **バンドルリソース** - Claudeが必要に応じて (スクリプトはコンテキストウィンドウに読み込まずに実行可能なため無制限)
 
-#### Progressive Disclosure Patterns
+#### 段階的開示パターン
 
-Keep SKILL.md body to the essentials and under 500 lines to minimize context bloat. Split content into separate files when approaching this limit. When splitting out content into other files, it is very important to reference them from SKILL.md and describe clearly when to read them, to ensure the reader of the skill knows they exist and when to use them.
+コンテキストの肥大化を最小限に抑えるため、SKILL.md本文は本質的な内容に留め、500行以下に保ってください。この制限に近づいた場合は、コンテンツを別ファイルに分割してください。コンテンツを他のファイルに分割する際は、SKILL.mdからそれらを参照し、いつ読むべきかを明確に説明することが非常に重要です。これにより、スキルの読者がそれらの存在といつ使用すべきかを知ることができます。
 
-**Key principle:** When a skill supports multiple variations, frameworks, or options, keep only the core workflow and selection guidance in SKILL.md. Move variant-specific details (patterns, examples, configuration) into separate reference files.
+**重要な原則：** スキルが複数のバリエーション、フレームワーク、オプションをサポートする場合、SKILL.mdにはコアワークフローと選択ガイダンスのみを保持してください。バリアント固有の詳細（パターン、例、設定）は別のリファレンスファイルに移動してください。
 
-**Pattern 1: High-level guide with references**
+**パターン1：リファレンス付きのハイレベルガイド**
 
 ```markdown
-# PDF Processing
+# PDF処理
 
-## Quick start
+## クイックスタート
 
-Extract text with pdfplumber:
-[code example]
+pdfplumberでテキストを抽出：
+[コード例]
 
-## Advanced features
+## 高度な機能
 
-- **Form filling**: See [FORMS.md](FORMS.md) for complete guide
-- **API reference**: See [REFERENCE.md](REFERENCE.md) for all methods
-- **Examples**: See [EXAMPLES.md](EXAMPLES.md) for common patterns
+- **フォーム入力**：完全なガイドは[FORMS.md](FORMS.md)を参照
+- **APIリファレンス**：すべてのメソッドは[REFERENCE.md](REFERENCE.md)を参照
+- **例**：一般的なパターンは[EXAMPLES.md](EXAMPLES.md)を参照
 ```
 
-Claude loads FORMS.md, REFERENCE.md, or EXAMPLES.md only when needed.
+Claudeは必要な場合にのみFORMS.md、REFERENCE.md、またはEXAMPLES.mdを読み込みます。
 
-**Pattern 2: Domain-specific organization**
+**パターン2：ドメイン固有の整理**
 
-For Skills with multiple domains, organize content by domain to avoid loading irrelevant context:
+複数のドメインを持つスキルの場合、無関係なコンテキストの読み込みを避けるためにドメインごとにコンテンツを整理します：
 
 ```
 bigquery-skill/
-├── SKILL.md (overview and navigation)
+├── SKILL.md (概要とナビゲーション)
 └── reference/
-    ├── finance.md (revenue, billing metrics)
-    ├── sales.md (opportunities, pipeline)
-    ├── product.md (API usage, features)
-    └── marketing.md (campaigns, attribution)
+    ├── finance.md (収益、請求指標)
+    ├── sales.md (商談、パイプライン)
+    ├── product.md (API使用状況、機能)
+    └── marketing.md (キャンペーン、アトリビューション)
 ```
 
-When a user asks about sales metrics, Claude only reads sales.md.
+ユーザーがセールス指標について質問した場合、Claudeはsales.mdのみを読みます。
 
-Similarly, for skills supporting multiple frameworks or variants, organize by variant:
+同様に、複数のフレームワークやバリアントをサポートするスキルの場合、バリアントごとに整理します：
 
 ```
 cloud-deploy/
-├── SKILL.md (workflow + provider selection)
+├── SKILL.md (ワークフロー + プロバイダー選択)
 └── references/
-    ├── aws.md (AWS deployment patterns)
-    ├── gcp.md (GCP deployment patterns)
-    └── azure.md (Azure deployment patterns)
+    ├── aws.md (AWSデプロイパターン)
+    ├── gcp.md (GCPデプロイパターン)
+    └── azure.md (Azureデプロイパターン)
 ```
 
-When the user chooses AWS, Claude only reads aws.md.
+ユーザーがAWSを選択した場合、Claudeはaws.mdのみを読みます。
 
-**Pattern 3: Conditional details**
+**パターン3：条件付き詳細**
 
-Show basic content, link to advanced content:
+基本コンテンツを表示し、高度なコンテンツにリンク：
 
 ```markdown
-# DOCX Processing
+# DOCX処理
 
-## Creating documents
+## ドキュメントの作成
 
-Use docx-js for new documents. See [DOCX-JS.md](DOCX-JS.md).
+新しいドキュメントにはdocx-jsを使用。[DOCX-JS.md](DOCX-JS.md)を参照。
 
-## Editing documents
+## ドキュメントの編集
 
-For simple edits, modify the XML directly.
+簡単な編集には、XMLを直接変更。
 
-**For tracked changes**: See [REDLINING.md](REDLINING.md)
-**For OOXML details**: See [OOXML.md](OOXML.md)
+**変更追跡の場合**：[REDLINING.md](REDLINING.md)を参照
+**OOXMLの詳細**：[OOXML.md](OOXML.md)を参照
 ```
 
-Claude reads REDLINING.md or OOXML.md only when the user needs those features.
+Claudeは、ユーザーがそれらの機能を必要とする場合にのみREDLINING.mdまたはOOXML.mdを読みます。
 
-**Important guidelines:**
+**重要なガイドライン：**
 
-- **Avoid deeply nested references** - Keep references one level deep from SKILL.md. All reference files should link directly from SKILL.md.
-- **Structure longer reference files** - For files longer than 100 lines, include a table of contents at the top so Claude can see the full scope when previewing.
+- **深くネストされたリファレンスを避ける** - リファレンスはSKILL.mdから1レベルの深さに保ってください。すべてのリファレンスファイルはSKILL.mdから直接リンクすべきです。
+- **長いリファレンスファイルを構造化する** - 100行を超えるファイルには、Claudeがプレビュー時に全体の範囲を確認できるように、先頭に目次を含めてください。
 
-## Skill Creation Process
+## スキル作成プロセス
 
-Skill creation involves these steps:
+スキル作成には以下のステップが含まれます：
 
-1. Understand the skill with concrete examples
-2. Plan reusable skill contents (scripts, references, assets)
-3. Initialize the skill (run init_skill.py)
-4. Edit the skill (implement resources and write SKILL.md)
-5. Package the skill (run package_skill.py)
-6. Iterate based on real usage
+1. 具体例でスキルを理解する
+2. 再利用可能なスキルコンテンツを計画する（スクリプト、リファレンス、アセット）
+3. スキルを初期化する（init_skill.pyを実行）
+4. スキルを編集する（リソースを実装しSKILL.mdを書く）
+5. スキルをパッケージ化する（package_skill.pyを実行）
+6. 実際の使用に基づいて反復する
 
-Follow these steps in order, skipping only if there is a clear reason why they are not applicable.
+明確な理由がない限り、これらのステップを順番に従ってください。
 
-### Step 1: Understanding the Skill with Concrete Examples
+### ステップ1：具体例でスキルを理解する
 
-Skip this step only when the skill's usage patterns are already clearly understood. It remains valuable even when working with an existing skill.
+スキルの使用パターンがすでに明確に理解されている場合にのみ、このステップをスキップしてください。既存のスキルで作業する場合でも、このステップは価値があります。
 
-To create an effective skill, clearly understand concrete examples of how the skill will be used. This understanding can come from either direct user examples or generated examples that are validated with user feedback.
+効果的なスキルを作成するには、スキルがどのように使用されるかの具体例を明確に理解してください。この理解は、直接的なユーザー例か、ユーザーフィードバックで検証された生成例のいずれかから得られます。
 
-For example, when building an image-editor skill, relevant questions include:
+例えば、画像エディタースキルを構築する場合、関連する質問には以下が含まれます：
 
-- "What functionality should the image-editor skill support? Editing, rotating, anything else?"
-- "Can you give some examples of how this skill would be used?"
-- "I can imagine users asking for things like 'Remove the red-eye from this image' or 'Rotate this image'. Are there other ways you imagine this skill being used?"
-- "What would a user say that should trigger this skill?"
+- 「画像エディタースキルはどのような機能をサポートすべきですか？編集、回転、他には？」
+- 「このスキルがどのように使用されるかの例を挙げてもらえますか？」
+- 「ユーザーが『この画像の赤目を除去して』や『この画像を回転して』などと依頼することを想像できます。他にどのような使用方法を想像しますか？」
+- 「このスキルをトリガーするためにユーザーは何と言いますか？」
 
-To avoid overwhelming users, avoid asking too many questions in a single message. Start with the most important questions and follow up as needed for better effectiveness.
+ユーザーを圧倒しないよう、1つのメッセージで質問しすぎないようにしてください。最も重要な質問から始め、より効果的にするために必要に応じてフォローアップしてください。
 
-Conclude this step when there is a clear sense of the functionality the skill should support.
+スキルがサポートすべき機能について明確な感覚が得られたら、このステップを終了してください。
 
-### Step 2: Planning the Reusable Skill Contents
+### ステップ2：再利用可能なスキルコンテンツの計画
 
-To turn concrete examples into an effective skill, analyze each example by:
+具体例を効果的なスキルに変換するには、各例を以下のように分析します：
 
-1. Considering how to execute on the example from scratch
-2. Identifying what scripts, references, and assets would be helpful when executing these workflows repeatedly
+1. ゼロから例を実行する方法を検討する
+2. これらのワークフローを繰り返し実行する際に役立つスクリプト、リファレンス、アセットを特定する
 
-Example: When building a `pdf-editor` skill to handle queries like "Help me rotate this PDF," the analysis shows:
+例：「このPDFを回転するのを手伝って」のようなクエリを処理する`pdf-editor`スキルを構築する場合、分析は以下を示します：
 
-1. Rotating a PDF requires re-writing the same code each time
-2. A `scripts/rotate_pdf.py` script would be helpful to store in the skill
+1. PDFを回転するには毎回同じコードを書き直す必要がある
+2. `scripts/rotate_pdf.py`スクリプトをスキルに保存すると役立つ
 
-Example: When designing a `frontend-webapp-builder` skill for queries like "Build me a todo app" or "Build me a dashboard to track my steps," the analysis shows:
+例：「Todoアプリを作って」や「歩数を追跡するダッシュボードを作って」のようなクエリ用の`frontend-webapp-builder`スキルを設計する場合、分析は以下を示します：
 
-1. Writing a frontend webapp requires the same boilerplate HTML/React each time
-2. An `assets/hello-world/` template containing the boilerplate HTML/React project files would be helpful to store in the skill
+1. フロントエンドウェブアプリを書くには毎回同じHTML/Reactのボイラープレートが必要
+2. ボイラープレートHTML/Reactプロジェクトファイルを含む`assets/hello-world/`テンプレートをスキルに保存すると役立つ
 
-Example: When building a `big-query` skill to handle queries like "How many users have logged in today?" the analysis shows:
+例：「今日ログインしたユーザーは何人ですか？」のようなクエリを処理する`big-query`スキルを構築する場合、分析は以下を示します：
 
-1. Querying BigQuery requires re-discovering the table schemas and relationships each time
-2. A `references/schema.md` file documenting the table schemas would be helpful to store in the skill
+1. BigQueryをクエリするには毎回テーブルスキーマと関係を再発見する必要がある
+2. テーブルスキーマを文書化した`references/schema.md`ファイルをスキルに保存すると役立つ
 
-To establish the skill's contents, analyze each concrete example to create a list of the reusable resources to include: scripts, references, and assets.
+スキルのコンテンツを確立するには、各具体例を分析して、含めるべき再利用可能なリソースのリストを作成してください：スクリプト、リファレンス、アセット。
 
-### Step 3: Initializing the Skill
+### ステップ3：スキルの初期化
 
-At this point, it is time to actually create the skill.
+この時点で、実際にスキルを作成する時です。
 
-Skip this step only if the skill being developed already exists, and iteration or packaging is needed. In this case, continue to the next step.
+開発中のスキルがすでに存在し、反復またはパッケージ化が必要な場合にのみ、このステップをスキップしてください。この場合、次のステップに進んでください。
 
-When creating a new skill from scratch, always run the `init_skill.py` script. The script conveniently generates a new template skill directory that automatically includes everything a skill requires, making the skill creation process much more efficient and reliable.
+ゼロから新しいスキルを作成する場合、常に`init_skill.py`スクリプトを実行してください。このスクリプトは、スキルが必要とするすべてを自動的に含む新しいテンプレートスキルディレクトリを便利に生成し、スキル作成プロセスをより効率的で信頼性の高いものにします。
 
-Usage:
+使用法：
 
 ```bash
 scripts/init_skill.py <skill-name> --path <output-directory>
 ```
 
-The script:
+スクリプトは：
 
-- Creates the skill directory at the specified path
-- Generates a SKILL.md template with proper frontmatter and TODO placeholders
-- Creates example resource directories: `scripts/`, `references/`, and `assets/`
-- Adds example files in each directory that can be customized or deleted
+- 指定されたパスにスキルディレクトリを作成
+- 適切なフロントマターとTODOプレースホルダーを含むSKILL.mdテンプレートを生成
+- サンプルリソースディレクトリを作成：`scripts/`、`references/`、`assets/`
+- カスタマイズまたは削除可能なサンプルファイルを各ディレクトリに追加
 
-After initialization, customize or remove the generated SKILL.md and example files as needed.
+初期化後、生成されたSKILL.mdとサンプルファイルを必要に応じてカスタマイズまたは削除してください。
 
-### Step 4: Edit the Skill
+### ステップ4：スキルの編集
 
-When editing the (newly-generated or existing) skill, remember that the skill is being created for another instance of Claude to use. Include information that would be beneficial and non-obvious to Claude. Consider what procedural knowledge, domain-specific details, or reusable assets would help another Claude instance execute these tasks more effectively.
+（新しく生成された、または既存の）スキルを編集する際、スキルは別のClaudeインスタンスが使用するために作成されていることを覚えておいてください。Claudeにとって有益で自明でない情報を含めてください。別のClaudeインスタンスがこれらのタスクをより効果的に実行するのに役立つ手続き的知識、ドメイン固有の詳細、または再利用可能なアセットは何かを検討してください。
 
-#### Learn Proven Design Patterns
+#### 実証済みの設計パターンを学ぶ
 
-Consult these helpful guides based on your skill's needs:
+スキルのニーズに基づいて、以下の有用なガイドを参照してください：
 
-- **Multi-step processes**: See references/workflows.md for sequential workflows and conditional logic
-- **Specific output formats or quality standards**: See references/output-patterns.md for template and example patterns
+- **複数ステップのプロセス**：順次ワークフローと条件ロジックについてはreferences/workflows.mdを参照
+- **特定の出力形式や品質基準**：テンプレートと例のパターンについてはreferences/output-patterns.mdを参照
 
-These files contain established best practices for effective skill design.
+これらのファイルには、効果的なスキル設計のための確立されたベストプラクティスが含まれています。
 
-#### Start with Reusable Skill Contents
+#### 再利用可能なスキルコンテンツから始める
 
-To begin implementation, start with the reusable resources identified above: `scripts/`, `references/`, and `assets/` files. Note that this step may require user input. For example, when implementing a `brand-guidelines` skill, the user may need to provide brand assets or templates to store in `assets/`, or documentation to store in `references/`.
+実装を開始するには、上記で特定した再利用可能なリソースから始めてください：`scripts/`、`references/`、`assets/`ファイル。このステップにはユーザー入力が必要な場合があることに注意してください。例えば、`brand-guidelines`スキルを実装する場合、ユーザーは`assets/`に保存するブランドアセットやテンプレート、または`references/`に保存するドキュメントを提供する必要があるかもしれません。
 
-Added scripts must be tested by actually running them to ensure there are no bugs and that the output matches what is expected. If there are many similar scripts, only a representative sample needs to be tested to ensure confidence that they all work while balancing time to completion.
+追加されたスクリプトは、実際に実行してテストし、バグがないことと出力が期待通りであることを確認する必要があります。類似のスクリプトが多数ある場合、すべてが機能することへの信頼性を確保しつつ、完了までの時間をバランスさせるために、代表的なサンプルのみをテストする必要があります。
 
-Any example files and directories not needed for the skill should be deleted. The initialization script creates example files in `scripts/`, `references/`, and `assets/` to demonstrate structure, but most skills won't need all of them.
+スキルに必要ないサンプルファイルとディレクトリは削除すべきです。初期化スクリプトは構造を示すために`scripts/`、`references/`、`assets/`にサンプルファイルを作成しますが、ほとんどのスキルはそれらすべてを必要としません。
 
-#### Update SKILL.md
+#### SKILL.mdの更新
 
-**Writing Guidelines:** Always use imperative/infinitive form.
+**執筆ガイドライン：** 常に命令形/不定形を使用してください。
 
-##### Frontmatter
+##### フロントマター
 
-Write the YAML frontmatter with `name` and `description`:
+`name`と`description`を含むYAMLフロントマターを書いてください：
 
-- `name`: The skill name
-- `description`: This is the primary triggering mechanism for your skill, and helps Claude understand when to use the skill.
-  - Include both what the Skill does and specific triggers/contexts for when to use it.
-  - Include all "when to use" information here - Not in the body. The body is only loaded after triggering, so "When to Use This Skill" sections in the body are not helpful to Claude.
-  - Example description for a `docx` skill: "Comprehensive document creation, editing, and analysis with support for tracked changes, comments, formatting preservation, and text extraction. Use when Claude needs to work with professional documents (.docx files) for: (1) Creating new documents, (2) Modifying or editing content, (3) Working with tracked changes, (4) Adding comments, or any other document tasks"
+- `name`：スキル名
+- `description`：これはスキルの主要なトリガーメカニズムであり、Claudeがいつスキルを使用すべきかを理解するのに役立ちます。
+  - スキルが何をするかと、いつ使用するかの具体的なトリガー/コンテキストの両方を含めてください。
+  - すべての「いつ使用するか」情報はここに含めてください - 本文には含めないでください。本文はトリガー後にのみ読み込まれるため、本文の「このスキルをいつ使用するか」セクションはClaudeにとって役立ちません。
+  - `docx`スキルの説明例：「変更追跡、コメント、書式保持、テキスト抽出をサポートした包括的なドキュメント作成、編集、分析。Claudeが以下のためにプロフェッショナルドキュメント（.docxファイル）を操作する必要がある場合に使用：(1) 新しいドキュメントの作成、(2) コンテンツの変更または編集、(3) 変更追跡の操作、(4) コメントの追加、またはその他のドキュメントタスク」
 
-Do not include any other fields in YAML frontmatter.
+YAMLフロントマターには他のフィールドを含めないでください。
 
-##### Body
+##### 本文
 
-Write instructions for using the skill and its bundled resources.
+スキルとそのバンドルリソースを使用するための指示を書いてください。
 
-### Step 5: Packaging a Skill
+### ステップ5：スキルのパッケージ化
 
-Once development of the skill is complete, it must be packaged into a distributable .skill file that gets shared with the user. The packaging process automatically validates the skill first to ensure it meets all requirements:
+スキルの開発が完了したら、ユーザーと共有される配布可能な.skillファイルにパッケージ化する必要があります。パッケージングプロセスは、すべての要件を満たしていることを確認するために、最初にスキルを自動的に検証します：
 
 ```bash
 scripts/package_skill.py <path/to/skill-folder>
 ```
 
-Optional output directory specification:
+オプションの出力ディレクトリ指定：
 
 ```bash
 scripts/package_skill.py <path/to/skill-folder> ./dist
 ```
 
-The packaging script will:
+パッケージングスクリプトは：
 
-1. **Validate** the skill automatically, checking:
+1. スキルを自動的に**検証**し、以下をチェックします：
 
-   - YAML frontmatter format and required fields
-   - Skill naming conventions and directory structure
-   - Description completeness and quality
-   - File organization and resource references
+   - YAMLフロントマターの形式と必須フィールド
+   - スキルの命名規則とディレクトリ構造
+   - 説明の完全性と品質
+   - ファイル構成とリソース参照
 
-2. **Package** the skill if validation passes, creating a .skill file named after the skill (e.g., `my-skill.skill`) that includes all files and maintains the proper directory structure for distribution. The .skill file is a zip file with a .skill extension.
+2. 検証に合格した場合、スキルを**パッケージ化**し、スキル名にちなんだ.skillファイル（例：`my-skill.skill`）を作成します。これにはすべてのファイルが含まれ、配布用の適切なディレクトリ構造が維持されます。.skillファイルは.skill拡張子を持つzipファイルです。
 
-If validation fails, the script will report the errors and exit without creating a package. Fix any validation errors and run the packaging command again.
+検証に失敗した場合、スクリプトはエラーを報告し、パッケージを作成せずに終了します。検証エラーを修正し、パッケージングコマンドを再度実行してください。
 
-### Step 6: Iterate
+### ステップ6：反復
 
-After testing the skill, users may request improvements. Often this happens right after using the skill, with fresh context of how the skill performed.
+スキルをテストした後、ユーザーが改善を要求する場合があります。これは多くの場合、スキルを使用した直後に、スキルがどのように機能したかの新鮮なコンテキストとともに発生します。
 
-**Iteration workflow:**
+**反復ワークフロー：**
 
-1. Use the skill on real tasks
-2. Notice struggles or inefficiencies
-3. Identify how SKILL.md or bundled resources should be updated
-4. Implement changes and test again
+1. 実際のタスクでスキルを使用
+2. 苦労や非効率に気づく
+3. SKILL.mdまたはバンドルリソースをどのように更新すべきかを特定
+4. 変更を実装し、再度テスト

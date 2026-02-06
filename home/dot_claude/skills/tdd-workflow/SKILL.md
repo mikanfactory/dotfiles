@@ -1,126 +1,126 @@
 ---
 name: tdd-workflow
-description: Use this skill when writing new features, fixing bugs, or refactoring Python code. Enforces test-driven development with 80%+ coverage including unit, integration, and E2E tests.
+description: 新機能の作成、バグ修正、またはPythonコードのリファクタリング時にこのスキルを使用します。ユニット、統合、E2Eテストを含む80%以上のカバレッジでテスト駆動開発を強制します。
 allowed-tools: Bash, Read, Write, Edit
 model: sonnet
 ---
 
-# Test-Driven Development Workflow
+# テスト駆動開発ワークフロー
 
-This skill ensures all Python code development follows TDD principles with comprehensive test coverage.
+このスキルは、すべてのPythonコード開発がTDD原則に従い、包括的なテストカバレッジを達成することを保証します。
 
-## When to Activate
+## アクティブ化するタイミング
 
-- Writing new features or functionality
-- Fixing bugs or issues
-- Refactoring existing code
-- Adding API endpoints
-- Creating new modules
+- 新機能や機能を作成する時
+- バグや問題を修正する時
+- 既存のコードをリファクタリングする時
+- APIエンドポイントを追加する時
+- 新しいモジュールを作成する時
 
-## Core Principles
+## 基本原則
 
-### 1. Tests BEFORE Code
-ALWAYS write tests first, then implement code to make tests pass.
+### 1. コードの前にテスト
+常に最初にテストを書き、その後テストをパスするコードを実装してください。
 
-### 2. Coverage Requirements
-- Minimum 80% coverage (unit + integration + E2E)
-- All edge cases covered
-- Error scenarios tested
-- Boundary conditions verified
+### 2. カバレッジ要件
+- 最小80%カバレッジ（ユニット + 統合 + E2E）
+- すべてのエッジケースをカバー
+- エラーシナリオをテスト
+- 境界条件を検証
 
-### 3. Test Types
+### 3. テストの種類
 
-#### Unit Tests
-- Individual functions and utilities
-- Module logic
-- Pure functions
-- Helpers and utilities
+#### ユニットテスト
+- 個別の関数とユーティリティ
+- モジュールロジック
+- 純粋関数
+- ヘルパーとユーティリティ
 
-#### Integration Tests
-- API endpoints
-- Database operations
-- Service interactions
-- External API calls
+#### 統合テスト
+- APIエンドポイント
+- データベース操作
+- サービス間の連携
+- 外部API呼び出し
 
-#### E2E Tests (Playwright)
-- Critical user flows
-- Complete workflows
-- Browser automation
-- UI interactions
+#### E2Eテスト（Playwright）
+- 重要なユーザーフロー
+- 完全なワークフロー
+- ブラウザ自動化
+- UI操作
 
-## TDD Workflow Steps
+## TDDワークフローステップ
 
-### Step 1: Write User Stories
+### ステップ1：ユーザーストーリーを書く
 ```
-As a [role], I want to [action], so that [benefit]
+[役割]として、[利益]のために[アクション]したい
 
-Example:
-As a user, I want to search for markets semantically,
-so that I can find relevant markets even without exact keywords.
+例：
+ユーザーとして、正確なキーワードがなくても関連するマーケットを見つけられるように、
+マーケットを意味的に検索したい。
 ```
 
-### Step 2: Generate Test Cases
-For each user story, create comprehensive test cases:
+### ステップ2：テストケースを生成
+各ユーザーストーリーに対して、包括的なテストケースを作成：
 
 ```python
 import pytest
 
 class TestSemanticSearch:
     def test_returns_relevant_markets_for_query(self):
-        # Test implementation
+        # テスト実装
         pass
 
     def test_handles_empty_query_gracefully(self):
-        # Test edge case
+        # エッジケースのテスト
         pass
 
     def test_falls_back_to_substring_search_when_redis_unavailable(self):
-        # Test fallback behavior
+        # フォールバック動作のテスト
         pass
 
     def test_sorts_results_by_similarity_score(self):
-        # Test sorting logic
+        # ソートロジックのテスト
         pass
 ```
 
-### Step 3: Run Tests (They Should Fail)
+### ステップ3：テストを実行（失敗するはず）
 ```bash
 uv run pytest
-# Tests should fail - we haven't implemented yet
+# テストは失敗するはず - まだ実装していないため
 ```
 
-### Step 4: Implement Code
-Write minimal code to make tests pass:
+### ステップ4：コードを実装
+テストをパスするための最小限のコードを書く：
 
 ```python
-# Implementation guided by tests
+# テストに導かれた実装
 async def search_markets(query: str) -> list[Market]:
-    # Implementation here
+    # ここに実装
     pass
 ```
 
-### Step 5: Run Tests Again
+### ステップ5：テストを再実行
 ```bash
 uv run pytest
-# Tests should now pass
+# テストはパスするはず
 ```
 
-### Step 6: Refactor
-Improve code quality while keeping tests green:
-- Remove duplication
-- Improve naming
-- Optimize performance
-- Enhance readability
+### ステップ6：リファクタリング
+テストをグリーンに保ちながらコード品質を改善：
+- 重複を削除
+- 命名を改善
+- パフォーマンスを最適化
+- 可読性を向上
 
-### Step 7: Verify Coverage
+### ステップ7：カバレッジを検証
 ```bash
 uv run pytest --cov=src --cov-report=term-missing
-# Verify 80%+ coverage achieved
+# 80%以上のカバレッジが達成されたことを確認
 ```
 
-## Testing Patterns
+## テストパターン
 
-### Unit Test Pattern (pytest)
+### ユニットテストパターン（pytest）
 ```python
 import pytest
 from mymodule import Button
@@ -147,7 +147,7 @@ class TestButton:
         assert button.disabled is True
 ```
 
-### API Integration Test Pattern
+### API統合テストパターン
 ```python
 import pytest
 from httpx import AsyncClient
@@ -179,7 +179,7 @@ class TestMarketsAPI:
         assert response.status_code == 500
 ```
 
-### E2E Test Pattern (Playwright)
+### E2Eテストパターン（Playwright）
 ```python
 import pytest
 from playwright.async_api import Page, expect
@@ -187,46 +187,46 @@ from playwright.async_api import Page, expect
 @pytest.mark.asyncio
 class TestMarketSearch:
     async def test_user_can_search_and_filter_markets(self, page: Page):
-        # Navigate to markets page
+        # マーケットページに移動
         await page.goto("/")
         await page.click('a[href="/markets"]')
 
-        # Verify page loaded
+        # ページが読み込まれたことを確認
         await expect(page.locator("h1")).to_contain_text("Markets")
 
-        # Search for markets
+        # マーケットを検索
         await page.fill('input[placeholder="Search markets"]', "election")
 
-        # Wait for debounce and results
+        # デバウンスと結果を待機
         await page.wait_for_timeout(600)
 
-        # Verify search results displayed
+        # 検索結果が表示されたことを確認
         results = page.locator('[data-testid="market-card"]')
         await expect(results).to_have_count(5, timeout=5000)
 
-        # Filter by status
+        # ステータスでフィルタリング
         await page.click('button:has-text("Active")')
 
-        # Verify filtered results
+        # フィルタリングされた結果を確認
         await expect(results).to_have_count(3)
 
     async def test_user_can_create_new_market(self, page: Page):
-        # Login first
+        # 最初にログイン
         await page.goto("/creator-dashboard")
 
-        # Fill market creation form
+        # マーケット作成フォームに入力
         await page.fill('input[name="name"]', "Test Market")
         await page.fill('textarea[name="description"]', "Test description")
         await page.fill('input[name="endDate"]', "2025-12-31")
 
-        # Submit form
+        # フォームを送信
         await page.click('button[type="submit"]')
 
-        # Verify success message
+        # 成功メッセージを確認
         await expect(page.locator("text=Market created successfully")).to_be_visible()
 ```
 
-## Test File Organization
+## テストファイル構成
 
 ```
 project/
@@ -249,9 +249,9 @@ project/
 └── conftest.py
 ```
 
-## Mocking External Services
+## 外部サービスのモック
 
-### Mock Database
+### データベースのモック
 ```python
 @pytest.fixture
 def mock_db(mocker):
@@ -260,7 +260,7 @@ def mock_db(mocker):
     ])
 ```
 
-### Mock Redis
+### Redisのモック
 ```python
 @pytest.fixture
 def mock_redis(mocker):
@@ -272,24 +272,24 @@ def mock_redis(mocker):
     )
 ```
 
-### Mock External API
+### 外部APIのモック
 ```python
 @pytest.fixture
 def mock_openai(mocker):
     return mocker.patch(
         "app.services.openai.generate_embedding",
-        return_value=[0.1] * 1536  # Mock 1536-dim embedding
+        return_value=[0.1] * 1536  # 1536次元の埋め込みをモック
     )
 ```
 
-## Test Coverage Verification
+## テストカバレッジの検証
 
-### Run Coverage Report
+### カバレッジレポートの実行
 ```bash
 uv run pytest --cov=src --cov-report=html
 ```
 
-### Coverage Configuration (pyproject.toml)
+### カバレッジ設定（pyproject.toml）
 ```toml
 [tool.pytest.ini_options]
 addopts = "--cov=src --cov-fail-under=80"
@@ -306,94 +306,94 @@ exclude_lines = [
 ]
 ```
 
-## Common Testing Mistakes to Avoid
+## 避けるべき一般的なテストの間違い
 
-### BAD: Testing Implementation Details
+### 悪い例：実装の詳細をテスト
 ```python
-# Don't test internal state
+# 内部状態をテストしない
 assert obj._internal_count == 5
 ```
 
-### GOOD: Test User-Visible Behavior
+### 良い例：ユーザーに見える動作をテスト
 ```python
-# Test what users see
+# ユーザーに見えるものをテスト
 assert obj.count == 5
 ```
 
-### BAD: Brittle Selectors
+### 悪い例：脆いセレクタ
 ```python
-# Breaks easily
+# 簡単に壊れる
 await page.click(".css-class-xyz")
 ```
 
-### GOOD: Semantic Selectors
+### 良い例：セマンティックセレクタ
 ```python
-# Resilient to changes
+# 変更に強い
 await page.click('button:has-text("Submit")')
 await page.click('[data-testid="submit-button"]')
 ```
 
-### BAD: No Test Isolation
+### 悪い例：テストの分離がない
 ```python
-# Tests depend on each other
+# テストが互いに依存
 def test_creates_user(): ...
-def test_updates_same_user(): ...  # depends on previous test
+def test_updates_same_user(): ...  # 前のテストに依存
 ```
 
-### GOOD: Independent Tests
+### 良い例：独立したテスト
 ```python
-# Each test sets up its own data
+# 各テストが独自のデータをセットアップ
 def test_creates_user():
     user = create_test_user()
-    # Test logic
+    # テストロジック
 
 def test_updates_user():
     user = create_test_user()
-    # Update logic
+    # 更新ロジック
 ```
 
-## Continuous Testing
+## 継続的テスト
 
-### Watch Mode During Development
+### 開発中のウォッチモード
 ```bash
 uv run pytest-watch
-# Tests run automatically on file changes
+# ファイル変更時にテストが自動実行
 ```
 
-### Pre-Commit Hook
+### プリコミットフック
 ```bash
-# Runs before every commit
+# すべてのコミット前に実行
 uv run pytest && uv run ruff check
 ```
 
-### CI/CD Integration (GitHub Actions)
+### CI/CD統合（GitHub Actions）
 ```yaml
 - name: Run Tests
   run: uv run pytest --cov --cov-fail-under=80
 ```
 
-## Best Practices
+## ベストプラクティス
 
-1. **Write Tests First** - Always TDD
-2. **One Assert Per Test** - Focus on single behavior
-3. **Descriptive Test Names** - Explain what's tested
-4. **Arrange-Act-Assert** - Clear test structure
-5. **Mock External Dependencies** - Isolate unit tests
-6. **Test Edge Cases** - None, empty, large
-7. **Test Error Paths** - Not just happy paths
-8. **Keep Tests Fast** - Unit tests < 50ms each
-9. **Clean Up After Tests** - No side effects
-10. **Review Coverage Reports** - Identify gaps
+1. **テストを最初に書く** - 常にTDD
+2. **テストごとに1つのアサート** - 単一の動作に焦点
+3. **説明的なテスト名** - 何がテストされているか説明
+4. **Arrange-Act-Assert** - 明確なテスト構造
+5. **外部依存関係をモック** - ユニットテストを分離
+6. **エッジケースをテスト** - None、空、大きい値
+7. **エラーパスをテスト** - ハッピーパスだけでなく
+8. **テストを高速に保つ** - ユニットテストは各50ms未満
+9. **テスト後にクリーンアップ** - 副作用なし
+10. **カバレッジレポートをレビュー** - ギャップを特定
 
-## Success Metrics
+## 成功指標
 
-- 80%+ code coverage achieved
-- All tests passing (green)
-- No skipped or disabled tests
-- Fast test execution (< 30s for unit tests)
-- E2E tests cover critical user flows
-- Tests catch bugs before production
+- 80%以上のコードカバレッジ達成
+- すべてのテストがパス（グリーン）
+- スキップまたは無効化されたテストなし
+- 高速なテスト実行（ユニットテストは30秒未満）
+- E2Eテストが重要なユーザーフローをカバー
+- テストが本番前にバグをキャッチ
 
 ---
 
-**Remember**: Tests are not optional. They are the safety net that enables confident refactoring, rapid development, and production reliability.
+**忘れないでください**：テストはオプションではありません。自信を持ってリファクタリングし、迅速に開発し、本番の信頼性を確保するためのセーフティネットです。

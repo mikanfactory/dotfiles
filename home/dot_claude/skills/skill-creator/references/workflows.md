@@ -1,28 +1,28 @@
-# Workflow Patterns
+# ワークフローパターン
 
-## Sequential Workflows
+## 順次ワークフロー
 
-For complex tasks, break operations into clear, sequential steps. It is often helpful to give Claude an overview of the process towards the beginning of SKILL.md:
+複雑なタスクの場合、操作を明確な順次ステップに分解します。SKILL.mdの最初の方でClaudeにプロセスの概要を示すことがしばしば有用です：
 
 ```markdown
-Filling a PDF form involves these steps:
+PDFフォームへの入力には以下のステップが含まれます：
 
-1. Analyze the form (run analyze_form.py)
-2. Create field mapping (edit fields.json)
-3. Validate mapping (run validate_fields.py)
-4. Fill the form (run fill_form.py)
-5. Verify output (run verify_output.py)
+1. フォームを分析（analyze_form.pyを実行）
+2. フィールドマッピングを作成（fields.jsonを編集）
+3. マッピングを検証（validate_fields.pyを実行）
+4. フォームに入力（fill_form.pyを実行）
+5. 出力を検証（verify_output.pyを実行）
 ```
 
-## Conditional Workflows
+## 条件付きワークフロー
 
-For tasks with branching logic, guide Claude through decision points:
+分岐ロジックを持つタスクの場合、Claudeを判断ポイントを通じてガイドします：
 
 ```markdown
-1. Determine the modification type:
-   **Creating new content?** → Follow "Creation workflow" below
-   **Editing existing content?** → Follow "Editing workflow" below
+1. 変更タイプを判断：
+   **新しいコンテンツを作成する？** → 以下の「作成ワークフロー」に従う
+   **既存のコンテンツを編集する？** → 以下の「編集ワークフロー」に従う
 
-2. Creation workflow: [steps]
-3. Editing workflow: [steps]
+2. 作成ワークフロー：[ステップ]
+3. 編集ワークフロー：[ステップ]
 ```
