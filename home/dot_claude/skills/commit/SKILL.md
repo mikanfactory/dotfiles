@@ -1,6 +1,8 @@
 ---
-allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git diff:*), Skill
+name: commit
 description: gitコミットを作成する
+allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git diff:*), Skill
+disable-model-invocation: true
 ---
 
 ## コンテキスト
@@ -41,4 +43,4 @@ description: gitコミットを作成する
 ## 参照
 
 ### エージェント
-- [`git-commit-splitter`](../agents/git-commit-splitter.md) - 変更を論理的なコミットに分割
+- [`git-commit-splitter`](../../agents/git-commit-splitter.md) - 変更を論理的なコミットに分割

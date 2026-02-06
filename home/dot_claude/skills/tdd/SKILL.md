@@ -1,6 +1,8 @@
 ---
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep
+name: tdd
 description: プランモードを終了してTDDワークフローで実装を進める
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep
+disable-model-invocation: true
 ---
 
 ## コンテキスト
@@ -61,4 +63,4 @@ uv run pytest --cov=src --cov-report=term-missing
 ## 参照
 
 ### スキル
-- [`/tdd-workflow`](../skills/tdd-workflow/SKILL.md) - TDDワークフローの原則とパターン
+- [`/tdd-workflow`](../tdd-workflow/SKILL.md) - TDDワークフローの原則とパターン

@@ -49,9 +49,6 @@ agent、command、rule、skillファイルで他の設定ファイルを参照�
 ### スキル
 - [`/skill-name`](../skills/skill-name/SKILL.md) - 簡潔な説明
 
-### コマンド
-- [`/command-name`](../commands/command-name.md) - 簡潔な説明
-
 ### ルール
 - [`rule-name`](../rules/rule-name.md) - 簡潔な説明
 
