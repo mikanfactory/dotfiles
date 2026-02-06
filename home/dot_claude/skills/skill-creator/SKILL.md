@@ -351,3 +351,11 @@ scripts/package_skill.py <path/to/skill-folder> ./dist
 2. 苦労や非効率に気づく
 3. SKILL.mdまたはバンドルリソースをどのように更新すべきかを特定
 4. 変更を実装し、再度テスト
+
+---
+
+## 参照
+
+### ドキュメント
+- [`workflows.md`](./references/workflows.md) - 順次・条件付きワークフローパターン
+- [`output-patterns.md`](./references/output-patterns.md) - テンプレートと例のパターン

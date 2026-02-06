@@ -55,3 +55,10 @@ uv run pytest --cov=src --cov-report=term-missing
 - テストされている内容を説明する説明的なテスト名を使用すること
 - 外部依存関係はモックすること
 - エッジケースとエラーパスをテストすること
+
+---
+
+## 参照
+
+### スキル
+- [`/tdd-workflow`](../skills/tdd-workflow/SKILL.md) - TDDワークフローの原則とパターン

@@ -183,3 +183,14 @@ CriticalからLowまでのすべての問題を以下の情報とともにリス
 - すべての問題に具体的なファイル:行の参照を含める
 - 可能な場合は修正のコード例を提供
 - ユーザーには日本語で回答
+
+---
+
+## 参照
+
+### エージェント
+- [`frontend-review-orchestrator`](../../agents/frontend-review-orchestrator.md) - レビューのオーケストレーション
+- [`typescript-pro`](../../agents/typescript-pro.md) - 型安全性とTypeScriptパターン
+- [`react-specialist`](../../agents/react-specialist.md) - Reactパターンと状態管理
+- [`frontend-developer`](../../agents/frontend-developer.md) - アクセシビリティとUXパターン
+- [`security-engineer`](../../agents/security-engineer.md) - XSS防止とセキュリティ

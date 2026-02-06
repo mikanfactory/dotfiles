@@ -292,9 +292,15 @@ find <target_path> -type f \( -name "*.tsx" -o -name "*.ts" -o -name "*.css" -o 
 3. ファイルパスが有効でアクセス可能であることを確認
 4. high/critical課題に工数見積もりが提供されていることを確認
 
-## 他のエージェントとの連携
+---
 
-- review-typescriptスキルからレビューリクエストを受け取る
-- ディスパッチ先: typescript-pro、react-specialist、frontend-developer、security-engineer
-- 必要に応じてcode-reviewerに追加パターンを相談可能
-- 実行可能なインサイトを含む統一レポートをユーザーに配信
+## 参照
+
+### エージェント（ディスパッチ先）
+- [`typescript-pro`](./typescript-pro.md) - TypeScript型安全性レビュー
+- [`react-specialist`](./react-specialist.md) - Reactパターンレビュー
+- [`frontend-developer`](./frontend-developer.md) - アクセシビリティレビュー
+- [`security-engineer`](./security-engineer.md) - フロントエンドセキュリティレビュー
+
+### スキル（呼び出し元）
+- [`/review-typescript`](../skills/review-typescript/SKILL.md) - TypeScriptレビューワークフロー

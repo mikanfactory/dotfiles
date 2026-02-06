@@ -184,3 +184,10 @@ git diff --name-only main...HEAD 2>/dev/null
 - クリティカルな問題を最上部に優先
 - 効率性の提案にはトークン数への影響を含める
 - ユーザーへの回答は日本語で
+
+---
+
+## 参照
+
+### エージェント
+- [`prompt-engineer`](../agents/prompt-engineer.md) - LLMプロンプトの評価と最適化

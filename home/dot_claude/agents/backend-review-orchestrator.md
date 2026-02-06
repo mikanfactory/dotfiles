@@ -272,9 +272,17 @@ find <target_path> -type f \( -name "*.py" -o -name "*.go" -o -name "*.js" -o -n
 3. ファイルパスが有効でアクセス可能であることを確認
 4. high/critical課題に工数見積もりが提供されていることを確認
 
-## 他のエージェントとの統合
+---
 
-- review-pythonおよびreview-goスキルからレビューリクエストを受け取る
-- 割り当て先: python-pro, golang-pro, backend-developer, fullstack-developer, security-engineer
-- 必要に応じて追加パターンについてcode-reviewerに相談
-- 実行可能なインサイトを含む統一レポートをユーザーに提供
+## 参照
+
+### エージェント（ディスパッチ先）
+- [`python-pro`](./python-pro.md) - Python型安全性とパターンレビュー
+- [`golang-pro`](./golang-pro.md) - Goベストプラクティスレビュー
+- [`backend-developer`](./backend-developer.md) - API設計とデータベースレビュー
+- [`fullstack-developer`](./fullstack-developer.md) - スキーマ/API整合性レビュー
+- [`security-engineer`](./security-engineer.md) - セキュリティ脆弱性レビュー
+
+### スキル（呼び出し元）
+- [`/review-python`](../skills/review-python/SKILL.md) - Pythonレビューワークフロー
+- [`/review-go`](../skills/review-go/SKILL.md) - Goレビューワークフロー

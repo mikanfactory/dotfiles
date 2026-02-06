@@ -169,3 +169,14 @@ CriticalからLowまでのすべての問題を以下の情報とともにリス
 - すべての問題に具体的なファイル:行の参照を含める
 - 可能な場合は修正のコード例を提供
 - ユーザーには日本語で回答
+
+---
+
+## 参照
+
+### エージェント
+- [`backend-review-orchestrator`](../../agents/backend-review-orchestrator.md) - レビューのオーケストレーション
+- [`python-pro`](../../agents/python-pro.md) - Python型安全性とパターン
+- [`backend-developer`](../../agents/backend-developer.md) - API設計とデータベース
+- [`security-engineer`](../../agents/security-engineer.md) - 脆弱性と認証
+- [`database-administrator`](../../agents/database-administrator.md) - データベースパフォーマンス
