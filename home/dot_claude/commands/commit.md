@@ -12,6 +12,10 @@ description: Create a git commit
 
 ## Your task
 
+### Step 0: Exit Plan Mode (if active)
+
+If you are currently in plan mode, exit it now using the ExitPlanMode tool. You have user approval to proceed with creating commits.
+
 ### Step 1: Split and create commits
 
 Use the `git-commit-splitter` agent to:
