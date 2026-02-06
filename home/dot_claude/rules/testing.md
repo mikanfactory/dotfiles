@@ -1,37 +1,37 @@
-# Testing Requirements
+# テスト要件
 
-## Core Requirements
+## 基本要件
 
-**Minimum Test Coverage: 80%**
+**最低テストカバレッジ: 80%**
 
-All code changes must include appropriate tests:
+すべてのコード変更には適切なテストを含める必要があります:
 
-1. **Unit Tests** - Individual functions, utilities, modules
-2. **Integration Tests** - API endpoints, database operations, service interactions
+1. **ユニットテスト** - 個々の関数、ユーティリティ、モジュール
+2. **インテグレーションテスト** - APIエンドポイント、データベース操作、サービス間連携
 
-Both test types must be implemented together for comprehensive coverage.
+包括的なカバレッジのために、両方のテストタイプを一緒に実装する必要があります。
 
-## TDD Workflow
+## TDDワークフロー
 
-Follow the Test-Driven Development cycle:
+テスト駆動開発サイクルに従ってください:
 
-1. **RED** - Write test first (it should fail)
-2. **GREEN** - Write minimal implementation to pass
-3. **REFACTOR** - Improve code while keeping tests green
-4. Verify coverage meets 80%+ threshold
+1. **RED** - まずテストを書く（失敗するはず）
+2. **GREEN** - テストをパスするための最小限の実装を書く
+3. **REFACTOR** - テストをグリーンに保ちながらコードを改善する
+4. カバレッジが80%以上の閾値を満たしていることを確認する
 
-## Troubleshooting Failed Tests
+## 失敗したテストのトラブルシューティング
 
-When tests fail:
+テストが失敗した場合:
 
-- Check test isolation (tests should not depend on each other)
-- Validate mock configurations
-- Fix implementation, not tests (unless tests have bugs)
-- Review edge cases and error scenarios
+- テストの独立性を確認する（テストは互いに依存してはいけない）
+- モックの設定を検証する
+- テストではなく実装を修正する（テストにバグがある場合を除く）
+- エッジケースとエラーシナリオを確認する
 
-## Skill Reference
+## スキルリファレンス
 
-For detailed implementation patterns, code examples, and best practices:
+詳細な実装パターン、コード例、ベストプラクティスについては:
 
-- Use `/tdd-workflow` skill when writing new features, fixing bugs, or refactoring
-- The skill provides pytest patterns, mocking examples, and coverage configuration
+- 新機能の開発、バグ修正、リファクタリング時に`/tdd-workflow`スキルを使用してください
+- このスキルはpytestパターン、モッキング例、カバレッジ設定を提供します

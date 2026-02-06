@@ -1,33 +1,33 @@
-# Guidelines
+# ガイドライン
 
-This document defines the project's rules, objectives, and progress management methods. Please proceed with the project according to the following content.
+このドキュメントはプロジェクトのルール、目的、進捗管理方法を定義します。以下の内容に従ってプロジェクトを進めてください。
 
-## Top-Level Rules
+## 基本ルール
 
-- To maximize efficiency, **if you need to execute multiple independent processes, invoke those tools concurrently, not sequentially**.
-- **You must think exclusively in English**. However, you are required to **respond in Japanese**.
-- To understand how to use a library, **always use the Contex7 MCP** to retrieve the latest information.
+- 効率を最大化するため、**複数の独立したプロセスを実行する必要がある場合は、順次ではなく並行してツールを呼び出してください**。
+- **思考は必ず英語で行ってください**。ただし、**回答は日本語で行う必要があります**。
+- ライブラリの使用方法を理解するには、**常にContex7 MCPを使用して**最新情報を取得してください。
 
-## Programming Rules
+## プログラミングルール
 
-- Avoid hard-coding values unless absolutely necessary.
-- Do not use `any` or `unknown` types in TypeScript.
-- You must not use a TypeScript `class` unless it is absolutely necessary (e.g., extending the `Error` class for custom error handling that requires `instanceof` checks).
+- 絶対に必要な場合を除き、値のハードコーディングは避けてください。
+- TypeScriptで`any`や`unknown`型を使用しないでください。
+- `instanceof`チェックが必要なカスタムエラー処理（例：`Error`クラスの拡張）など、絶対に必要な場合を除き、TypeScriptの`class`を使用しないでください。
 
-## Workflow Preferences
+## ワークフローの設定
 
-### Code Review
+### コードレビュー
 
-- When user requests a code review, provide the review findings only
-- Do not automatically proceed to implement fixes unless explicitly asked
-- Wait for explicit instruction like "fix it" or "implement the changes"
+- ユーザーがコードレビューを依頼した場合、レビュー結果のみを提供してください
+- 明示的な指示がない限り、自動的に修正を実装しないでください
+- 「修正して」「変更を実装して」などの明示的な指示を待ってください
 
-### Plan Mode
+### プランモード
 
-- Before exiting plan mode to execute changes, pause and confirm with the user
-- User often wants to review the plan before implementation starts
+- プランモードを終了して変更を実行する前に、一時停止してユーザーに確認してください
+- ユーザーは実装開始前にプランをレビューしたいことが多いです
 
-### Refactoring
+### リファクタリング
 
-- When refactoring code that changes error types or exception classes, always update related tests to expect the new exceptions before running the test suite
-- Identify all test assertions for the old pattern before starting the refactor
+- エラータイプや例外クラスを変更するコードをリファクタリングする場合、テストスイートを実行する前に、関連するテストを新しい例外を期待するように更新してください
+- リファクタリングを開始する前に、古いパターンに対するすべてのテストアサーションを特定してください
