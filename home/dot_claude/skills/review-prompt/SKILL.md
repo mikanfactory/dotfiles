@@ -1,6 +1,8 @@
 ---
-allowed-tools: Read, Glob, Grep, Bash(git diff:*), Bash(git status:*), Bash(git log:*)
+name: review-prompt
 description: LLMプロンプトをレビューして品質・効率・安全性を評価する
+allowed-tools: Read, Glob, Grep, Bash(git diff:*), Bash(git status:*), Bash(git log:*)
+disable-model-invocation: true
 ---
 
 ## コンテキスト
@@ -33,7 +35,7 @@ git diff --name-only main...HEAD 2>/dev/null
 ```
 
 **オプションC: 特定のパスが指定された場合**
-ユーザーがパス引数を指定した場合（例: `/review_prompt prompts/system.md`）、そのパスを使用。
+ユーザーがパス引数を指定した場合（例: `/review-prompt prompts/system.md`）、そのパスを使用。
 
 **オプションD: インラインプロンプトが提供された場合**
 ユーザーが引用符内でプロンプトテキストを直接提供した場合、そのテキストをレビュー。
@@ -157,16 +159,16 @@ git diff --name-only main...HEAD 2>/dev/null
 
 ```bash
 # ステージ済み/未ステージのプロンプトファイルをレビュー（デフォルト）
-/review_prompt
+/review-prompt
 
 # 特定のファイルをレビュー
-/review_prompt prompts/system-prompt.md
+/review-prompt prompts/system-prompt.md
 
 # インラインプロンプトをレビュー
-/review_prompt "You are a helpful assistant..."
+/review-prompt "You are a helpful assistant..."
 
 # ディレクトリをレビュー
-/review_prompt prompts/
+/review-prompt prompts/
 ```
 
 ## 制約
@@ -190,4 +192,4 @@ git diff --name-only main...HEAD 2>/dev/null
 ## 参照
 
 ### エージェント
-- [`prompt-engineer`](../agents/prompt-engineer.md) - LLMプロンプトの評価と最適化
+- [`prompt-engineer`](../../agents/prompt-engineer.md) - LLMプロンプトの評価と最適化
