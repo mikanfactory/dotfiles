@@ -37,6 +37,20 @@ Scripts in `home/.chezmoiscripts/` run automatically during chezmoi init:
 2. `run_once_after_install-packages.sh.tmpl` - Installs packages from Brewfile
 3. `run_once_after_setup-nvim.sh.tmpl` - Sets up Neovim (hybrid theme, dein.vim, python support)
 
+### Claude Code Configuration (`dot_claude/`)
+
+The `dot_claude/` directory contains Claude Code settings and is mapped to `~/.claude/`:
+
+```
+home/dot_claude/
+├── settings.json.tmpl     # Master config (permissions, MCP servers, plugins)
+├── CLAUDE.md              # Project-level guidelines
+├── agents/                # Specialized AI agents
+├── skills/                # Reusable workflow skills
+├── commands/              # Workflow entry point commands
+└── rules/                 # Additional rule files
+```
+
 ## Common Commands
 
 ### Chezmoi Operations
