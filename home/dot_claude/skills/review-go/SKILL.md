@@ -7,6 +7,13 @@ allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(find:
 disable-model-invocation: true
 ---
 
+## Important: Review Only
+
+- Provide findings and recommendations only
+- Do NOT automatically implement fixes
+- Do NOT exit plan mode to execute changes
+- Wait for explicit user instruction before making any changes (e.g., "fix it", "implement the fixes")
+
 ## Context
 
 - Current git status: !`git status --short`
