@@ -1,8 +1,6 @@
 ---
-name: review-go
+name: review-backend-go
 description: 複数の専門エージェントを使用してGoバックエンドコードの包括的なレビューを実行します
-context: fork
-agent: golang-pro
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(find:*), Bash(ls:*), Read, Glob, Grep
 disable-model-invocation: true
 ---

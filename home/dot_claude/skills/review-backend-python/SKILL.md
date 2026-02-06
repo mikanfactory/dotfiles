@@ -1,10 +1,7 @@
 ---
-name: review-python
+name: review-backend-python
 description: 複数の専門エージェントを使用してPythonバックエンドコードの包括的なレビューを実行します
-context: fork
-agent: python-pro
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(find:*), Bash(ls:*), Read, Glob, Grep
-disable-model-invocation: true
 ---
 
 ## 重要: レビューのみ
