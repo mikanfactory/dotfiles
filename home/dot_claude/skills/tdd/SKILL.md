@@ -2,7 +2,6 @@
 name: tdd
 description: プランモードを終了してTDDワークフローで実装を進める
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
-disable-model-invocation: true
 ---
 
 ## コンテキスト

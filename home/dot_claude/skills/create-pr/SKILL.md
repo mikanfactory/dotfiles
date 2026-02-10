@@ -2,7 +2,6 @@
 name: create-pr
 description: 日本語の説明文でプルリクエストを作成する
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(git push:*), Bash(git remote:*), Bash(gh pr:*), Bash(ls:*), Read, Glob
-disable-model-invocation: true
 ---
 
 ## コンテキスト

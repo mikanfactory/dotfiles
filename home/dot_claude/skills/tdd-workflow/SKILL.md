@@ -2,7 +2,7 @@
 name: tdd-workflow
 description: 新機能の作成、バグ修正、またはPythonコードのリファクタリング時にこのスキルを使用します。ユニット、統合、E2Eテストを含む80%以上のカバレッジでテスト駆動開発を強制します。
 allowed-tools: Bash, Read, Write, Edit
-model: sonnet
+model: Orpus
 ---
 
 # テスト駆動開発ワークフロー

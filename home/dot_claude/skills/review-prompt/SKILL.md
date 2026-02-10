@@ -2,7 +2,6 @@
 name: review-prompt
 description: LLMプロンプトをレビューして品質・効率・安全性を評価する
 allowed-tools: Read, Glob, Grep, Bash(git diff:*), Bash(git status:*), Bash(git log:*)
-disable-model-invocation: true
 ---
 
 ## コンテキスト
