@@ -14,6 +14,6 @@ bindings = [
 [general]
 # theme
 import = [
-    "~/.config/alacritty/themes/themes/alacritty_0_12.toml"
+    "~/.config/alacritty/themes/themes/one_dark.toml"
 ]
 
