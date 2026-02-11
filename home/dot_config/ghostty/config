@@ -48,5 +48,9 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 # font-family = 'FiraCode Nerd Font'
+font-family = FiraCode Nerd Font
+font-style = Regular
+font-style-bold = Bold
+font-style-italic = Italic
 font-size = 20
 theme = One Half Dark

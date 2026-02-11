@@ -53,6 +53,7 @@ brew "mise"
 # - tfenv (replaced by mise terraform)
 
 cask "alacritty"
+cask "ghostty"
 cask "font-hack-nerd-font"
 cask "font-roboto-mono-nerd-font"
 cask "monitorcontrol"
