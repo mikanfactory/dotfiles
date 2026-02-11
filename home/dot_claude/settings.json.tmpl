@@ -20,32 +20,12 @@
     ]
   },
   "model": "opus",
-  "enabledMcpjsonServers": [
-    "context7"
-  ],
+  "enabledMcpjsonServers": [],
   "enabledPlugins": {
-    "claude-mem@thedotmack": true,
     "pyright-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
   },
-  "mcpServers": {
-    "context7": {
-      "type": "http",
-      "url": "https://mcp.context7.com/mcp",
-      "headers": {
-        "CONTEXT7_API_KEY": "{{ (bitwardenFields "item" "claude-code-mcp-tokens").context7.value }}"
-      }
-    },
-    "mlflow-mcp": {
-      "command": "uv",
-      "args": ["run", "--with", "mlflow[mcp]>=3.5.1", "mlflow", "mcp", "run"],
-      "env": {
-        "MLFLOW_TRACKING_URI": "{{ (bitwardenFields "item" "claude-code-mcp-tokens").mlflow_tracking_uri.value }}",
-        "DATABRICKS_HOST": "{{ (bitwardenFields "item" "claude-code-mcp-tokens").databricks_host.value }}",
-        "DATABRICKS_TOKEN": "{{ (bitwardenFields "item" "claude-code-mcp-tokens").databricks_token.value }}"
-      }
-    }
-  },
+  "mcpServers": {},
   "hooks": {
     "Notification": [
       {
