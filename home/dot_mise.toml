@@ -4,6 +4,7 @@ node = "lts"
 terraform = "latest"
 uv = "latest"
 bun = "latest"
+ripgrep = "latest"
 
 [settings]
 experimental = true
