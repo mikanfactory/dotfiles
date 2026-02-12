@@ -5,6 +5,7 @@ terraform = "latest"
 uv = "latest"
 bun = "latest"
 ripgrep = "latest"
+tmux = "latest"
 
 [settings]
 experimental = true
