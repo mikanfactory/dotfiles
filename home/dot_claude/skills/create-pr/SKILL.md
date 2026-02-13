@@ -10,6 +10,7 @@ allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git b
 - デフォルトブランチ: !`git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}' || echo "main"`
 - このブランチの最近のコミット: !`git log --oneline -10`
 - リポジトリルート: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
+- デフォルトブランチとこのブランチの差分: !`git diff origin/main...HEAD --stat`
 
 ## タスク
 
