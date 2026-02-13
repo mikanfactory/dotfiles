@@ -16,9 +16,11 @@
       "Bash(git push origin main)"
     ],
     "ask": [
-      "Bash(rm:*)",
+      "Bash(rm *)",
       "Bash(git commit --amend)",
-      "Bash(git rebase)"
+      "Bash(git commit --amend *)",
+      "Bash(git rebase)",
+      "Bash(git rebase *)"
     ]
   },
   "model": "opus",
