@@ -5,3 +5,4 @@ macos/
 .idea/
 .DS_Store
 Brewfile
+.claude/settings.base.json

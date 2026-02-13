@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""chezmoi modify_ script for ~/.claude/settings.json
+
+ベース設定とローカルオーバーライドをディープマージする。
+- ベース設定: $CHEZMOI_SOURCE_DIR/dot_claude/settings.base.json
+- ローカル設定: ~/.claude/settings.local.json (任意)
+
+マージ動作:
+  - オブジェクト: 再帰的にマージ (ローカルのキーが優先)
+  - 配列: 結合 + 重複排除 (順序保持)
+  - スカラー: ローカルの値で上書き
+"""
+
+import json
+import os
+import sys
+
+
+def deep_merge(base, override):
+    """2つの値を再帰的にディープマージする。"""
+    if isinstance(base, dict) and isinstance(override, dict):
+        merged = dict(base)
+        for key, value in override.items():
+            if key in merged:
+                merged[key] = deep_merge(merged[key], value)
+            else:
+                merged[key] = value
+        return merged
+
+    if isinstance(base, list) and isinstance(override, list):
+        seen = []
+        for item in base + override:
+            if item not in seen:
+                seen.append(item)
+        return seen
+
+    return override
+
+
+def main():
+    # stdin (現在のファイル内容) を破棄
+    sys.stdin.read()
+
+    source_dir = os.environ.get("CHEZMOI_SOURCE_DIR", "")
+    base_path = os.path.join(source_dir, "dot_claude", "settings.base.json")
+    local_path = os.path.join(os.path.expanduser("~"), ".claude", "settings.local.json")
+
+    with open(base_path) as f:
+        base = json.load(f)
+
+    if os.path.isfile(local_path):
+        with open(local_path) as f:
+            local = json.load(f)
+        result = deep_merge(base, local)
+    else:
+        result = base
+
+    json.dump(result, sys.stdout, indent=2, ensure_ascii=False)
+    sys.stdout.write("\n")
+
+
+if __name__ == "__main__":
+    main()
