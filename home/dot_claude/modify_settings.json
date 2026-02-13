@@ -12,8 +12,9 @@
 """
 
 import json
-import os
 import sys
+from os import environ
+from pathlib import Path
 
 
 def deep_merge(base, override):
@@ -41,14 +42,14 @@ def main():
     # stdin (現在のファイル内容) を破棄
     sys.stdin.read()
 
-    source_dir = os.environ.get("CHEZMOI_SOURCE_DIR", "")
-    base_path = os.path.join(source_dir, "dot_claude", "settings.base.json")
-    local_path = os.path.join(os.path.expanduser("~"), ".claude", "settings.local.json")
+    source_dir = environ.get("CHEZMOI_SOURCE_DIR", "")
+    base_path = Path(source_dir) / "dot_claude" / "settings.base.json"
+    local_path = Path.home() / ".claude" / "settings.local.json"
 
     with open(base_path) as f:
         base = json.load(f)
 
-    if os.path.isfile(local_path):
+    if local_path.is_file():
         with open(local_path) as f:
             local = json.load(f)
         result = deep_merge(base, local)
