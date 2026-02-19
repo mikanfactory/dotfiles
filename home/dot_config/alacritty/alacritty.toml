@@ -5,11 +5,11 @@ italic = {family = 'FiraCode Nerd Font', style = "Italic"}
 size = 20
 
 [keyboard]
-# bindings = [
-#   {action = "ToggleViMode", key = "X", mods = "Control" },
-#   {action = "ToggleViMode", key = "Escape", mode = "Vi" },
-#   {action = "ToggleViMode", key = "[", mods = "Control", mode = "Vi" },
-# ]
+bindings = [
+  {action = "ToggleViMode", key = "X", mods = "Control" },
+  {action = "ToggleViMode", key = "Escape", mode = "Vi" },
+  {action = "ToggleViMode", key = "[", mods = "Control", mode = "Vi" },
+]
 
 [general]
 # theme
