@@ -43,8 +43,8 @@ allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git b
 
 変更に関する包括的な情報を収集します:
 
-1. ベースブランチに対するdiffサマリーを取得
-2. このブランチのすべてのコミットメッセージを取得
+1. `git diff origin/main...HEAD --stat` でdiffサマリーを取得（**`git diff main` は絶対に使用しない**）
+2. `git log origin/main..HEAD --oneline` でこのブランチのコミットメッセージを取得
 3. 変更の種類を特定（機能追加、バグ修正、リファクタリングなど）
 
 ### ステップ4: PRタイトルと説明文の生成
@@ -122,6 +122,10 @@ PR作成完了後、常に`/clear`を実行してセッションをクリアし�
 
 ## 制約
 
+- **ブランチ比較は常に `origin/main` を使用すること**（`main` や `local main` ではなく）
+  - diff: `git diff origin/main...HEAD`
+  - log: `git log origin/main..HEAD`
+  - ローカルの `main` ブランチはリモートと同期されていない可能性があるため、必ず `origin/main` を使う
 - **PRタイトルと説明文の内容は日本語で記述すること**
   - ただし、テンプレートの見出し（`## Description` など）は英語のまま保持する
   - 日本語化するのはセクションの本文のみ
