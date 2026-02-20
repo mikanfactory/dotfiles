@@ -8,7 +8,9 @@
       "MultiEdit",
       "WebSearch",
       "WebFetch",
-      "Search(*)"
+      "Search(*)",
+      "mcp__mlflow-mcp*",
+      "mcp__plugin_sentry_sentry*"
     ],
     "deny": [
       "Read(.env)",
