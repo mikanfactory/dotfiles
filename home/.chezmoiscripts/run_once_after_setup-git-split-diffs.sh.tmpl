@@ -1,0 +1,15 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "darwin" -}}
+echo "Installing git-split-diffs..."
+
+if command -v mise &> /dev/null; then
+    eval "$(mise activate bash)"
+fi
+
+if command -v npm &> /dev/null; then
+    npm install -g git-split-diffs
+    echo "git-split-diffs installed successfully."
+else
+    echo "Warning: npm not found, skipping git-split-diffs installation"
+fi
+{{ end -}}

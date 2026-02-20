@@ -20,6 +20,9 @@
   d = diff
   dc = diff --cached
   gr = log --oneline --decorate --graph --all
+  nd = -c core.pager='less -RFX' diff
+  ndc = -c core.pager='less -RFX' diff --cached
+  nlog = -c core.pager='less -RFX' log --oneline --decorate --graph --all
 [filter "lfs"]
   clean = git-lfs clean %f
   smudge = git-lfs smudge %f
@@ -28,7 +31,12 @@
   ff = only
 [core]
   excludesfile = ~/.gitignore_global
+  pager = git-split-diffs --color | less -RFX
+[split-diffs]
+  min-line-width = 40
+  theme-name = github-dark-dim
 [ghq]
   root = ~/.go/src
 [includeIf "gitdir:~/code_ivry/"]
   path = ~/.gitconfig_ivry
+
