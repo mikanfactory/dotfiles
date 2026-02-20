@@ -26,7 +26,8 @@
   "enabledMcpjsonServers": [],
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "sentry@claude-plugins-official": true
   },
   "mcpServers": {},
   "hooks": {
