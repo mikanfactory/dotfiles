@@ -46,6 +46,11 @@
         "hooks": [
           {
             "type": "command",
+            "command": "bash ~/.claude/hooks/post-edit-lint.sh",
+            "timeout": 120
+          },
+          {
+            "type": "command",
             "command": "osascript -e 'display notification \"Invoke Stop event.\" with title \"Claude Code\" sound name \"Glass\"'"
           }
         ]
