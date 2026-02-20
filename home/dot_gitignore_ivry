@@ -8,4 +8,5 @@ env
 .pytest_cache/
 .vscode
 .idea
+.mcp.json
 .claude/settings.local.json
