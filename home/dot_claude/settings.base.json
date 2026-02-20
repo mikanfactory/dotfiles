@@ -1,5 +1,6 @@
 {
   "permissions": {
+    "defaultMode": "plan",
     "allow": [
       "Bash",
       "Read",
@@ -12,11 +13,7 @@
       "mcp__mlflow-mcp*",
       "mcp__plugin_sentry_sentry*"
     ],
-    "deny": [
-      "Read(.env)",
-      "Bash(terraform:*)",
-      "Bash(git push origin main)"
-    ],
+    "deny": ["Read(.env)", "Bash(terraform:*)", "Bash(git push origin main)"],
     "ask": [
       "Bash(rm *)",
       "Bash(git commit --amend)",
