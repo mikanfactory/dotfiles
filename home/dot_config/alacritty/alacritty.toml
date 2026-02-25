@@ -6,9 +6,10 @@ size = 20
 
 [keyboard]
 bindings = [
-  {action = "ToggleViMode", key = "X", mods = "Control" },
-  {action = "ToggleViMode", key = "Escape", mode = "Vi" },
-  {action = "ToggleViMode", key = "[", mods = "Control", mode = "Vi" },
+  # yakumo
+  {chars = "\u0002w", key = "G", mods = "Command" },
+  {chars = "\u0018c", key = "C", mods = "Command|Shift" },
+  {chars = "\u0018b", key = "B", mods = "Command|Shift" },
 ]
 
 [general]
