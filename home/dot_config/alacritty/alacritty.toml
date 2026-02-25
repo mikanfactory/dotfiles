@@ -7,7 +7,7 @@ size = 20
 [keyboard]
 bindings = [
   # yakumo
-  {chars = "\u0002w", key = "G", mods = "Command" },
+  {chars = "\u0013w", key = "G", mods = "Command" },
   {chars = "\u0018c", key = "C", mods = "Command|Shift" },
   {chars = "\u0018b", key = "B", mods = "Command|Shift" },
 ]
