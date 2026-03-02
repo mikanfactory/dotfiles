@@ -27,9 +27,28 @@
       "skillFolderHash": "7c50bf619d9332176007f593d99046d3c1fbebe2",
       "installedAt": "2026-01-29T05:19:05.261Z",
       "updatedAt": "2026-01-29T05:46:44.890Z"
+    },
+    "marimo-notebook": {
+      "source": "marimo-team/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/marimo-team/skills.git",
+      "skillPath": "skills/marimo-notebook/SKILL.md",
+      "skillFolderHash": "e57b6ee104636b02515cbeaaa5a74bd1fa369cfa",
+      "installedAt": "2026-03-02T06:12:48.494Z",
+      "updatedAt": "2026-03-02T06:12:48.494Z"
     }
   },
   "dismissed": {
     "findSkillsPrompt": true
-  }
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "cline",
+    "codex",
+    "cursor",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-cli",
+    "opencode"
+  ]
 }
