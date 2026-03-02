@@ -78,6 +78,12 @@ brew bundle list --file=~/dotfiles/home/Brewfile
 
 # 依存関係を含めてインストール
 brew bundle install --file=~/dotfiles/home/Brewfile
+
+# スキル（npx skills）のロックファイルを更新し、chezmoiソースに同期
+mise run skill-lock
+
+# スキルをインストールしてClaude Codeにリンク（-a claude-code が必要）
+npx skills add <owner/repo> -g -s <skill-name> -a claude-code -y
 ```
 
 ## リソース
