@@ -2,6 +2,7 @@
 name: commit
 description: gitコミットを作成する
 allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git diff:*), Skill
+model: Sonnet
 ---
 
 ## コンテキスト

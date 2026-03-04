@@ -2,6 +2,7 @@
 name: commit-and-pr
 description: 変更をコミットしてプルリクエストを作成する
 allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git diff:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(git push:*), Bash(git remote:*), Bash(gh pr:*), Bash(ls:*), Read, Glob, Skill
+model: Sonnet
 ---
 
 ## コンテキスト
