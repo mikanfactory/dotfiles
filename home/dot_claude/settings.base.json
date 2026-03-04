@@ -10,6 +10,7 @@
       "WebSearch",
       "WebFetch",
       "Search(*)",
+      "mcp__pencil",
       "mcp__mlflow-mcp*",
       "mcp__plugin_sentry_sentry*"
     ],
