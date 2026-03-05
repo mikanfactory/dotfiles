@@ -15,12 +15,13 @@
       "mcp__plugin_sentry_sentry*"
     ],
     "deny": [
-      "Read(.env)",
+      "Read(.env*)",
       "Read(.mcp.json)",
       "Bash(terraform:*)",
       "Bash(git push origin main)",
       "Bash(printenv)",
-      "Search(pattern: \".mcp*.json\")"
+      "Search(pattern: \".mcp*.json\")",
+      "Search(pattern: \".env*\")"
     ],
     "ask": [
       "Bash(rm *)",
