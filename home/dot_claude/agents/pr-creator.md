@@ -9,7 +9,7 @@ model: sonnet
 ## ワークフロー
 
 1. **前提条件確認**: 現在のブランチがデフォルトブランチでないこと、PRを作成するコミットが存在することを確認
-2. **テンプレート検索**: 以下の順序でPRテンプレートを検索
+2. **テンプレート検索**: 呼び出し元からPRテンプレートが提供されている場合はそれを使用する。提供されていない場合は以下の順序で検索
    - `.github/PULL_REQUEST_TEMPLATE.md`
    - `.github/pull_request_template.md`
    - `.github/PULL_REQUEST_TEMPLATE/default.md`
