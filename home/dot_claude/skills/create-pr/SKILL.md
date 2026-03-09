@@ -12,6 +12,7 @@ model: Sonnet
 - このブランチの最近のコミット: !`git log --oneline -10`
 - リポジトリルート: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
 - デフォルトブランチとこのブランチの差分: !`git diff origin/main...HEAD --stat`
+- PRテンプレート: !`cat $(git rev-parse --show-toplevel)/.github/pull_request_template.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/.github/PULL_REQUEST_TEMPLATE.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/.github/PULL_REQUEST_TEMPLATE/default.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/docs/PULL_REQUEST_TEMPLATE.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/PULL_REQUEST_TEMPLATE.md 2>/dev/null || echo "テンプレートなし"`
 
 ## タスク
 
@@ -21,10 +22,11 @@ model: Sonnet
 
 ### ステップ1: PRを作成
 
-`pr-creator`エージェントを使用して以下を実行します:
+`pr-creator`エージェントを使用して以下を実行します。
+**上記コンテキストのPRテンプレートの内容をエージェントのプロンプトに含めてください。**
 
 1. 前提条件を確認する（ブランチ、コミットの存在）
-2. PRテンプレートを検索し、テンプレートに従って説明文を生成する
+2. 上記コンテキストに含まれるPRテンプレートを使用して説明文を生成する
 3. 変更内容を分析し、日本語でPRタイトルと説明文を作成する
 4. `gh pr create`でPRを作成し、結果を報告する
 
