@@ -7,6 +7,8 @@ bun = "latest"
 ripgrep = "latest"
 tmux = "latest"
 go = "latest"
+rust = "latest"
+psqldef = "latest"
 
 [settings]
 experimental = true
