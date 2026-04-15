@@ -16,11 +16,9 @@
     ],
     "deny": [
       "Read(.env*)",
-      "Read(.mcp.json)",
       "Bash(terraform:*)",
       "Bash(git push origin main)",
       "Bash(printenv)",
-      "Search(pattern: \".mcp*.json\")",
       "Search(pattern: \".env*\")"
     ],
     "ask": [
