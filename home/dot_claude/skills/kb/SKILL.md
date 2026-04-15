@@ -1,7 +1,7 @@
 ---
 name: kb
 description: |
-  Karpathy式LLMナレッジベース管理スキル。~/code/knowledge_base に構造化Markdown wikiを構築・維持する。
+  Karpathy式LLMナレッジベース管理スキル。~/code/knowledge_base/obsidian に構造化Markdown wikiを構築・維持する。
   3操作を提供: ingest（URL/ファイルからの知識取り込み）、query（wikiへの質問応答）、lint（整合性チェック）。
   「/kb ingest <URL or path>」「/kb query <質問>」「/kb lint」で起動。
   ナレッジベースへの追加・検索・メンテナンスを依頼された場合にもトリガー。
@@ -12,13 +12,13 @@ allowed-tools: WebFetch, Read, Write, Edit, Glob, Grep
 
 LLMが生のドキュメントを読み込み、構造化されたMarkdown wikiに「コンパイル」するナレッジベースを管理する。
 
-**ベースディレクトリ**: `~/code/knowledge_base`
+**ベースディレクトリ**: `~/code/knowledge_base/obsidian`
 
 ## 初期化
 
 操作実行前に、ナレッジベースのディレクトリ構造を確認する。
 
-1. `~/code/knowledge_base` が存在しない場合、以下を作成:
+1. `~/code/knowledge_base/obsidian` が存在しない場合、以下を作成:
    - `sources/web/`、`sources/local/` ディレクトリ
    - `wiki/topics/`、`wiki/topics/queries/` ディレクトリ
    - `CLAUDE.md` — [wiki-schema.md](./references/wiki-schema.md) のテンプレート部分（コードブロック内）をコピー

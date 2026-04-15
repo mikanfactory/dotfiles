@@ -1,6 +1,6 @@
 # ナレッジベース CLAUDE.md テンプレート
 
-初期化時にこの内容を `~/code/knowledge_base/CLAUDE.md` として生成する。
+初期化時にこの内容を `~/code/knowledge_base/obsidian/CLAUDE.md` として生成する。
 
 ---
 
@@ -20,7 +20,7 @@ Karpathy式LLMナレッジベース。生のドキュメントをLLMが読み込
 ## ディレクトリ構造
 
 ```
-knowledge_base/
+obsidian/                            # ~/code/knowledge_base/obsidian
 ├── CLAUDE.md
 ├── sources/
 │   ├── web/                     # WebFetchで取得した記事
