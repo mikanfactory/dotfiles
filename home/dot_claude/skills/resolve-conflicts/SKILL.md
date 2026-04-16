@@ -12,10 +12,6 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git b
 
 ## タスク
 
-### ステップ0: プランモードの終了（アクティブな場合）
-
-現在プランモードにいる場合は、ExitPlanModeツールを使用して今すぐ終了してください。コンフリクト解決の続行についてユーザーの承認を得ています。
-
 ### ステップ1: コンフリクトを解決
 
 `conflict-resolver`エージェントを使用して以下を実行します:
