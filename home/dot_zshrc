@@ -36,6 +36,9 @@ source "$ZRCDIR/peco.sh"
 # export custom environment
 source "$ZRCDIR/local_env.sh"
 
+# claude code helpers
+source "$ZRCDIR/genc.sh"
+
 # auto suggestion
 # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
