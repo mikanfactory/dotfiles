@@ -1,8 +1,8 @@
 ---
 name: refine-loop
 description: |
-  プラン承認後に「TDD実装 → /simplify整理 → コミット&PR作成 → Greptileレビュー待ち
-  → 推奨指摘の自動修正 → push」を1パスで自動実行するスキル。
+  プラン承認後に「ブランチrename → TDD実装 → /simplify整理 → コミット&PR作成
+  → Greptileレビュー待ち → 推奨指摘の自動修正 → push」を1パスで自動実行するスキル。
   プランモードを終了して一連のリファインフローを回す。
   「/refine-loop」で起動。プランが承認済みで自動で最後まで通したい場合にトリガー。
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
@@ -34,6 +34,13 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 上記コンテキストを確認:
 
 - `gh認証状態` が未認証、または `リポジトリ情報` が「不明」、または `origin` リモートが無い場合 → 理由を報告して**中断**（ステップ3以降が実行できないため）。
+
+### ステップ0.7: ブランチ rename
+
+`Skill`ツールで `rename-branch` を呼び出し、承認済みプランの要約から意味のあるブランチ名へ自動rename します（PRが最初から内容を表すブランチ名で作成されるようにするため）。
+
+- 「rename不要」と報告された場合 → そのままステップ1へ続行
+- 中断（保護ブランチ／衝突／プラン未検出）の場合 → refine-loop全体を**中断**（誤ブランチでのPR作成を防ぐため）
 
 ### ステップ1: TDDでコード生成
 
@@ -166,6 +173,7 @@ gh api repos/{owner}/{repo}/pulls/{pr}/reviews/{review_id}/comments --paginate \
 - [`pr-creator`](../../agents/pr-creator.md) - PRの作成と説明文の生成
 
 ### スキル
+- [`/rename-branch`](../rename-branch/SKILL.md) - プラン要約からブランチ名を生成しrename（ステップ0.7で呼び出し）
 - `/simplify` - 変更コードのリファクタリング（ビルトイン、`Skill`ツールで起動・自動修正）
 - [`/tdd-workflow`](../tdd-workflow/SKILL.md) - TDDワークフローの原則とパターン
 - [`/review-greptile`](../review-greptile/SKILL.md) - Greptileコメント取得・分類ロジックの流用元
