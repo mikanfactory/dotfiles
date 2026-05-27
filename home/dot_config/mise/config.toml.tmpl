@@ -17,6 +17,8 @@ lsd = "latest"
 starship = "latest"
 peco = "latest"
 direnv = "latest"
+"npm:difit" = "latest"
+"npm:git-split-diffs" = "latest"
 chezmoi = "latest"
 
 {{- if eq .machineId "mac-mini" }}
@@ -32,6 +34,7 @@ VISUAL = "vim"
 LC_ALL = "en_US.UTF-8"
 LC_TYPE = "en_US.UTF-8"
 LANG = "en_US.UTF-8"
+GOBIN = "{{ "{{" }} env.HOME {{ "}}" }}/.local/bin"
 
 {{- if eq .machineId "mac-mini" }}
 PNPM_HOME = "/Users/shoji/Library/pnpm"

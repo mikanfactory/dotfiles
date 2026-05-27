@@ -1,0 +1,11 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "darwin" -}}
+if command -v mise &> /dev/null; then
+    echo "Installing mise tools..."
+    eval "$(mise activate bash)"
+    mise install
+    echo "mise tools installed successfully."
+else
+    echo "Warning: mise not found, skipping mise tools installation"
+fi
+{{ end -}}

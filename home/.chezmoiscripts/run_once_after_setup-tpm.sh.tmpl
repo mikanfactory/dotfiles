@@ -1,0 +1,13 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "darwin" -}}
+TPM_DIR="${HOME}/.config/tmux/plugins/tpm"
+
+if [ ! -d "$TPM_DIR" ]; then
+    echo "Installing tpm (Tmux Plugin Manager)..."
+    git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+    echo "tpm installed successfully."
+    echo "Run 'prefix + I' in tmux to install plugins."
+else
+    echo "tpm is already installed."
+fi
+{{ end -}}
