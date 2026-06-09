@@ -11,8 +11,8 @@
       "WebFetch",
       "Search(*)",
       "mcp__pencil",
-      "mcp__mlflow-mcp*",
-      "mcp__plugin_sentry_sentry*"
+      "mcp__mlflow-mcp__*",
+      "mcp__plugin_sentry_sentry__*"
     ],
     "deny": [
       "Read(.env*)",
@@ -61,7 +61,6 @@
     ]
   },
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "NIPPO_REPORTS_DIR": "reports"
   }
 }
