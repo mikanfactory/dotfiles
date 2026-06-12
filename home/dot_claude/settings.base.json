@@ -9,7 +9,6 @@
       "MultiEdit",
       "WebSearch",
       "WebFetch",
-      "Search(*)",
       "mcp__pencil",
       "mcp__mlflow-mcp__*",
       "mcp__plugin_sentry_sentry__*"
@@ -18,8 +17,7 @@
       "Read(.env*)",
       "Bash(terraform:*)",
       "Bash(git push origin main)",
-      "Bash(printenv)",
-      "Search(pattern: \".env*\")"
+      "Bash(printenv)"
     ],
     "ask": [
       "Bash(rm *)",
