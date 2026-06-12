@@ -125,7 +125,7 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews/{review_id}/comments --pag
 | 1 | `src/api/users.py:42` | Noneチェックを追加 |
 | 3 | `src/db/queries.py:67` | パラメータバインディングに変更 |
 
-修正が完了しました。`/commit` でコミットできます。
+修正が完了しました。`/commit-fast` でコミットできます。
 ```
 
 ## 制約
@@ -150,4 +150,4 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews/{review_id}/comments --pag
 ## 参照
 
 ### スキル
-- [`/commit`](../commit/SKILL.md) - 修正後のコミット作成
+- [`/commit-fast`](../commit-fast/SKILL.md) - 修正後のコミット作成

@@ -18,7 +18,7 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git b
 
 1. コンフリクトを分析し、各ファイルの解決方針を提示する
 2. ユーザーの承認後、コンフリクトを解決してステージングする
-3. **コミットは実行しない** - ユーザーが `/commit` で実行する
+3. **コミットは実行しない** - ユーザーが `/commit-fast` で実行する
 
 ## 制約
 
@@ -34,4 +34,4 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git b
 - [`conflict-resolver`](../../agents/conflict-resolver.md) - コンフリクトの分析と解決
 
 ### スキル
-- [`/commit`](../commit/SKILL.md) - コンフリクト解決後のコミット作成
+- [`/commit-fast`](../commit-fast/SKILL.md) - コンフリクト解決後のコミット作成
