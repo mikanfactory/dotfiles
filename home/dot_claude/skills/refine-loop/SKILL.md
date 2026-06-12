@@ -23,7 +23,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 
 ## タスク
 
-承認済みプランの実装から push までを **1パス** で自動実行します。`/commit-and-pr` `/commit` はサブスキル呼び出しせず、その手順を**インライン化**します
+承認済みプランの実装から push までを **1パス** で自動実行します。コミット作成・PR作成はサブスキル呼び出しせず、その手順を**インライン化**します
 
 ### ステップ0: プランモードの終了
 
@@ -63,9 +63,11 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 
 ### ステップ3: コミット & PR作成（インライン）
 
-`/commit-and-pr` の手順を、**末尾の「完了（ここで停止）」ステップは行わず**に再現します（PR作成後もステップ4へ続行する）。
+コミット作成からPR作成までを以下の手順で実行します（PR作成を「完了」扱いにせず、ステップ4へ続行する）。
 
-1. `git-commit-splitter`エージェントを `Task` で起動し、すべての変更（フォーマッタ変更含む）を論理的でアトミックなコミットに分割して作成する。
+1. `/commit-fast` の手順をインラインで実行し、すべての変更（フォーマッタ変更含む）を分割コミットする:
+   - `git status` と `git diff HEAD --stat` を見て、変更を論理グループ（feat/fix/refactor/docs/test/chore）に分類する。ファイル名・パス・変更行数で判断が付くものはdiffを読まずに分類し、内容を見ないと分類できないファイルに限り `git diff HEAD -- <file>` で確認する
+   - **ユーザー確認は挟まず**、各論理グループを `git add <files...>` → `git commit -m "<type>: <summary>"` で順次コミットする（メッセージは英語・命令形・50文字以内推奨、依存関係のあるコミットは正しい順序で）
 2. `pr-creator`エージェントを `Task` で起動する。**上記コンテキストの「PRテンプレート」の内容をエージェントのプロンプトに含める**。前提条件（ブランチ・コミットの存在）を確認し、PRテンプレートを使って日本語のタイトルと説明文を生成し、`gh pr create` でPRを作成させる。push はこの時点で完了する。
 3. PR番号とURLを捕捉して保持する:
    ```bash
@@ -140,7 +142,7 @@ gh api repos/{owner}/{repo}/pulls/{pr}/reviews/{review_id}/comments --paginate \
 
 ### ステップ6: 追加コミット & push
 
-1. `git-commit-splitter`エージェントを `Task` で起動し、ステップ5の修正を論理的でアトミックなコミットに分割して作成する。
+1. ステップ5の修正を、ステップ3と同じ `/commit-fast` のインライン手順で論理的でアトミックなコミットに分割して作成する。
 2. push する:
    ```bash
    git push
@@ -169,10 +171,10 @@ gh api repos/{owner}/{repo}/pulls/{pr}/reviews/{review_id}/comments --paginate \
 ## 参照
 
 ### エージェント
-- [`git-commit-splitter`](../../agents/git-commit-splitter.md) - 変更を論理的なコミットに分割
 - [`pr-creator`](../../agents/pr-creator.md) - PRの作成と説明文の生成
 
 ### スキル
+- [`/commit-fast`](../commit-fast/SKILL.md) - 分割コミット手順のインライン化元（ステップ3・6）
 - [`/rename-branch`](../rename-branch/SKILL.md) - プラン要約からブランチ名を生成しrename（ステップ0.7で呼び出し）
 - `/simplify` - 変更コードのリファクタリング（ビルトイン、`Skill`ツールで起動・自動修正）
 - [`/tdd-workflow`](../tdd-workflow/SKILL.md) - TDDワークフローの原則とパターン
