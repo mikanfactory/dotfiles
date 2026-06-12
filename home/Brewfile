@@ -1,6 +1,4 @@
 tap "databricks/tap"
-tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
 tap "supabase/tap"
 
 # System libraries (keep in Homebrew)
@@ -26,15 +24,11 @@ brew "curl"
 brew "git"
 brew "navi"
 brew "pnpm"
-brew "poppler"
 brew "postgresql@14"
 brew "starship"
 brew "tig"
 brew "databricks/tap/databricks"
 brew "supabase/tap/supabase"
-
-# Services
-brew "postgresql@14"
 
 # mise (bootstrap - manages other dev tools)
 brew "mise"
