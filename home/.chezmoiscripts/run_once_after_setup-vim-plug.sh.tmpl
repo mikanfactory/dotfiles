@@ -13,7 +13,8 @@ if [ ! -f "$PLUG_FILE" ]; then
 fi
 
 # Install plugins
+# Run vim under a pseudo-tty so headless (non-interactive) PlugInstall works.
 echo "Installing Vim plugins..."
-vim +'PlugInstall --sync' +qa
+script -q /dev/null vim +'PlugInstall --sync' +qa
 
 {{ end }}

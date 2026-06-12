@@ -11,7 +11,7 @@ call plug#end()
 " Colorscheme
 " =============================================================================
 set termguicolors
-colorscheme catppuccin_mocha
+silent! colorscheme catppuccin_mocha
 
 syntax enable
 
