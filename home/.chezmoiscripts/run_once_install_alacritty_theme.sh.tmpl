@@ -2,8 +2,8 @@
 
 {{ if eq .chezmoi.os "darwin" }}
 
-mkdir -p ~/.config/alacritty/themes
-git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
-brew bundle --file="$HOME/.Brewfile"
+if [ ! -d ~/.config/alacritty/themes/.git ]; then
+    git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
+fi
 
 {{ end }}
