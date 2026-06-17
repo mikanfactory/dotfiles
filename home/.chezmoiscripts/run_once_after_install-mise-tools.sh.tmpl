@@ -3,6 +3,10 @@
 if command -v mise &> /dev/null; then
     echo "Installing mise tools..."
     eval "$(mise activate bash)"
+    # Trust config files; mise silently ignores untrusted configs,
+    # which would skip all tool installs (e.g. go) on a fresh machine.
+    [ -f "$HOME/.config/mise/config.toml" ] && mise trust "$HOME/.config/mise/config.toml"
+    [ -f "$HOME/.mise.toml" ] && mise trust "$HOME/.mise.toml"
     mise install
     echo "mise tools installed successfully."
 else
