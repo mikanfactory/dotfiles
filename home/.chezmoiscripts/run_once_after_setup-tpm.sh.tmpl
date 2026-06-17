@@ -6,8 +6,11 @@ if [ ! -d "$TPM_DIR" ]; then
     echo "Installing tpm (Tmux Plugin Manager)..."
     git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
     echo "tpm installed successfully."
-    echo "Run 'prefix + I' in tmux to install plugins."
 else
     echo "tpm is already installed."
 fi
+
+# Install plugins declared in tmux.conf (headless, no running tmux server required).
+echo "Installing tmux plugins..."
+"$TPM_DIR/bin/install_plugins"
 {{ end -}}
