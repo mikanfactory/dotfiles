@@ -68,7 +68,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 1. `/commit-fast` の手順をインラインで実行し、すべての変更（フォーマッタ変更含む）を分割コミットする:
    - `git status` と `git diff HEAD --stat` を見て、変更を論理グループ（feat/fix/refactor/docs/test/chore）に分類する。ファイル名・パス・変更行数で判断が付くものはdiffを読まずに分類し、内容を見ないと分類できないファイルに限り `git diff HEAD -- <file>` で確認する
    - **ユーザー確認は挟まず**、各論理グループを `git add <files...>` → `git commit -m "<type>: <summary>"` で順次コミットする（メッセージは英語・命令形・50文字以内推奨、依存関係のあるコミットは正しい順序で）
-2. `pr-creator`エージェントを `Task` で起動する。**上記コンテキストの「PRテンプレート」の内容をエージェントのプロンプトに含める**。前提条件（ブランチ・コミットの存在）を確認し、PRテンプレートを使って日本語のタイトルと説明文を生成し、`gh pr create` でPRを作成させる。push はこの時点で完了する。
+2. `pr-creator`エージェントを `Task` で起動する。**上記コンテキストの「PRテンプレート」の内容をエージェントのプロンプトに含める**。さらに**「PRはDraftとして作成すること（`gh pr create --draft` を使用）」と明示的に指示する**。前提条件（ブランチ・コミットの存在）を確認し、PRテンプレートを使って日本語のタイトルと説明文を生成し、`gh pr create --draft` でPRをDraftとして作成させる。push はこの時点で完了する。
 3. PR番号とURLを捕捉して保持する:
    ```bash
    gh pr view --json number,url --jq '"PR #" + (.number|tostring) + " " + .url'
@@ -150,13 +150,14 @@ gh api repos/{owner}/{repo}/pulls/{pr}/reviews/{review_id}/comments --paginate \
 3. 最終サマリを日本語で表示:
    ```markdown
    ## refine-loop 完了
-   - PR: #123 <URL>
+   - PR: #123 <URL> (Draft)
    - Greptile: 推奨対応 Y件修正 / スキップ Z件
    - テスト: グリーン / カバレッジ XX%
    ```
 
 ## 制約
 
+- **PRは常にDraftとして作成し、refine-loop完了後もDraftのまま維持する（Ready for reviewへの自動変更はしない）**
 - **PR作成・コミットを「タスク完了」扱いにして停止しない**
 - すべてのコミットメッセージは英語・Claudeの共著フッターを追加しない（既存スキル継承）
 - 各コミットはアトミックで独立してリバート可能であること
