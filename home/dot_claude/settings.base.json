@@ -1,6 +1,7 @@
 {
   "permissions": {
     "defaultMode": "plan",
+    "useAutoModeDuringPlan": false,
     "allow": [
       "Bash",
       "Read",
