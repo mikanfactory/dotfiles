@@ -12,7 +12,13 @@
       "WebFetch",
       "mcp__pencil",
       "mcp__mlflow-mcp__*",
-      "mcp__plugin_sentry_sentry__*"
+      "mcp__plugin_sentry_sentry__*",
+      "Bash(mise x -- ls-lint:*)",
+      "Bash(hk check:*)",
+      "Bash(./scripts/claude/list-aws-roles.sh)",
+      "Bash(mise x -- gh pr view:*)",
+      "mcp__plugin_linear_linear__get_issue",
+      "mcp__plugin_linear_linear__list_comments"
     ],
     "deny": [
       "Read(.env*)",
