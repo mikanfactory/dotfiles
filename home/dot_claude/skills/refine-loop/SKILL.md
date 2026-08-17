@@ -177,6 +177,7 @@ gh api repos/{owner}/{repo}/pulls/{pr}/reviews/{review_id}/comments --paginate \
 ### スキル
 - [`/commit-fast`](../commit-fast/SKILL.md) - 分割コミット手順のインライン化元（ステップ3・6）
 - [`/rename-branch`](../rename-branch/SKILL.md) - プラン要約からブランチ名を生成しrename（ステップ0.7で呼び出し）
+- [`/revise-loop`](../revise-loop/SKILL.md) - PR作成後に仕様変更が出た場合の後段スキル（ブランチ維持・PR本文を編集で更新）
 - `/simplify` - 変更コードのリファクタリング（ビルトイン、`Skill`ツールで起動・自動修正）
 - [`/tdd-workflow`](../tdd-workflow/SKILL.md) - TDDワークフローの原則とパターン
 - [`/review-greptile`](../review-greptile/SKILL.md) - Greptileコメント取得・分類ロジックの流用元
