@@ -1,6 +1,6 @@
 ---
 name: review-greptile
-description: GitHub PRのGreptileレビューコメントを取得・分析し、各コメントに対して対応/スキップの判定を提示する。ユーザーがGreptileのレビュー対応を依頼した場合にトリガー。
+description: GitHub PRのGreptileレビューコメントを取得・分析し、各コメントに対して対応/スキップの判定を提示する。修正後はGreptileのコメントに対応可否と理由を返信する。ユーザーがGreptileのレビュー対応を依頼した場合にトリガー。
 allowed-tools: Bash(gh api:*), Bash(gh pr:*), Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Read, Edit, Glob, Grep
 ---
 
@@ -13,7 +13,7 @@ allowed-tools: Bash(gh api:*), Bash(gh pr:*), Bash(git diff:*), Bash(git status:
 
 ## タスク
 
-GitHub PRに投稿されたGreptileのレビューコメントを取得・分析し、各コメントに対して対応/スキップの判定を提示します。ユーザーが選択したコメントのみを修正します。
+GitHub PRに投稿されたGreptileのレビューコメントを取得・分析し、各コメントに対して対応/スキップの判定を提示します。ユーザーが選択したコメントのみを修正し、最後にGreptileへ対応可否と理由を返信します。
 
 ### ステップ1: PR番号の特定
 
@@ -31,35 +31,17 @@ PRが見つからない場合はエラーを報告して終了。
 
 ### ステップ2: Greptileコメントの取得
 
-リポジトリのowner/repoは上記コンテキストの「リポジトリ情報」から取得する。
+[`references/greptile-api.md`](./references/greptile-api.md) の **§1（投稿先）** と **§5（本文の取得）** に従い、以下の3ソースを取得する。owner/repoは上記コンテキストの「リポジトリ情報」から取得する。
 
-#### 2a: インラインレビューコメント
+1. **サマリ** — `repos/{owner}/{repo}/issues/{pr}/comments` のGreptile投稿（総括。**指摘0件でも必ず存在する**）
+2. **インライン** — `repos/{owner}/{repo}/pulls/{pr}/comments` のGreptile投稿（ファイル・行に紐づく指摘）
+3. **レビュー** — `repos/{owner}/{repo}/pulls/{pr}/reviews` のGreptile投稿のうち`body`が非空のもの
 
-```bash
-gh api repos/{owner}/{repo}/pulls/{pr_number}/comments --paginate \
-  --jq '[.[] | select(.user.login | test("greptile")) | {id, path, line: (.line // .original_line), side, body, diff_hunk, created_at}]'
-```
-
-#### 2b: トップレベルレビュー
-
-```bash
-gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews --paginate \
-  --jq '[.[] | select(.user.login | test("greptile")) | {id, body, state}]'
-```
-
-#### 2c: レビューに紐づくコメント
-
-レビューIDが取得できた場合:
-```bash
-gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews/{review_id}/comments --paginate \
-  --jq '[.[] | {id, path, line: (.line // .original_line), body, diff_hunk}]'
-```
-
-コメントが0件の場合は「Greptileのコメントはありません」と報告して終了。
+**3ソースすべてが0件**の場合のみ「Greptileのコメントはありません」と報告して終了。インラインが0件でもサマリがあれば続行する。
 
 ### ステップ3: コードコンテキストの読み込みと分析
 
-各インラインコメントについて:
+**インラインコメント**について:
 
 1. コメントが参照するファイルパスと行番号を特定
 2. `Read`で該当ファイルの関連部分を読み込む（コメント行の前後20行程度）
@@ -69,6 +51,8 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews/{review_id}/comments --pag
    - **対応推奨**: `対応` または `スキップ`
    - **理由**: 判定の根拠（1-2文）
    - **修正案**: 対応推奨の場合、具体的な修正内容（1文）
+
+**サマリ・レビュー本文**についても同様に分析する。リファレンス §6 のとおり、**インラインコメントが0件でもサマリ本文に具体的な指摘が含まれることがある**ため、必ず読んで指摘を抽出し、番号を振って同じ基準で判定する。
 
 ### ステップ4: 判定結果の提示
 
@@ -80,7 +64,7 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews/{review_id}/comments --pag
 **PR:** #123 - PRタイトル
 **コメント数:** X件 | **推奨対応:** Y件 | **推奨スキップ:** Z件
 
-## コメント一覧
+## インラインコメント
 
 ### [1] 対応推奨 | バグ | `src/api/users.py:42`
 **指摘:** NullPointerの可能性...
@@ -91,12 +75,19 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews/{review_id}/comments --pag
 **指摘:** 変数名が不明瞭...
 **分析:** 現在の命名はドメイン用語に基づいており適切。
 
+## 総括コメント（Greptileサマリ）
+
+**Confidence Score:** 4/5
+
+### [3] 対応推奨 | バグ | ファイル参照なし
+**指摘:** 新しい第3の能力に対してセキュリティモデルが同期していない
+**分析:** 指摘は妥当。...
+**修正案:** ...
+
 ---
 
 対応するコメント番号を指定してください（例: `1,3,5` / `all` / `none`）
 ```
-
-トップレベルレビュー（ファイル参照なし）は「総括コメント」として別セクションに表示。
 
 ### ステップ5: ユーザー選択の待機
 
@@ -104,7 +95,7 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews/{review_id}/comments --pag
 
 - `1,3,5` — 指定番号のコメントのみ修正
 - `all` — 推奨対応のすべてを修正
-- `none` — 修正せず終了
+- `none` — 修正せず終了（返信も行わない）
 
 ### ステップ6: 選択されたコメントの修正
 
@@ -124,13 +115,28 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews/{review_id}/comments --pag
 |---|---------|---------|
 | 1 | `src/api/users.py:42` | Noneチェックを追加 |
 | 3 | `src/db/queries.py:67` | パラメータバインディングに変更 |
+```
 
-修正が完了しました。`/commit-fast` でコミットできます。
+### ステップ7: Greptileへの返信
+
+[`references/greptile-api.md`](./references/greptile-api.md) の **§7** に従い、対応可否と理由を返信する。
+
+- **インラインコメント** → `pulls/{pr}/comments/{comment_id}/replies` へスレッド返信（§7.2）
+- **サマリ・総括レビュー** → PRコメント1件に集約して投稿（§7.3）。インラインの対応結果も表に含める
+
+返信は**修正のコミット・pushが済んでからユーザーに実行可否を確認して**行う。ユーザーが `none` を選んだ場合は返信しない。
+
+返信後、以下を報告:
+
+```markdown
+修正と返信が完了しました。未コミットの場合は `/commit-fast` でコミットできます。
 ```
 
 ## 制約
 
 - レビュー結果のみを提示し、ユーザーの明示的な指示なしに修正を実施しない
+- **返信するのはGreptileが投稿したコメントのみ。人間のコメント・他のbotのコメントには絶対に返信しない**
+- 既に自分が返信済みのスレッドには再返信しない（リファレンス §7.1 の判定を使う）
 - Greptileのコメント以外のレビューコメントは対象外
 - 修正はコメントが指摘する範囲のみ（スコープ外のリファクタリングは行わない）
 - ユーザーとのコミュニケーションでは常に日本語で結果を出力
@@ -151,3 +157,6 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews/{review_id}/comments --pag
 
 ### スキル
 - [`/commit-fast`](../commit-fast/SKILL.md) - 修正後のコミット作成
+
+### ドキュメント
+- [`greptile-api`](./references/greptile-api.md) - Greptileコメントの取得・待機・返信のAPI手順

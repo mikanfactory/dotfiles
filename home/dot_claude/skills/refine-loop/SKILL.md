@@ -2,7 +2,8 @@
 name: refine-loop
 description: |
   プラン承認後に「ブランチrename → TDD実装 → /simplify整理 → コミット&PR作成
-  → Greptileレビュー待ち → 推奨指摘の自動修正 → push」を1パスで自動実行するスキル。
+  → Greptileレビュー待ち → 推奨指摘の自動修正 → push → Greptileへ対応可否を返信」を
+  1パスで自動実行するスキル。
   プランモードを終了して一連のリファインフローを回す。
   「/refine-loop」で起動。プランが承認済みで自動で最後まで通したい場合にトリガー。
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
@@ -75,47 +76,28 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
    ```
 4. **PR作成はゴールではなく通過点。「完了」扱いで停止せず、必ずステップ4へ進む**
 
-### ステップ4: Greptileレビューのトリガー & レビュー待ち（ポーリング+タイムアウト継続）
+### ステップ4: Greptileレビューのトリガー & レビュー待ち
 
-Greptileは `@greptileai` メンションがないとレビューを開始しないため、まずメンションコメントを投稿してレビューをトリガーする（`{pr}` はステップ3で捕捉したPR番号）:
+取得・待機の詳細手順は [`review-greptile/references/greptile-api.md`](../review-greptile/references/greptile-api.md) に従う。`{owner}/{repo}` は上記コンテキストの「リポジトリ情報」、`{pr}` はステップ3で捕捉したPR番号を実値で埋める。
 
-```bash
-gh pr comment {pr} --body "@greptileai review"
-```
+1. **ベースラインを空にする**（新規PRのため既存Greptileコメントは無い）。リファレンス §2 の `STATE_DIR` / `snapshot()` を定義したうえで:
 
-その後、ステップ3のPR番号に対し、Greptileのレビューコメントを **60秒間隔・最大15分（最大15回）** ポーリングします。owner/repo は上記コンテキストの「リポジトリ情報」、`{pr}` はステップ3で捕捉したPR番号を使用。
+   ```bash
+   : > "$STATE_DIR/baseline.txt"
+   ```
 
-単一Bash内のポーリングループ例（`{owner}/{repo}` と `{pr}` を実値に置換して実行）:
+2. **レビューをトリガーする**。Greptileは `@greptileai` メンションがないとレビューを開始しない場合があるため、PR作成直後にメンションコメントを投稿する:
 
-```bash
-for i in $(seq 1 15); do
-  n=$(gh api "repos/{owner}/{repo}/pulls/{pr}/comments" --paginate \
-        --jq '[.[] | select(.user.login | test("greptile"))] | length' 2>/dev/null || echo 0)
-  m=$(gh api "repos/{owner}/{repo}/pulls/{pr}/reviews" --paginate \
-        --jq '[.[] | select(.user.login | test("greptile"))] | length' 2>/dev/null || echo 0)
-  echo "poll $i: inline=$n reviews=$m"
-  [ "$n" -gt 0 ] || [ "$m" -gt 0 ] && { echo "GREPTILE_READY"; break; }
-  sleep 60
-done
-```
+   ```bash
+   gh pr comment {pr} --body "@greptileai review"
+   ```
 
-- `GREPTILE_READY` が出たら次のステップへ。
-- foreground `sleep` がハーネスにブロックされる場合は、`Monitor`ツールでGreptileコメント数 `> 0` を until条件にしてフォールバックする。
-- **15分経過しても0件**の場合 → 「Greptileのレビューが時間内に付かなかった」と警告し、**ステップ5・6をスキップして正常終了**（PRはpush済みで残る。最終サマリでPR URLを報告）。
+3. **完了を待つ**。リファレンス §4 のポーリングループを **`Bash`ツールの `run_in_background: true`** で実行する（foregroundの `sleep` はハーネスにブロックされるため必須）。30秒間隔・最大30回＝15分でタイムアウトする。
 
-レビューが取得できたら、`/review-greptile` と同じ3ソースでコメント本体を取得:
+   - 出力に `GREPTILE_READY` が現れたら次へ進む
+   - `GREPTILE_TIMEOUT` の場合 → 「Greptileのレビューが時間内に付かなかった」と警告し、**ステップ5〜7をスキップして正常終了**（PRはpush済みで残る。最終サマリでPR URLを報告）
 
-```bash
-# 2a: インラインレビューコメント
-gh api repos/{owner}/{repo}/pulls/{pr}/comments --paginate \
-  --jq '[.[] | select(.user.login | test("greptile")) | {id, path, line: (.line // .original_line), side, body, diff_hunk, created_at}]'
-# 2b: トップレベルレビュー
-gh api repos/{owner}/{repo}/pulls/{pr}/reviews --paginate \
-  --jq '[.[] | select(.user.login | test("greptile")) | {id, body, state}]'
-# 2c: レビューに紐づくコメント（review_idが取れた場合）
-gh api repos/{owner}/{repo}/pulls/{pr}/reviews/{review_id}/comments --paginate \
-  --jq '[.[] | {id, path, line: (.line // .original_line), body, diff_hunk}]'
-```
+4. **本文を取得する**。リファレンス §5 に従い、サマリ（`issues/{pr}/comments`）・インライン（`pulls/{pr}/comments`）・レビュー（`pulls/{pr}/reviews` のbody非空）の3ソースを取得する。**指摘0件のPRではインラインが0件・レビューbodyが空になり、サマリだけが唯一のレビュー結果になる**ため、サマリを必ず取得する。
 
 ### ステップ5: 推奨指摘の自動修正
 
@@ -126,6 +108,8 @@ gh api repos/{owner}/{repo}/pulls/{pr}/reviews/{review_id}/comments --paginate \
    - **重要度**: `バグ` / `セキュリティ` / `パフォーマンス` / `スタイル` / `その他`
    - **対応推奨**: `対応` または `スキップ`
    - **理由**: 判定の根拠（1-2文）／対応推奨なら**修正案**（1文）
+
+   **サマリ・レビュー本文も同じ基準で分析する。** リファレンス §6 のとおり、インラインコメントが0件でもサマリ本文に具体的な指摘が含まれることがあるため、必ず読んで指摘を抽出し、番号を振って判定する。
 2. 分析レポートを **表示のみ**（選択は待たない）:
    ```markdown
    # Greptileレビュー分析レポート
@@ -141,9 +125,9 @@ gh api repos/{owner}/{repo}/pulls/{pr}/reviews/{review_id}/comments --paginate \
    **指摘:** ...
    **分析:** ...
    ```
-   トップレベルレビュー（ファイル参照なし）は「総括コメント」として別セクションに記載。
+   サマリ・トップレベルレビュー（ファイル参照なし）は「総括コメント（Greptileサマリ）」として別セクションに記載。
 3. **「対応推奨」と判定したコメントのみ** `Edit` で自動修正する。修正はコメントが指摘する範囲のみ（スコープ外のリファクタリングは禁止）。
-4. **全件「スキップ推奨」or コメント0件**の場合 → 修正・追加コミット・pushをスキップし、「対応不要」と報告して終了（最終サマリでPR URLを報告）。
+4. **全件「スキップ推奨」or コメント0件**の場合 → 修正・追加コミット・pushはスキップするが、**ステップ7の返信は実施する**（「対応不要」と判断した理由をGreptileに返す）。
 5. 修正後、ステップ1のテストを再実行し、カバレッジ80%以上を再確認。修正でテストが壊れたら最小限の修正で回復させる。**回復不能な場合は push せず**、状況を報告して中断。
 
 ### ステップ6: 追加コミット & push
@@ -153,18 +137,33 @@ gh api repos/{owner}/{repo}/pulls/{pr}/reviews/{review_id}/comments --paginate \
    ```bash
    git push
    ```
-3. 最終サマリを日本語で表示:
-   ```markdown
-   ## refine-loop 完了
-   - PR: #123 <URL> (Draft)
-   - Greptile: 推奨対応 Y件修正 / スキップ Z件
-   - テスト: グリーン / カバレッジ XX%
-   ```
+
+### ステップ7: Greptileへの返信
+
+push完了後、[`review-greptile/references/greptile-api.md`](../review-greptile/references/greptile-api.md) の **§7** に従い、**Greptileが投稿したコメントに限り**対応可否と理由を返信する。ユーザー確認は挟まない。
+
+1. リファレンス §7.1 で既返信スレッドを除外する
+2. **インラインコメント** → `pulls/{pr}/comments/{comment_id}/replies` へスレッド返信（§7.2）。「対応しました」/「対応見送り」＋理由1〜2文
+3. **サマリ・総括レビュー** → PRコメント1件に集約して投稿（§7.3）。インラインの対応結果も表に含める
+4. 全件スキップ・指摘0件の場合も、サマリへの返信（§7.3）だけは投稿し「対応不要と判断した」旨と理由を記す
+
+最終サマリを日本語で表示:
+
+```markdown
+## refine-loop 完了
+- PR: #123 <URL> (Draft)
+- Greptile: 推奨対応 Y件修正 / スキップ Z件
+- Greptileへの返信: インライン N件 + 総括 1件
+- テスト: グリーン / カバレッジ XX%
+```
 
 ## 制約
 
 - **PRは常にDraftとして作成し、refine-loop完了後もDraftのまま維持する（Ready for reviewへの自動変更はしない）**
 - **PR作成・コミットを「タスク完了」扱いにして停止しない**
+- **返信するのはGreptileが投稿したコメントのみ。人間のコメント・他のbotのコメントには絶対に返信しない**
+- 既に自分が返信済みのスレッドには再返信しない
+- 返信は修正のpush完了後に行う（返信内容と実際のコードを一致させるため）
 - すべてのコミットメッセージは英語・Claudeの共著フッターを追加しない（既存スキル継承）
 - 各コミットはアトミックで独立してリバート可能であること
 - PRタイトル/本文・ユーザーへの出力は日本語
@@ -187,3 +186,6 @@ gh api repos/{owner}/{repo}/pulls/{pr}/reviews/{review_id}/comments --paginate \
 - `/simplify` - 変更コードのリファクタリング（ビルトイン、`Skill`ツールで起動・自動修正）
 - [`/tdd-workflow`](../tdd-workflow/SKILL.md) - TDDワークフローの原則とパターン
 - [`/review-greptile`](../review-greptile/SKILL.md) - Greptileコメント取得・分類ロジックの流用元
+
+### ドキュメント
+- [`greptile-api`](../review-greptile/references/greptile-api.md) - Greptileコメントの取得・待機・返信のAPI手順（ステップ4・5・7）
