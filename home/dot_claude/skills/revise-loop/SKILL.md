@@ -113,6 +113,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 
    - PRテンプレートの**見出しと順序はそのまま維持**（英語の見出しは翻訳しない。チェックボックスは該当項目のみ `- [x]`）
    - 「〜を追加しました、その後〜に変更しました」のような**経緯の羅列にせず、現在の仕様として書き直す**
+   - 文体は [`create-pr/references/writing-style.md`](../create-pr/references/writing-style.md) に従う
    - 変更後の内容とPRタイトルが乖離している場合のみ `--title` も併せて更新する
 
    **ステップ4-3で人間による書き換えを検出した場合**は、上書き再生成をせず以下のいずれかを選ぶ:
@@ -262,3 +263,4 @@ PR本文にユーザーの加筆を検出したため、自動更新は行いま
 
 ### ドキュメント
 - [`greptile-api`](../review-greptile/references/greptile-api.md) - Greptileコメントの取得・待機・返信のAPI手順（ステップ4・5・6・8）
+- [`writing-style`](../create-pr/references/writing-style.md) - PR本文の文体ガイド（ステップ4）
