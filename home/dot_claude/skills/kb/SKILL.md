@@ -1,163 +1,91 @@
 ---
 name: kb
 description: |
-  Karpathy式LLMナレッジベース管理スキル。~/code/knowledge_base/obsidian に構造化Markdown wikiを構築・維持する。
-  3操作を提供: ingest（URL/ファイルからの知識取り込み）、query（wikiへの質問応答）、lint（整合性チェック）。
-  「/kb ingest <URL or path>」「/kb query <質問>」「/kb lint」で起動。
-  ナレッジベースへの追加・検索・メンテナンスを依頼された場合にもトリガー。
-allowed-tools: WebFetch, Read, Write, Edit, Glob, Grep
+  Obsidian vault をベースにしたプロジェクト別ナレッジベースを扱うスキル。
+  vault のパスは環境変数 $OBSIDIAN_VAULT_DIR（chezmoi でマシンごとに設定）。
+  3操作を提供: research（調査ノートの作成）、dd（Design Doc の執筆）、ref（DD と関連ノートの参照）。
+  「/kb research <topic> <調査内容>」「/kb dd <topic>」「/kb ref <topic>」で起動。
+  「調査をナレッジベースに残して」「Design Doc / DD を書いて」「DD を参照して」と依頼された場合にもトリガー。
+argument-hint: "<research|dd|ref> [project/]topic [内容]"
+allowed-tools: Read, Write, Edit, Glob, Grep, WebFetch, Bash(git remote *), Bash(mkdir *), Bash(echo *)
 ---
 
-# KB - ナレッジベース管理
+# KB - プロジェクト別ナレッジベース
 
-LLMが生のドキュメントを読み込み、構造化されたMarkdown wikiに「コンパイル」するナレッジベースを管理する。
-
-**ベースディレクトリ**: `~/code/knowledge_base/obsidian`
-
-## 初期化
-
-操作実行前に、ナレッジベースのディレクトリ構造を確認する。
-
-1. `~/code/knowledge_base/obsidian` が存在しない場合、以下を作成:
-   - `sources/web/`、`sources/local/` ディレクトリ
-   - `wiki/topics/`、`wiki/topics/queries/` ディレクトリ
-   - `CLAUDE.md` — [wiki-schema.md](./references/wiki-schema.md) のテンプレート部分（コードブロック内）をコピー
-   - `wiki/index.md` — 空のインデックス（[page-templates.md](./references/page-templates.md) の index.md テンプレート参照）
-   - `wiki/_recent.md` — 空の更新履歴テーブル
-
-2. 既に存在する場合は `CLAUDE.md` を読み込み、現在のスキーマを把握する
+調査ノート → Design Doc → Implementation Plan を、Obsidian vault の `<project>/<topic>/` に蓄積する。
+書き方の規約は [vault-conventions.md](./references/vault-conventions.md) に従う。
 
 ## 操作ルーティング
 
-ユーザー入力から操作を判定する:
+`$ARGUMENTS` の先頭語で判定する。
 
-- `ingest <URL>` or `ingest <ファイルパス>` → Ingest
-- `query <質問>` → Query
-- `lint` → Lint
-- 引数なし → ユーザーに操作を確認
+- `research` → Research
+- `dd` → Design Doc
+- `ref` → Reference
+- 引数なし・判定不能 → ユーザーに操作を確認する
 
-## Ingest ワークフロー
+## 共通: 保存先の解決
 
-### Step 1: ソース種別の判定
+すべての操作の最初に行う。
 
-- `http://` or `https://` で始まる → Web ソース
-- それ以外 → ローカルファイル
+1. `echo "$OBSIDIAN_VAULT_DIR"` で vault のパスを取得する。空なら**中断**し、`chezmoi init && chezmoi apply` の実行と Claude Code の再起動を案内する
+2. project を決める
+   - 引数が `project/topic` 形式ならそれを使う
+   - topic だけなら `git remote get-url origin` のリポジトリ名（例: `ivry-inc/datahub` → `datahub`）を vault 直下のディレクトリ名と照合する
+   - 一致しない・git 外の場合は、vault 直下のディレクトリ一覧（`日記/` を除く）を示して聞く
+3. topic は kebab-case のディレクトリ名（例: `slack-webhook`）。research / dd で存在しなければ `mkdir -p` する
+4. 以降のパスは `$OBSIDIAN_VAULT_DIR/<project>/<topic>/` を絶対パスに展開して扱う（Write は絶対パスを受け取る）
 
-### Step 2: コンテンツの取得と保存
+## Research ワークフロー
 
-**Webソースの場合:**
+`/kb research [project/]topic <調査したいこと>`
 
-1. `WebFetch` でURLの内容を取得する。プロンプト:
-   > この記事の内容を詳細にMarkdown形式で抽出してください。タイトル、著者、公開日などのメタデータも含めてください。要約ではなく、できるだけ詳細に全文を抽出してください。
-2. 取得した内容を `sources/web/YYYY-MM-DD_slug.md` に保存
-   - slugはURLまたはタイトルから生成（kebab-case、英数字のみ）
-   - frontmatterに `url` と `fetched` を記録
+1. 依頼を独立した問いに分解し、ユーザーに一覧で示す（例: 「Incoming Webhook の URL を JSON params で変更できるか」「Plan A: Webhook のまま強化」）
+2. topic フォルダの既存ノートを Glob / Read で把握する。同じ問いのノートがあれば新規作成せず追記・更新する
+3. 問いごとに調べる
+   - コードは `path:line` で根拠を示す
+   - 外部仕様は公式ドキュメントを WebFetch し、原文を引用して URL を添える
+   - 裏付けが取れない情報は「**記憶ベース・未検証**」と明記する。推測を事実として書かない
+4. 1 問 1 ノートで書く。テンプレートは [note-templates.md](./references/note-templates.md) の「調査ノート」「案ノート」「比較ノート」から選ぶ
+5. 相互リンク: 新しいノートの `## 関連` に関連ノートを並べ、関連する既存ノートの `## 関連` にも新しいノートを追記する
+6. `YYYY-MM-DD プロンプト.md` に依頼文と作成・更新したノートの wikilink 一覧を追記する（同日のファイルがあれば追記）
+7. 作成・更新したファイルのパスと、各問いの結論を 1 行ずつ報告する
 
-**ローカルファイルの場合:**
+## Design Doc ワークフロー
 
-1. `Read` でファイル内容を読み取る
-2. `sources/local/YYYY-MM-DD_original-filename.md` にコピー
-   - frontmatterに `original_path` と `copied` を記録
+`/kb dd [project/]topic`
 
-### Step 3: 重複チェック
+1. topic フォルダの全ノートを読む。`Design Doc*.md` が既にあれば最新版（`Design Doc.md` = v1、`Design Doc vN.md` = vN）を特定する
+2. 調査ノートだけでは決まらない判断（採用案、スコープ外、リリース順など）を洗い出し、AskUserQuestion で 1 つずつ確認する
+3. [design-doc-template.md](./references/design-doc-template.md) に沿って書く
+   - 初版は `Design Doc.md`、既存がある場合は `Design Doc vN.md`（N = 既存の最大版 + 1）
+   - 版を上げたら末尾に「vN-1 からの変更点」表を置く
+   - 該当しない章は削除せず「なし」と理由を 1 行で書く
+4. 不採用案・懸念点・制約は根拠となる調査ノートへ `[[wikilink]]` を張る。根拠ノートがない主張は「設計の未検証事項」に回す
+5. 旧版の Design Doc は変更しない
+6. 作成したパスと、ユーザーの判断が必要な未検証事項を報告する
 
-`sources/` 内を `Grep` で検索し、同じURL or ファイルパスが既に取り込み済みでないか確認する。重複の場合はユーザーに通知し、上書き or スキップを確認する。
+## Reference ワークフロー
 
-### Step 4: Wikiへのコンパイル
+`/kb ref [project/]topic` または `/kb ref <キーワード>`（**読み取り専用**）
 
-1. `wiki/index.md` を読み、既存のカテゴリとトピックを把握
-2. ソース内容を分析し、以下を判定:
-   - **既存トピックに統合すべきか**: 既存ページを `Read` → `Edit` で新情報を追記、`updated` を更新
-   - **新規ページを作成すべきか**: [page-templates.md](./references/page-templates.md) の標準トピックページテンプレートに従って作成
-3. カテゴリの選択:
-   - 既存カテゴリに該当するものがあれば優先使用
-   - 該当なしの場合のみ新規カテゴリを作成
-
-### Step 5: インデックス更新
-
-1. `wiki/index.md` に新規/更新ページのエントリを追加・更新
-2. `wiki/_recent.md` の先頭に追加（最大20件、超過分は末尾から削除）
-
-### Step 6: ユーザーへの報告
-
-以下を報告する:
-- 保存したソースファイルのパス
-- 作成/更新したwikiページのパス
-- 割り当てたカテゴリとタグ
-
-## Query ワークフロー
-
-### Step 1: 関連ページの特定
-
-1. `wiki/index.md` を読み、全体構造を把握
-2. 質問のキーワードで `wiki/topics/` 内を `Grep` 検索
-3. 関連性の高いページを `Read` で読み込む（最大5ページ）
-
-### Step 2: 回答の合成
-
-読み込んだwikiページの内容に基づいて回答を合成する。wikiに情報がない場合はその旨を明記する。
-
-### Step 3: 回答のファイリング
-
-1. 回答を `wiki/topics/queries/YYYY-MM-DD_question-slug.md` として保存
-   - [page-templates.md](./references/page-templates.md) のQuery結果ページテンプレートに従う
-   - `sources` は `["query"]` とする
-   - 参照したページへのリンクを含める
-2. `wiki/index.md` の Queries セクションに追加
-3. `wiki/_recent.md` を更新
-
-### Step 4: ユーザーへの回答
-
-合成した回答をユーザーに直接提示する。ファイリングしたページのパスも添える。
-
-## Lint ワークフロー
-
-以下のチェックを実行し、結果をレポートとして提示する。**自動修正は行わない。**
-
-### チェック項目
-
-1. **孤立ページ**: `wiki/topics/` 内のページで `index.md` からリンクされていないもの
-   - `Glob` で全ページを列挙 → `Grep` で index.md 内のリンクと照合
-
-2. **壊れたリンク**: wiki内の `[text](path)` リンクで、リンク先ファイルが存在しないもの
-   - `Grep` でリンクを抽出 → `Glob` で存在確認
-
-3. **Frontmatter不足**: 必須フィールド（title, created, sources, tags）が欠けているページ
-   - `Grep` で frontmatter をチェック
-
-4. **空カテゴリ**: `index.md` 内のH2セクションで、配下にリンクがないもの
-
-5. **重複トピック**: タイトルが類似しているページ（同一カテゴリ内で類似slugを検出）
-
-6. **_recent.md の件数**: 20件を超えている場合に警告
-
-### レポート形式
-
-```
-## Lintレポート
-
-### 問題あり
-- [重大] 孤立ページ: wiki/topics/ml/orphan-page.md
-- [警告] Frontmatter不足: wiki/topics/web/page.md (tags missing)
-
-### 統計
-- 総ページ数: N
-- カテゴリ数: N
-- 問題数: N
-```
-
-## 規約
-
-- wikiの内容は**日本語**で記述する
-- ソースファイルは取り込み後に**変更しない**（不変）
-- 内部リンクは**相対パス**を使用する
-- frontmatterは**必ず**含める
-- タグは**小文字kebab-case**
+1. topic ディレクトリを特定する。キーワードの場合は vault 全体を Grep し、候補の topic を示して選んでもらう
+2. 最新の `Design Doc*.md` と `Implementation Plan.md`（あれば）を読む
+3. 本文中の `[[X]]` を同じ project 配下の `**/X.md` として Glob で解決し、1 ホップ分だけ読む
+4. 会話に次の要約を出す
+   - 採用した設計と主要な決定
+   - 守るべき制約・前提
+   - 不採用案とその理由（同じ案を再提案しないため）
+   - 設計の未検証事項
+   - 実装の進捗（Implementation Plan の「現在地」）
+5. 以後の実装・回答はこの要約に従う。Design Doc と矛盾する変更が必要になったら、実装前にユーザーへ指摘する
+6. ファイルには書き込まない
 
 ---
 
 ## 参照
 
 ### ドキュメント
-- [`wiki-schema`](./references/wiki-schema.md) - ナレッジベースのCLAUDE.mdテンプレート
-- [`page-templates`](./references/page-templates.md) - wikiページのテンプレート集
+- [`vault-conventions`](./references/vault-conventions.md) - vault の構造・命名・リンク・記述の規約
+- [`note-templates`](./references/note-templates.md) - 調査ノート・案ノート・比較ノート・プロンプトログのテンプレート
+- [`design-doc-template`](./references/design-doc-template.md) - Design Doc の章立てテンプレート
