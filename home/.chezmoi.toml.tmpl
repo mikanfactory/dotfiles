@@ -1,4 +1,9 @@
 {{- $machineId := promptStringOnce . "machineId" "Machine ID (mac-mini/macbook-air)" -}}
+{{- $obsidianVaultDir := promptStringOnce . "obsidianVaultDir" "Obsidian vault directory" (printf "%s/Documents/Obsidian Vault" .chezmoi.homeDir) -}}
 
 [data]
     machineId = {{ $machineId | quote }}
+    obsidianVaultDir = {{ $obsidianVaultDir | quote }}
+
+[env]
+    OBSIDIAN_VAULT_DIR = {{ $obsidianVaultDir | quote }}

@@ -4,6 +4,7 @@
 ベース設定とローカルオーバーライドをディープマージする。
 - ベース設定: $CHEZMOI_SOURCE_DIR/dot_claude/settings.base.json
 - ローカル設定: ~/.claude/settings.local.json (任意)
+- vault設定: 環境変数 OBSIDIAN_VAULT_DIR (chezmoi.toml の [env] から渡される。任意)
 
 マージ動作:
   - オブジェクト: 再帰的にマージ (ローカルのキーが優先)
@@ -38,6 +39,16 @@ def deep_merge(base, override):
     return override
 
 
+def vault_overlay(vault_dir):
+    """Obsidian vault のパスを env と additionalDirectories に載せる設定を返す。"""
+    if not vault_dir:
+        return {}
+    return {
+        "env": {"OBSIDIAN_VAULT_DIR": vault_dir},
+        "permissions": {"additionalDirectories": [vault_dir]},
+    }
+
+
 def main():
     # stdin (現在のファイル内容) を破棄
     sys.stdin.read()
@@ -55,6 +66,8 @@ def main():
         result = deep_merge(base, local)
     else:
         result = base
+
+    result = deep_merge(result, vault_overlay(environ.get("OBSIDIAN_VAULT_DIR", "")))
 
     json.dump(result, sys.stdout, indent=2, ensure_ascii=False)
     sys.stdout.write("\n")
