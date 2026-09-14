@@ -37,7 +37,7 @@ PR作成完了後、このスキルのタスクは完了です。**追加のコ�
 ## 制約
 
 - ブランチ比較は常に`origin/main`を使用すること
-- PRタイトルと説明文の内容は日本語で記述すること
+- PRタイトルと説明文の内容は日本語で記述し、[`writing-style`](references/writing-style.md) の文体に従うこと
 - 曖昧な点がある場合は作成前にユーザーに確認
 
 ---
@@ -46,3 +46,6 @@ PR作成完了後、このスキルのタスクは完了です。**追加のコ�
 
 ### エージェント
 - [`pr-creator`](../../agents/pr-creator.md) - PRの作成と説明文の生成
+
+### ドキュメント
+- [`writing-style`](references/writing-style.md) - PRタイトル・本文の文体ガイド

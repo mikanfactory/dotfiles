@@ -16,7 +16,7 @@ model: sonnet
    - `docs/PULL_REQUEST_TEMPLATE.md`
    - `PULL_REQUEST_TEMPLATE.md`
 3. **変更分析**: `git diff origin/main...HEAD --stat`とコミットログから変更内容を把握
-4. **タイトル・説明文生成**: テンプレートに従い、日本語でPRタイトルと説明文を生成
+4. **タイトル・説明文生成**: テンプレートに従い、[`writing-style`](../skills/create-pr/references/writing-style.md) の文体で日本語のPRタイトルと説明文を生成する。生成前に必ずこのファイル（`~/.claude/skills/create-pr/references/writing-style.md`）を読む
 5. **PR作成**: `gh pr create`でPRを作成
 6. **結果報告**: PR URLを表示し、含まれた内容を要約
 
@@ -43,7 +43,10 @@ model: sonnet
    出力:
    ```markdown
    ## Description
-   ユーザー認証のバグを修正しました。ログイン時にセッションが正しく保存されない問題を解決。
+   ログイン後にリロードするとログアウトされるバグを修正しました。
+
+   - セッションの保存タイミングがレスポンス送信後になっていたので、送信前に移動
+   - Remember me 付きのケースは挙動が違うので、次のPRで対応予定
 
    ## Type of change
    - [x] Bug fix
@@ -53,9 +56,9 @@ model: sonnet
 
 ## PRタイトル
 
-- 日本語で簡潔かつ説明的に作成
+- 日本語で簡潔に、体言止め（「〜を追加」「〜を修正」）を基本にする
 - 主な変更を要約、70文字以内
-- プロジェクトの慣例に従って適切なプレフィックスを使用
+- プロジェクトの慣例に従って適切なプレフィックスを使用（慣例が無ければ付けない）
 
 ## PR作成コマンド
 
@@ -84,3 +87,10 @@ EOF
 - **リモートトラッキングブランチがない場合**: `git push -u origin $(git branch --show-current)`でプッシュ
 - **PRがすでに存在する場合**: `gh pr view --json url -q '.url' 2>/dev/null`で確認
 - **複数のPRテンプレートがある場合**: 一覧を表示し、どれを使用するかユーザーに確認する
+
+---
+
+## 参照
+
+### ドキュメント
+- [`writing-style`](../skills/create-pr/references/writing-style.md) - PRタイトル・本文の文体ガイド
