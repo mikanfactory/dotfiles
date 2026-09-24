@@ -34,13 +34,15 @@
       "Bash(git rebase *)"
     ]
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "enabledMcpjsonServers": [],
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "sentry@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "linear@claude-plugins-official": true,
+    "langfuse-observability@langfuse-observability": true
   },
   "mcpServers": {},
   "hooks": {
@@ -68,5 +70,22 @@
   },
   "env": {
     "NIPPO_REPORTS_DIR": "reports"
+  },
+  "agentPushNotifEnabled": true,
+  "extraKnownMarketplaces": {
+    "langfuse-observability": {
+      "source": {
+        "source": "github",
+        "repo": "langfuse/Claude-Observability-Plugin"
+      }
+    }
+  },
+  "pluginConfigs": {
+    "langfuse-observability@langfuse-observability": {
+      "options": {
+        "LANGFUSE_PUBLIC_KEY": "pk-lf-local",
+        "LANGFUSE_BASE_URL": "http://localhost:3000"
+      }
+    }
   }
 }
