@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+#MISE description="Run docker compose for the local Langfuse stack"
+
+set -euo pipefail
+
+LANGFUSE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/langfuse"
+ENV_FILE="$LANGFUSE_DIR/.env"
+PROJECT_NAME="langfuse"
+PUBLIC_KEY="pk-lf-local"
+DOCKER_WAIT_SECONDS="${LANGFUSE_DOCKER_WAIT_SECONDS:-60}"
+
+random_hex() {
+    openssl rand -hex "$1"
+}
+
+ensure_docker() {
+    if docker info >/dev/null 2>&1; then
+        return
+    fi
+
+    echo "Starting OrbStack..."
+    open -ga OrbStack
+
+    local waited=0
+    until docker info >/dev/null 2>&1; do
+        if [ "$waited" -ge "$DOCKER_WAIT_SECONDS" ]; then
+            echo "Error: Docker did not become ready within ${DOCKER_WAIT_SECONDS}s" >&2
+            exit 1
+        fi
+        sleep 1
+        waited=$((waited + 1))
+    done
+}
+
+generate_env() {
+    local existing_volumes
+    existing_volumes="$(docker volume ls -q --filter "label=com.docker.compose.project=$PROJECT_NAME")"
+    if [ -n "$existing_volumes" ]; then
+        echo "Error: $ENV_FILE is missing, but volumes for project '$PROJECT_NAME' already exist." >&2
+        echo "New secrets would not match the existing data. Restore the original .env, or delete the data with:" >&2
+        echo "  docker volume rm $(echo "$existing_volumes" | tr '\n' ' ')" >&2
+        exit 1
+    fi
+
+    local user_email
+    user_email="$(git config --global user.email || true)"
+    if [ -z "$user_email" ]; then
+        echo "Error: git config --global user.email is not set" >&2
+        exit 1
+    fi
+
+    local postgres_password minio_password
+    postgres_password="$(random_hex 24)"
+    minio_password="$(random_hex 24)"
+
+    umask 077
+    cat >"$ENV_FILE" <<ENV
+POSTGRES_PASSWORD=$postgres_password
+DATABASE_URL=postgresql://postgres:$postgres_password@postgres:5432/postgres
+SALT=$(random_hex 32)
+ENCRYPTION_KEY=$(random_hex 32)
+NEXTAUTH_SECRET=$(random_hex 32)
+CLICKHOUSE_PASSWORD=$(random_hex 24)
+REDIS_AUTH=$(random_hex 24)
+MINIO_ROOT_PASSWORD=$minio_password
+LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY=$minio_password
+LANGFUSE_S3_MEDIA_UPLOAD_SECRET_ACCESS_KEY=$minio_password
+LANGFUSE_S3_BATCH_EXPORT_SECRET_ACCESS_KEY=$minio_password
+TELEMETRY_ENABLED=false
+LANGFUSE_INIT_ORG_ID=local
+LANGFUSE_INIT_ORG_NAME=local
+LANGFUSE_INIT_PROJECT_ID=claude-code
+LANGFUSE_INIT_PROJECT_NAME=claude-code
+LANGFUSE_INIT_PROJECT_PUBLIC_KEY=$PUBLIC_KEY
+LANGFUSE_INIT_PROJECT_SECRET_KEY=sk-lf-$(random_hex 24)
+LANGFUSE_INIT_USER_EMAIL=$user_email
+LANGFUSE_INIT_USER_NAME=$USER
+LANGFUSE_INIT_USER_PASSWORD=Lf1-$(random_hex 12)
+ENV
+    echo "Generated $ENV_FILE"
+}
+
+if [ ! -f "$LANGFUSE_DIR/compose.yaml" ]; then
+    echo "Error: $LANGFUSE_DIR/compose.yaml not found. Run 'chezmoi apply' first." >&2
+    exit 1
+fi
+
+ensure_docker
+
+if [ ! -f "$ENV_FILE" ]; then
+    generate_env
+fi
+
+cd "$LANGFUSE_DIR"
+# 呼び出し元の環境をそのまま渡さないのは、DATABASE_URL や AWS_* が compose の変数展開で .env より優先されるため
+exec env -i HOME="$HOME" PATH="$PATH" TERM="${TERM:-dumb}" docker compose "$@"

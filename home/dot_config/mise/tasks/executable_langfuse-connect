@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#MISE description="Install the Langfuse Claude Code plugin and connect it to the local Langfuse"
+
+set -euo pipefail
+
+ENV_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/langfuse/.env"
+MARKETPLACE_NAME="langfuse-observability"
+MARKETPLACE_REPO="langfuse/Claude-Observability-Plugin"
+PLUGIN="langfuse-observability@$MARKETPLACE_NAME"
+BASE_URL="${LANGFUSE_LOCAL_BASE_URL:-http://localhost:3000}"
+
+read_env() {
+    grep -E "^$1=" "$ENV_FILE" | tail -n 1 | cut -d= -f2-
+}
+
+if [ ! -f "$ENV_FILE" ]; then
+    echo "Error: $ENV_FILE not found. Run 'mise run langfuse up -d' first." >&2
+    exit 1
+fi
+
+public_key="$(read_env LANGFUSE_INIT_PROJECT_PUBLIC_KEY)"
+secret_key="$(read_env LANGFUSE_INIT_PROJECT_SECRET_KEY)"
+if [ -z "$public_key" ] || [ -z "$secret_key" ]; then
+    echo "Error: LANGFUSE_INIT_PROJECT_PUBLIC_KEY or LANGFUSE_INIT_PROJECT_SECRET_KEY is empty in $ENV_FILE" >&2
+    exit 1
+fi
+
+if ! claude plugin marketplace list | grep -qw "$MARKETPLACE_NAME"; then
+    claude plugin marketplace add "$MARKETPLACE_REPO"
+fi
+
+# インストール済みでも再設定するのは、設定だけを書き換えるコマンドが無いため
+if claude plugin list | grep -qF "$PLUGIN"; then
+    echo "Reinstalling $PLUGIN to update its configuration..."
+    claude plugin uninstall --keep-data "$PLUGIN"
+fi
+
+claude plugin install "$PLUGIN" \
+    --config "LANGFUSE_PUBLIC_KEY=$public_key" \
+    --config "LANGFUSE_SECRET_KEY=$secret_key" \
+    --config "LANGFUSE_BASE_URL=$BASE_URL"

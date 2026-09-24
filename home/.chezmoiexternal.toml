@@ -1,0 +1,3 @@
+[".config/langfuse/compose.yaml"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/langfuse/langfuse/v4.33.0/docker-compose.yml"
