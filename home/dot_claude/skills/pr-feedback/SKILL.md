@@ -5,7 +5,7 @@ description: |
   create-pr の writing-style.md に更新案を提示して、承認分だけ反映するスキル。
   「/pr-feedback [PR番号 or URL] [コメント]」で起動。
   「PRの文体をフィードバックしたい」「このPR本文の書き方を覚えて」と依頼された場合にもトリガー。
-allowed-tools: Bash(gh pr:*), Bash(gh api:*), Bash(gh repo:*), Bash(git rev-parse:*), Bash(git branch:*), Bash(chezmoi source-path:*), Bash(ls:*), Read, Edit, Glob, Grep, AskUserQuestion
+allowed-tools: Bash(gh pr:*), Bash(gh api:*), Bash(gh repo:*), Bash(git rev-parse:*), Bash(git branch:*), Bash(ls:*), Read, Edit, Glob, Grep, AskUserQuestion
 ---
 
 ## コンテキスト
@@ -14,7 +14,7 @@ allowed-tools: Bash(gh pr:*), Bash(gh api:*), Bash(gh repo:*), Bash(git rev-pars
 - 現在のPR: !`gh pr view --json number,url,title 2>/dev/null || echo "PRなし"`
 - リポジトリ情報: !`gh repo view --json nameWithOwner --jq '.nameWithOwner' 2>/dev/null || echo "不明"`
 - リポジトリルート: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
-- chezmoiソースパス: !`chezmoi source-path 2>/dev/null || echo "chezmoiなし"`
+- dotfilesリポジトリ: !`ls -d $HOME/code/dotfiles 2>/dev/null || echo "見つからない"`
 
 ## タスク
 
@@ -68,10 +68,10 @@ query($owner:String!,$repo:String!,$number:Int!){
 
 ### ステップ3: writing-style.md の特定と読み込み
 
-編集対象は chezmoi の**ソース側**。`~/.claude/skills/...`（ターゲット側）は `chezmoi apply` で上書きされるので編集しない。
+編集対象は dotfiles リポジトリ（`$HOME/code/dotfiles`）の chezmoi ソース。`~/.claude/skills/...`（ターゲット側）は `chezmoi apply` で上書きされ、`chezmoi source-path`（`~/.local/share/chezmoi`）は別クローンで変更が push されないので、どちらも編集しない。
 
 1. リポジトリルートに `home/dot_claude/skills/create-pr/references/writing-style.md` があれば、それを使う（dotfiles の worktree で作業中のケース）
-2. 無ければ `{chezmoiソースパス}/dot_claude/skills/create-pr/references/writing-style.md`
+2. 無ければ `{dotfilesリポジトリ}/home/dot_claude/skills/create-pr/references/writing-style.md`
 3. どちらも無ければパスを報告して終了
 
 `Read` で全文を読み、既存ルールを把握する。
