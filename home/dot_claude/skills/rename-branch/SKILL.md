@@ -13,7 +13,7 @@ model: Sonnet
 - 現在のブランチ: !`git branch --show-current`
 - リポジトリルート: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
 - git config user.name: !`git config user.name 2>/dev/null || echo ""`
-- 最新プランファイル: !`ls -1t /Users/shoji/.claude/plans/*.md 2>/dev/null | head -1 || echo "プランファイルなし"`
+- 最新プランファイル: !`ls -1t $HOME/.claude/plans/*.md 2>/dev/null | head -1 || echo "プランファイルなし"`
 - ローカルブランチ一覧: !`git branch --format='%(refname:short)' 2>/dev/null`
 - リモートブランチ一覧: !`git ls-remote --heads origin 2>/dev/null | awk '{print $2}' | sed 's|refs/heads/||' || echo "リモートなし"`
 

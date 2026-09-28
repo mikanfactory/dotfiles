@@ -11,7 +11,7 @@ model: Sonnet
 - デフォルトブランチ: !`git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}' || echo "main"`
 - このブランチの最近のコミット: !`git log --oneline -10`
 - リポジトリルート: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
-- デフォルトブランチとこのブランチの差分: !`git diff origin/main...HEAD --stat`
+- デフォルトブランチとこのブランチの差分: !`git diff "$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo origin/main)"...HEAD --stat`
 - PRテンプレート: !`cat $(git rev-parse --show-toplevel)/.github/pull_request_template.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/.github/PULL_REQUEST_TEMPLATE.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/.github/PULL_REQUEST_TEMPLATE/default.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/docs/PULL_REQUEST_TEMPLATE.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/PULL_REQUEST_TEMPLATE.md 2>/dev/null || echo "テンプレートなし"`
 
 ## タスク
@@ -36,7 +36,7 @@ PR作成完了後、このスキルのタスクは完了です。**追加のコ�
 
 ## 制約
 
-- ブランチ比較は常に`origin/main`を使用すること
+- ブランチ比較は上記コンテキストのデフォルトブランチ（`origin/<default>`）を使用すること
 - PRタイトルと説明文の内容は日本語で記述し、[`writing-style`](references/writing-style.md) の文体に従うこと
 - 曖昧な点がある場合は作成前にユーザーに確認
 
