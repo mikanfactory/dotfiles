@@ -14,14 +14,14 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 - 現在のgitステータス: !`git status`
 - 現在のブランチ: !`git branch --show-current`
 - デフォルトブランチ: !`git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}' || echo "main"`
-- デフォルトブランチとこのブランチの差分: !`git diff origin/main...HEAD --stat 2>/dev/null || echo "差分なし"`
+- デフォルトブランチとこのブランチの差分: !`git diff "$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo origin/main)"...HEAD --stat 2>/dev/null || echo "差分なし"`
 - リポジトリルート: !`git rev-parse --show-toplevel 2>/dev/null || pwd`
 - リポジトリ情報（owner/repo）: !`gh repo view --json nameWithOwner --jq '.nameWithOwner' 2>/dev/null || echo "不明"`
 - gh認証状態: !`gh auth status 2>&1 | head -3 || echo "未認証"`
 - リモート: !`git remote -v | head -2 || echo "リモートなし"`
 - 既存PR: !`gh pr view --json number,url,title,isDraft 2>/dev/null || echo "PRなし"`
 - 既存PR本文: !`gh pr view --json body --jq '.body' 2>/dev/null || echo "本文なし"`
-- 最新プランファイル: !`ls -1t /Users/shoji/.claude/plans/*.md 2>/dev/null | head -1 || echo "プランファイルなし"`
+- 最新プランファイル: !`ls -1t $HOME/.claude/plans/*.md 2>/dev/null | head -1 || echo "プランファイルなし"`
 - PRテンプレート: !`cat $(git rev-parse --show-toplevel)/.github/pull_request_template.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/.github/PULL_REQUEST_TEMPLATE.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/.github/PULL_REQUEST_TEMPLATE/default.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/docs/PULL_REQUEST_TEMPLATE.md 2>/dev/null || cat $(git rev-parse --show-toplevel)/PULL_REQUEST_TEMPLATE.md 2>/dev/null || echo "テンプレートなし"`
 
 ## タスク
@@ -48,7 +48,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 
 ### ステップ1: TDDでコード生成
 
-**今回承認された仕様変更プラン**を `/tdd-workflow` の原則で実装します:
+**今回承認された仕様変更プラン**をTDDで実装します:
 
 1. **RED** — まず失敗するテストを書く（各テストは1つの振る舞い・説明的なテスト名・外部依存はモック・エッジケースとエラーパスを含む）
 2. **GREEN** — テストを通過する最小限のコードを書く
@@ -109,7 +109,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 
    併せて、上記コンテキストの「既存PR本文」を「PRテンプレート」および本スキル／`pr-creator` が生成する形式と突き合わせ、**テンプレートに無い見出し・手書きの補足・レビュー向けメモ・議論の経緯**など、人間が加筆したと判断できる記述があるかを確認する。編集履歴が空でも本文が生成物と乖離していれば人間編集ありとみなす。
 
-4. **PR本文を編集して更新**する。上記コンテキストの「既存PR本文」「PRテンプレート」「最新プランファイル」と `git diff origin/main...HEAD --stat` を材料に、**仕様変更後の最終状態**を表す本文を日本語で再生成する:
+4. **PR本文を編集して更新**する。上記コンテキストの「既存PR本文」「PRテンプレート」「最新プランファイル」と上記コンテキストの「デフォルトブランチとこのブランチの差分」を材料に、**仕様変更後の最終状態**を表す本文を日本語で再生成する:
 
    - PRテンプレートの**見出しと順序はそのまま維持**（英語の見出しは翻訳しない。チェックボックスは該当項目のみ `- [x]`）
    - 「〜を追加しました、その後〜に変更しました」のような**経緯の羅列にせず、現在の仕様として書き直す**
@@ -232,21 +232,21 @@ PR本文にユーザーの加筆を検出したため、自動更新は行いま
 
 ## 制約
 
-- **ブランチのrenameは行わない**（既存PRとの紐付けを壊さないため）
-- **PRは新規作成せず、既存PRの本文を編集して更新する**
-- **人間が書き換えたPR本文を機械的に上書きしない** — 加筆を検出したら、その記述に沿って最小限だけ編集するか、編集せず最終サマリで更新案を提案する。判断が付かない場合は編集しない
-- **PRは常にDraftのまま維持する（Ready for reviewへの自動変更はしない）**
-- **Greptile指摘は今回のpush以降の新規・更新分のみを対象にする**（前回ラウンドで判定済みかつ `updated_at` に変化がない指摘は再評価しない）
-- **返信するのはGreptileが投稿したコメントのみ。人間のコメント・他のbotのコメントには絶対に返信しない**
-- **返信はインラインコメントへのスレッド返信のみ。`@greptileai review` のトリガー以外にPRコメントを投稿しない**
+- ブランチのrenameは行わない（既存PRとの紐付けを壊さないため）
+- PRは新規作成せず、既存PRの本文を編集して更新する
+- 人間が書き換えたPR本文を機械的に上書きしない — 加筆を検出したら、その記述に沿って最小限だけ編集するか、編集せず最終サマリで更新案を提案する。判断が付かない場合は編集しない
+- PRは常にDraftのまま維持する（Ready for reviewへの自動変更はしない）
+- Greptile指摘は今回のpush以降の新規・更新分のみを対象にする（前回ラウンドで判定済みかつ `updated_at` に変化がない指摘は再評価しない）
+- 返信するのはGreptileが投稿したコメントのみ。人間のコメント・他のbotのコメントには絶対に返信しない
+- 返信はインラインコメントへのスレッド返信のみ。`@greptileai review` のトリガー以外にPRコメントを投稿しない
 - 既に自分が返信済みのスレッドには再返信しない
 - 返信は修正のpush完了後に行う（返信内容と実際のコードを一致させるため）
-- **PR本文更新・コミットを「タスク完了」扱いにして停止しない**
+- PR本文更新・コミットを「タスク完了」扱いにして停止しない
 - すべてのコミットメッセージは英語・Claudeの共著フッターを追加しない（既存スキル継承）
 - 各コミットはアトミックで独立してリバート可能であること
 - PRタイトル/本文・ユーザーへの出力は日本語
-- ブランチ比較は常に `origin/main`
-- **1パスのみ**（Greptile再レビューの反復はしない）
+- ブランチ比較は上記コンテキストのデフォルトブランチ（`origin/<default>`）
+- 1パスのみ（Greptile再レビューの反復はしない）
 - Greptile指摘の修正はコメントが指摘する範囲のみ（スコープ外リファクタ禁止、Greptileのコメント以外は対象外）
 - 各段階でテストグリーン・カバレッジ80%以上を維持。回復不能な失敗時は push せず中断して報告
 
@@ -258,7 +258,6 @@ PR本文にユーザーの加筆を検出したため、自動更新は行いま
 - [`/refine-loop`](../refine-loop/SKILL.md) - 初回のPR作成まで担う姉妹スキル（本スキルはその後段）
 - [`/commit-fast`](../commit-fast/SKILL.md) - 分割コミット手順のインライン化元（ステップ3・7）
 - `/simplify` - 変更コードのリファクタリング（ビルトイン、`Skill`ツールで起動・自動修正）
-- [`/tdd-workflow`](../tdd-workflow/SKILL.md) - TDDワークフローの原則とパターン
 - [`/review-greptile`](../review-greptile/SKILL.md) - Greptileコメント取得・分類ロジックの流用元
 
 ### ドキュメント
