@@ -45,7 +45,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 
 ### ステップ1: TDDでコード生成
 
-承認済みプランを `/tdd-workflow` の原則で実装します:
+承認済みプランをTDDで実装します:
 
 1. **RED** — まず失敗するテストを書く（各テストは1つの振る舞い・説明的なテスト名・外部依存はモック・エッジケースとエラーパスを含む）
 2. **GREEN** — テストを通過する最小限のコードを書く
@@ -186,7 +186,6 @@ push完了後、[`review-greptile/references/greptile-api.md`](../review-greptil
 - [`/rename-branch`](../rename-branch/SKILL.md) - プラン要約からブランチ名を生成しrename（ステップ0.7で呼び出し）
 - [`/revise-loop`](../revise-loop/SKILL.md) - PR作成後に仕様変更が出た場合の後段スキル（ブランチ維持・PR本文を編集で更新）
 - `/simplify` - 変更コードのリファクタリング（ビルトイン、`Skill`ツールで起動・自動修正）
-- [`/tdd-workflow`](../tdd-workflow/SKILL.md) - TDDワークフローの原則とパターン
 - [`/review-greptile`](../review-greptile/SKILL.md) - Greptileコメント取得・分類ロジックの流用元
 
 ### ドキュメント
