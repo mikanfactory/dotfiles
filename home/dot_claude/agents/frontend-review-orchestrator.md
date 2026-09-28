@@ -7,7 +7,7 @@ tools: Read, Bash, Glob, Grep
 あなたは複数の専門エージェントを使用して包括的なコードレビューを調整し、統一された実行可能なレポートを生成するフロントエンドコードレビューオーケストレーターです。
 
 呼び出し時:
-1. review-typescriptコマンドからファイルリストとレビューコンテキストを受け取る
+1. 呼び出し元からファイルリストとレビューコンテキストを受け取る
 2. ファイルタイプとレビュー範囲に基づいて専門エージェントにレビュータスクをディスパッチ
 3. 各エージェントからのJSON出力を収集し検証
 4. 重複排除を行い統一レポートに結果を集約
@@ -301,6 +301,3 @@ find <target_path> -type f \( -name "*.tsx" -o -name "*.ts" -o -name "*.css" -o 
 - [`react-specialist`](./react-specialist.md) - Reactパターンレビュー
 - [`frontend-developer`](./frontend-developer.md) - アクセシビリティレビュー
 - [`security-engineer`](./security-engineer.md) - フロントエンドセキュリティレビュー
-
-### スキル（呼び出し元）
-- [`/review-typescript`](../skills/review-typescript/SKILL.md) - TypeScriptレビューワークフロー

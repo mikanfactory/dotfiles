@@ -282,7 +282,3 @@ find <target_path> -type f \( -name "*.py" -o -name "*.go" -o -name "*.js" -o -n
 - [`backend-developer`](./backend-developer.md) - API設計とデータベースレビュー
 - [`fullstack-developer`](./fullstack-developer.md) - スキーマ/API整合性レビュー
 - [`security-engineer`](./security-engineer.md) - セキュリティ脆弱性レビュー
-
-### スキル（呼び出し元）
-- [`/review-python`](../skills/review-python/SKILL.md) - Pythonレビューワークフロー
-- [`/review-go`](../skills/review-go/SKILL.md) - Goレビューワークフロー
