@@ -1,0 +1,18 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "darwin" -}}
+YAKUMO_PACKAGE="github.com/mikanfactory/yakumo/cmd/yakumo@latest"
+YAKUMO_BIN_DIR="{{ .chezmoi.homeDir }}/.local/bin"
+
+if command -v mise &> /dev/null; then
+    eval "$(mise activate bash)"
+fi
+
+if command -v go &> /dev/null; then
+    echo "Installing yakumo..."
+    mkdir -p "$YAKUMO_BIN_DIR"
+    GOBIN="$YAKUMO_BIN_DIR" go install "$YAKUMO_PACKAGE"
+    echo "yakumo installed successfully."
+else
+    echo "Warning: go not found, skipping yakumo installation"
+fi
+{{ end -}}
