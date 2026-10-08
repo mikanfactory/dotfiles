@@ -39,9 +39,9 @@
   root = ~/.go/src
 [credential "https://github.com"]
   helper =
-  helper = !{{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
+  helper = !cd "$HOME" && {{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
 [credential "https://gist.github.com"]
   helper =
-  helper = !{{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
+  helper = !cd "$HOME" && {{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
 
 
