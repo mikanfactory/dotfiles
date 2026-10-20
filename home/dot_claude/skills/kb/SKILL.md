@@ -3,16 +3,18 @@ name: kb
 description: |
   Obsidian vault をベースにしたプロジェクト別ナレッジベースを扱うスキル。
   vault のパスは環境変数 $OBSIDIAN_VAULT_DIR（chezmoi でマシンごとに設定）。
-  3操作を提供: research（調査ノートの作成）、dd（Design Doc の執筆）、ref（DD と関連ノートの参照）。
-  「/kb research <topic> <調査内容>」「/kb dd <topic>」「/kb ref <topic>」で起動。
-  「調査をナレッジベースに残して」「Design Doc / DD を書いて」「DD を参照して」と依頼された場合にもトリガー。
-argument-hint: "<research|dd|ref> [project/]topic [内容]"
+  3操作を提供: research（調査ノートの作成）、adr（1決定1ファイルの ADR の作成）、ref（ADR・DD と関連ノートの参照）。
+  「/kb research <topic> <調査内容>」「/kb adr <topic> [決定内容]」「/kb ref <topic>」で起動。
+  「調査をナレッジベースに残して」「この決定を ADR に残して」「DD / ADR を参照して」と依頼された場合にもトリガー。
+  Design Doc の執筆は /doc-writing が担当する。
+argument-hint: "<research|adr|ref> [project/]topic [内容]"
 allowed-tools: Read, Write, Edit, Glob, Grep, WebFetch, Bash(git remote *), Bash(mkdir *), Bash(echo *)
 ---
 
 # KB - プロジェクト別ナレッジベース
 
-調査ノート → Design Doc → Implementation Plan を、Obsidian vault の `<project>/<topic>/` に蓄積する。
+調査ノート → ADR → Implementation Plan を、Obsidian vault の `<project>/<topic>/` に蓄積する。
+人に読ませる Design Doc は [`/doc-writing`](../doc-writing/SKILL.md) で同じ topic フォルダに書く。
 書き方の規約は [vault-conventions.md](./references/vault-conventions.md) に従う。
 
 ## 操作ルーティング
@@ -20,7 +22,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, WebFetch, Bash(git remote *), Bash
 `$ARGUMENTS` の先頭語で判定する。
 
 - `research` → Research
-- `dd` → Design Doc
+- `adr` → ADR
+- `dd` → 廃止。Design Doc の執筆は `/doc-writing` に案内する
 - `ref` → Reference
 - 引数なし・判定不能 → ユーザーに操作を確認する
 
@@ -33,7 +36,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, WebFetch, Bash(git remote *), Bash
    - 引数が `project/topic` 形式ならそれを使う
    - topic だけなら `git remote get-url origin` のリポジトリ名（例: `ivry-inc/datahub` → `datahub`）を vault 直下のディレクトリ名と照合する
    - 一致しない・git 外の場合は、vault 直下のディレクトリ一覧（`日記/` を除く）を示して聞く
-3. topic は kebab-case のディレクトリ名（例: `slack-webhook`）。research / dd で存在しなければ `mkdir -p` する
+3. topic は kebab-case のディレクトリ名（例: `slack-webhook`）。research / adr で存在しなければ `mkdir -p` する
 4. 以降のパスは `$OBSIDIAN_VAULT_DIR/<project>/<topic>/` を絶対パスに展開して扱う（Write は絶対パスを受け取る）
 
 ## Research ワークフロー
@@ -51,41 +54,43 @@ allowed-tools: Read, Write, Edit, Glob, Grep, WebFetch, Bash(git remote *), Bash
 6. `YYYY-MM-DD プロンプト.md` に依頼文と作成・更新したノートの wikilink 一覧を追記する（同日のファイルがあれば追記）
 7. 作成・更新したファイルのパスと、各問いの結論を 1 行ずつ報告する
 
-## Design Doc ワークフロー
+## ADR ワークフロー
 
-`/kb dd [project/]topic`
+`/kb adr [project/]topic [決定内容]`
 
-1. topic フォルダの全ノートを読む。`Design Doc*.md` が既にあれば最新版（`Design Doc.md` = v1、`Design Doc vN.md` = vN）を特定する
-2. 調査ノートだけでは決まらない判断（採用案、スコープ外、リリース順など）を洗い出し、AskUserQuestion で 1 つずつ確認する
-3. [design-doc-template.md](./references/design-doc-template.md) に沿って書く
-   - 初版は `Design Doc.md`、既存がある場合は `Design Doc vN.md`（N = 既存の最大版 + 1）
-   - 版を上げたら末尾に「vN-1 からの変更点」表を置く
-   - 該当しない章は削除せず「なし」と理由を 1 行で書く
-4. 不採用案・懸念点・制約は根拠となる調査ノートへ `[[wikilink]]` を張る。根拠ノートがない主張は「設計の未検証事項」に回す
-5. 旧版の Design Doc は変更しない
-6. 作成したパスと、ユーザーの判断が必要な未検証事項を報告する
+1. topic フォルダの調査ノートと既存の `ADR-*.md` を読む。同じ決定の ADR が `Accepted` で既にあれば、新規作成せずユーザーに覆すのかを確認する
+2. 決定内容・採らなかった案・理由のうち、依頼文と調査ノートから読めないものを AskUserQuestion で確認する
+3. 番号は topic 内の既存 `ADR-NNNN-*.md` の最大 + 1（無ければ `0001`）。[adr-template.md](./references/adr-template.md) に沿って `ADR-NNNN-<決定のタイトル>.md` を書く。段階ごとの承認は取らない
+4. 状況・不採用案の根拠は調査ノートへ `[[wikilink]]` を張る。根拠ノートがない前提は「未検証事項」に回す
+5. 決定を覆す場合は、旧 ADR のステータス行だけを `Superseded by [[新 ADR]]` に変える。旧 ADR の本文は変更しない
+6. 関連する調査ノートの `## 関連` にも新しい ADR を追記する
+7. 作成したパスと、決定を 1 行で報告する
 
 ## Reference ワークフロー
 
 `/kb ref [project/]topic` または `/kb ref <キーワード>`（**読み取り専用**）
 
 1. topic ディレクトリを特定する。キーワードの場合は vault 全体を Grep し、候補の topic を示して選んでもらう
-2. 最新の `Design Doc*.md` と `Implementation Plan.md`（あれば）を読む
+2. 全 `ADR-*.md`、最新の `Design Doc*.md`、`Implementation Plan.md`（それぞれあれば）を読む
 3. 本文中の `[[X]]` を同じ project 配下の `**/X.md` として Glob で解決し、1 ホップ分だけ読む
 4. 会話に次の要約を出す
+   - 有効な ADR（`Superseded` を除く）の決定を 1 行ずつ
    - 採用した設計と主要な決定
    - 守るべき制約・前提
    - 不採用案とその理由（同じ案を再提案しないため）
    - 設計の未検証事項
    - 実装の進捗（Implementation Plan の「現在地」）
-5. 以後の実装・回答はこの要約に従う。Design Doc と矛盾する変更が必要になったら、実装前にユーザーへ指摘する
+5. 以後の実装・回答はこの要約に従う。ADR・Design Doc と矛盾する変更が必要になったら、実装前にユーザーへ指摘する
 6. ファイルには書き込まない
 
 ---
 
 ## 参照
 
+### スキル
+- [`/doc-writing`](../doc-writing/SKILL.md) - Design Doc など人に読ませる文書の執筆（kb dd の移管先）
+
 ### ドキュメント
 - [`vault-conventions`](./references/vault-conventions.md) - vault の構造・命名・リンク・記述の規約
 - [`note-templates`](./references/note-templates.md) - 調査ノート・案ノート・比較ノート・プロンプトログのテンプレート
-- [`design-doc-template`](./references/design-doc-template.md) - Design Doc の章立てテンプレート
+- [`adr-template`](./references/adr-template.md) - ADR のテンプレート

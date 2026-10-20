@@ -13,8 +13,12 @@ $OBSIDIAN_VAULT_DIR/
         ├── <問いのタイトル>.md       # 調査ノート（1 問 1 ファイル）
         ├── Plan A - <案の名前>.md    # 案ノート
         ├── Plan B と Plan C の比較.md # 比較ノート
-        ├── Design Doc.md            # v1
+        ├── ADR-0001-<決定のタイトル>.md # 1 決定 1 ファイル（kb adr / brainstorming の出力）
+        ├── Design Doc.md            # v1（doc-writing の確定版）
         ├── Design Doc v2.md         # 以降の版
+        ├── <文書名>/                 # doc-writing の作業フォルダ
+        │   ├── outline-YYYYMMDD.md
+        │   └── draft-YYYYMMDD.md
         └── Implementation Plan.md   # superpowers:writing-plans の出力
 ```
 
@@ -22,7 +26,7 @@ $OBSIDIAN_VAULT_DIR/
 
 - project / topic ディレクトリ: kebab-case の英数字
 - ノートのファイル名: 日本語のタイトルそのまま（スペース可）。`/` など OS で使えない文字は避ける
-- 固定名: `Design Doc.md`、`Design Doc vN.md`、`Implementation Plan.md`、`YYYY-MM-DD プロンプト.md`
+- 固定名: `ADR-NNNN-<タイトル>.md`、`Design Doc.md`、`Design Doc vN.md`、`Implementation Plan.md`、`YYYY-MM-DD プロンプト.md`
 
 ## リンク
 
