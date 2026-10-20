@@ -23,11 +23,9 @@
     "deny": [
       "Read(.env*)",
       "Bash(terraform:*)",
-      "Bash(git push origin main)",
       "Bash(printenv)"
     ],
     "ask": [
-      "Bash(rm *)",
       "Bash(git commit --amend)",
       "Bash(git commit --amend *)",
       "Bash(git rebase)",
