@@ -29,10 +29,12 @@ eval "$(direnv hook zsh)"
 # mise (manages tools, env, aliases)
 eval "$(mise activate zsh)"
 
+# direnv
+eval "$(direnv hook zsh)"
+
 {{- else }}
 
 # mise (manages tools, env, aliases)
 eval "$(mise activate zsh)"
 
 {{- end }}
-
