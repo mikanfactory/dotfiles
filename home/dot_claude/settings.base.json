@@ -40,7 +40,8 @@
     "sentry@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
-    "langfuse-observability@langfuse-observability": true
+    "langfuse-observability@langfuse-observability": true,
+    "slack@anthropic-plugin-directory": true
   },
   "mcpServers": {},
   "hooks": {
