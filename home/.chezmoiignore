@@ -6,3 +6,4 @@ macos/
 .DS_Store
 Brewfile
 .claude/settings.base.json
+**/__pycache__

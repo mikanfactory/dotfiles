@@ -1,0 +1,13 @@
+onboarding = false
+
+[worktrees]
+directory = "~/yakumo"
+
+[ui.toast]
+delivery = "system"
+
+[[keys.command]]
+key = "prefix+shift+e"
+type = "shell"
+command = 'zed "$HERDR_ACTIVE_PANE_CWD"'
+description = "open pane directory in zed"

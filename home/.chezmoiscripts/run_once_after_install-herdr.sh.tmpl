@@ -1,0 +1,21 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "darwin" -}}
+HERDR_INSTALLER_URL="https://herdr.dev/install.sh"
+HERDR_BIN_DIR="{{ .chezmoi.homeDir }}/.local/bin"
+HERDR_PLUGIN_DIR="{{ .chezmoi.homeDir }}/.config/herdr/local-plugins/worktree-setup"
+
+export PATH="$HERDR_BIN_DIR:$PATH"
+
+if ! command -v herdr &> /dev/null; then
+    echo "Installing herdr..."
+    curl -fsSL "$HERDR_INSTALLER_URL" | sh
+fi
+
+if command -v herdr &> /dev/null; then
+    herdr integration install claude
+    herdr plugin link "$HERDR_PLUGIN_DIR"
+    echo "herdr setup complete."
+else
+    echo "Warning: herdr not found, skipping herdr setup"
+fi
+{{ end -}}
