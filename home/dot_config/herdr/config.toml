@@ -6,6 +6,11 @@ directory = "~/yakumo"
 [ui.toast]
 delivery = "system"
 
+[keys]
+prefix = "ctrl+s"
+navigate_workspace_up = "ctrl+p"
+navigate_workspace_down = "ctrl+n"
+
 [[keys.command]]
 key = "prefix+shift+e"
 type = "shell"
