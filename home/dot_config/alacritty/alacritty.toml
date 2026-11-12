@@ -6,10 +6,11 @@ size = 20
 
 [keyboard]
 bindings = [
-  # yakumo
+  # herdr
   {chars = "\u0013w", key = "G", mods = "Command" },
-  {chars = "\u0018c", key = "C", mods = "Command|Shift" },
-  {chars = "\u0018b", key = "B", mods = "Command|Shift" },
+  # copy mode
+  {key = "X", mods = "Control", action = "ToggleViMode" },
+  {key = "Escape", mode = "Vi|~Search", action = "ToggleViMode" },
 ]
 
 [general]
