@@ -49,6 +49,29 @@ def vault_overlay(vault_dir):
     }
 
 
+def herdr_overlay(home):
+    """herdr の Claude 連携が入っている場合、herdr が書き込む SessionStart フックを返す。"""
+    hook_script = home / ".claude" / "hooks" / "herdr-agent-state.sh"
+    if not hook_script.is_file():
+        return {}
+    return {
+        "hooks": {
+            "SessionStart": [
+                {
+                    "matcher": "^(startup|resume|clear|compact|fork)$",
+                    "hooks": [
+                        {
+                            "type": "command",
+                            "command": f"bash '{hook_script}' session",
+                            "timeout": 10,
+                        }
+                    ],
+                }
+            ]
+        }
+    }
+
+
 def main():
     # stdin (現在のファイル内容) を破棄
     sys.stdin.read()
@@ -68,6 +91,7 @@ def main():
         result = base
 
     result = deep_merge(result, vault_overlay(environ.get("OBSIDIAN_VAULT_DIR", "")))
+    result = deep_merge(result, herdr_overlay(Path.home()))
 
     json.dump(result, sys.stdout, indent=2, ensure_ascii=False)
     sys.stdout.write("\n")
