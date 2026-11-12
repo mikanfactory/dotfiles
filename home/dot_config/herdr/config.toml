@@ -8,6 +8,7 @@ delivery = "system"
 
 [keys]
 prefix = "ctrl+s"
+copy_mode = "ctrl+x"
 navigate_workspace_up = "ctrl+p"
 navigate_workspace_down = "ctrl+n"
 

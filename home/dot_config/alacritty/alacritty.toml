@@ -8,9 +8,6 @@ size = 20
 bindings = [
   # herdr
   {chars = "\u0013w", key = "G", mods = "Command" },
-  # copy mode
-  {key = "X", mods = "Control", action = "ToggleViMode" },
-  {key = "Escape", mode = "Vi|~Search", action = "ToggleViMode" },
 ]
 
 [general]
