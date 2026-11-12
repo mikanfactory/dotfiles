@@ -8,6 +8,7 @@ size = 20
 bindings = [
   # herdr
   {chars = "\u0013w", key = "G", mods = "Command" },
+  {chars = "\u0013K", key = "D", mods = "Command|Shift" },
 ]
 
 [general]

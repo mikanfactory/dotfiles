@@ -9,6 +9,9 @@ delivery = "system"
 [keys]
 prefix = "ctrl+s"
 copy_mode = "ctrl+x"
+remove_worktree = "prefix+shift+k"
+split_vertical = ""
+split_horizontal = ""
 navigate_workspace_up = "ctrl+p"
 navigate_workspace_down = "ctrl+n"
 
