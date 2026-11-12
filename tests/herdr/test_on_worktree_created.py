@@ -15,7 +15,6 @@ hook = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hook)
 
 PANE_ID = "w5:p1"
-CHECKOUT_PATH = "/worktrees/datahub/feature-a"
 HERDR_BIN = "/opt/bin/herdr"
 
 
@@ -24,10 +23,7 @@ def build_env(config_dir, repo_name="datahub"):
         "event": "worktree_created",
         "data": {
             "workspace": {
-                "worktree": {
-                    "repo_name": repo_name,
-                    "checkout_path": CHECKOUT_PATH,
-                }
+                "worktree": {"repo_name": repo_name}
             }
         },
     }
@@ -49,29 +45,16 @@ class OnWorktreeCreatedTest(unittest.TestCase):
     def run_hook(self, env):
         hook.main(env, self.calls.append)
 
-    def test_splits_a_shell_pane_to_the_right_in_the_checkout(self):
+    def test_does_not_split_the_agent_pane(self):
         self.run_hook(build_env(self.config_dir))
 
-        self.assertEqual(
-            self.calls[0],
-            [
-                HERDR_BIN,
-                "pane",
-                "split",
-                PANE_ID,
-                "--direction",
-                "right",
-                "--cwd",
-                CHECKOUT_PATH,
-                "--no-focus",
-            ],
-        )
+        self.assertEqual([call[1:3] for call in self.calls], [["pane", "run"]])
 
     def test_starts_agent_directly_when_repo_has_no_setup_script(self):
         self.run_hook(build_env(self.config_dir))
 
         self.assertEqual(
-            self.calls[1], [HERDR_BIN, "pane", "run", PANE_ID, hook.AGENT_COMMAND]
+            self.calls[0], [HERDR_BIN, "pane", "run", PANE_ID, hook.AGENT_COMMAND]
         )
 
     def test_sources_setup_script_before_agent_when_repo_has_one(self):
@@ -81,7 +64,7 @@ class OnWorktreeCreatedTest(unittest.TestCase):
         self.run_hook(build_env(self.config_dir))
 
         self.assertEqual(
-            self.calls[1],
+            self.calls[0],
             [
                 HERDR_BIN,
                 "pane",
@@ -97,7 +80,7 @@ class OnWorktreeCreatedTest(unittest.TestCase):
         self.run_hook(build_env(self.config_dir, repo_name="dotfiles"))
 
         self.assertEqual(
-            self.calls[1], [HERDR_BIN, "pane", "run", PANE_ID, hook.AGENT_COMMAND]
+            self.calls[0], [HERDR_BIN, "pane", "run", PANE_ID, hook.AGENT_COMMAND]
         )
 
     def test_quotes_setup_script_path_containing_spaces(self):
@@ -108,14 +91,14 @@ class OnWorktreeCreatedTest(unittest.TestCase):
         self.run_hook(build_env(config_dir))
 
         self.assertEqual(
-            self.calls[1][-1],
+            self.calls[0][-1],
             f"source '{config_dir}/datahub.sh' && {hook.AGENT_COMMAND}",
         )
 
     def test_works_when_config_dir_does_not_exist(self):
         self.run_hook(build_env(self.config_dir / "missing"))
 
-        self.assertEqual(self.calls[1][-1], hook.AGENT_COMMAND)
+        self.assertEqual(self.calls[0][-1], hook.AGENT_COMMAND)
 
 
 if __name__ == "__main__":

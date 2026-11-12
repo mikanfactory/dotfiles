@@ -7,7 +7,6 @@ from os import environ
 from pathlib import Path
 
 AGENT_COMMAND = "claude"
-SHELL_PANE_DIRECTION = "right"
 SETUP_SCRIPT_SUFFIX = ".sh"
 
 
@@ -31,19 +30,6 @@ def main(env, run):
         Path(env["HERDR_PLUGIN_CONFIG_DIR"]), worktree["repo_name"]
     )
 
-    run(
-        [
-            herdr,
-            "pane",
-            "split",
-            agent_pane,
-            "--direction",
-            SHELL_PANE_DIRECTION,
-            "--cwd",
-            worktree["checkout_path"],
-            "--no-focus",
-        ]
-    )
     run([herdr, "pane", "run", agent_pane, agent_pane_command(setup_script)])
 
 
