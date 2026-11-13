@@ -17,6 +17,9 @@ if [ ! -d "$YAKUMO_DIR" ]; then
 fi
 
 echo "Installing yakumo..."
-make -C "$YAKUMO_DIR" install
+if ! make -C "$YAKUMO_DIR" install; then
+    echo "Warning: yakumo build failed; run 'make -C $YAKUMO_DIR install' manually"
+    exit 0
+fi
 echo "yakumo installed successfully."
 {{ end -}}
