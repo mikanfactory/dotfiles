@@ -1,18 +1,22 @@
 #!/bin/bash
 {{ if eq .chezmoi.os "darwin" -}}
-YAKUMO_PACKAGE="github.com/mikanfactory/yakumo/cmd/yakumo@latest"
-YAKUMO_BIN_DIR="{{ .chezmoi.homeDir }}/.local/bin"
+YAKUMO_REPO="https://github.com/mikanfactory/yakumo"
+YAKUMO_DIR="{{ .chezmoi.homeDir }}/code/yakumo"
 
-if command -v mise &> /dev/null; then
-    eval "$(mise activate bash)"
+if ! command -v swift &> /dev/null; then
+    echo "Warning: swift not found, skipping yakumo installation"
+    exit 0
 fi
 
-if command -v go &> /dev/null; then
-    echo "Installing yakumo..."
-    mkdir -p "$YAKUMO_BIN_DIR"
-    GOBIN="$YAKUMO_BIN_DIR" go install "$YAKUMO_PACKAGE"
-    echo "yakumo installed successfully."
-else
-    echo "Warning: go not found, skipping yakumo installation"
+if [ ! -d "$YAKUMO_DIR" ]; then
+    mkdir -p "$(dirname "$YAKUMO_DIR")"
+    if ! git clone "$YAKUMO_REPO" "$YAKUMO_DIR"; then
+        echo "Warning: git clone failed, skipping yakumo installation"
+        exit 0
+    fi
 fi
+
+echo "Installing yakumo..."
+make -C "$YAKUMO_DIR" install
+echo "yakumo installed successfully."
 {{ end -}}
