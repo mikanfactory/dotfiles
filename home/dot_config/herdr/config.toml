@@ -3,6 +3,10 @@ onboarding = false
 [worktrees]
 directory = "~/yakumo"
 
+[ui]
+sidebar_start_collapsed = true
+sidebar_collapsed_mode = "hidden"
+
 [ui.toast]
 delivery = "system"
 
