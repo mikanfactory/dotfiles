@@ -32,7 +32,7 @@
       "Bash(git rebase *)"
     ]
   },
-  "model": "opus[1m]",
+  "model": "fable",
   "enabledMcpjsonServers": [],
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
@@ -44,29 +44,7 @@
     "slack@anthropic-plugin-directory": true
   },
   "mcpServers": {},
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "branch=$(git -C \"$CLAUDE_WORKING_DIRECTORY\" rev-parse --abbrev-ref HEAD 2>/dev/null || echo 'N/A'); osascript -e \"display notification \\\"Notification. [$branch]\\\" with title \\\"Claude Code\\\" sound name \\\"Funk\\\"\""
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "branch=$(git -C \"$CLAUDE_WORKING_DIRECTORY\" rev-parse --abbrev-ref HEAD 2>/dev/null || echo 'N/A'); osascript -e \"display notification \\\"Stop. [$branch]\\\" with title \\\"Claude Code\\\" sound name \\\"Hero\\\"\""
-          }
-        ]
-      }
-    ]
-  },
+  "hooks": {},
   "env": {
     "NIPPO_REPORTS_DIR": "reports"
   },
