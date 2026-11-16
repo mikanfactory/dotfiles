@@ -6,6 +6,7 @@ directory = "~/yakumo"
 [ui]
 sidebar_start_collapsed = true
 sidebar_collapsed_mode = "hidden"
+prompt_new_tab_name = false
 
 [ui.toast]
 delivery = "system"
