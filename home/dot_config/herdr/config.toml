@@ -9,7 +9,7 @@ sidebar_collapsed_mode = "hidden"
 prompt_new_tab_name = false
 
 [ui.toast]
-delivery = "system"
+delivery = "off"
 
 [keys]
 prefix = "ctrl+s"
