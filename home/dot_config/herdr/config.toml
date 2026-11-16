@@ -19,9 +19,16 @@ split_vertical = ""
 split_horizontal = ""
 navigate_workspace_up = "ctrl+p"
 navigate_workspace_down = "ctrl+n"
+close_tab = ""
 
 [[keys.command]]
 key = "prefix+shift+e"
 type = "shell"
 command = 'zed "$HERDR_ACTIVE_PANE_CWD"'
 description = "open pane directory in zed"
+
+[[keys.command]]
+key = "prefix+shift+x"
+type = "shell"
+command = '[ "$("$HERDR_BIN_PATH" tab list --workspace "$HERDR_ACTIVE_WORKSPACE_ID" | grep -o tab_id | wc -l)" -gt 1 ] && "$HERDR_BIN_PATH" tab close "$HERDR_ACTIVE_TAB_ID"'
+description = "close tab unless it is the last one"

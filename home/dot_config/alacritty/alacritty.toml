@@ -10,6 +10,7 @@ bindings = [
   {chars = "\u0013w", key = "G", mods = "Command" },
   {chars = "\u0013K", key = "D", mods = "Command|Shift" },
   {chars = "\u0013c", key = "T", mods = "Command" },
+  {chars = "\u0013X", key = "W", mods = "Command" },
   {action = "CreateNewTab", key = "T", mods = "Command|Shift" },
   {chars = "\u00131", key = "1", mods = "Command" },
   {chars = "\u00132", key = "2", mods = "Command" },
